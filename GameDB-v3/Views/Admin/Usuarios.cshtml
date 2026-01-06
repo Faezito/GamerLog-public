@@ -1,0 +1,108 @@
+﻿@model UsuarioModel;
+@{
+    ViewData["Title"] = "Painél do usuário";
+}
+
+<h1>Usuários</h1>
+<form method="post" class="" id="pesquisar">
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <input type="text" asp-for="NomeCompleto" class="form-control" />
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-secondary" id="pesquisar-usuarios">Pesquisar</button>
+            <a role="button" class="btn btn-primary" asp-action="Cadastro" asp-controller="Admin">Cadastrar</a>
+        </div>
+    </div>
+</form>
+
+<div id="tabela-usuarios">
+</div>
+
+<div id="loading" style="display:none; text-align:center; padding:20px;">
+    <span class="spinner-border" role="status"></span>
+</div>
+
+@section Scripts {
+    <script>
+        $('#pesquisar-usuarios').on('click', function () {
+            carregarTabela();
+        });
+
+        $(document).on('click','.deletar', function(e){
+            e.preventDefault();
+
+            const form = $(this).closest("form");
+
+            Swal.fire({
+                title: "Realmente deseja deletar este usuário?",
+                showDenyButton: true,
+                denyButtonText: "Não",
+                confirmButtonText: "Sim",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                form.trigger("submit");
+                Swal.fire("Deletado com sucesso!", "", "success");
+            }
+        })
+        })
+
+        $(document).on('click','.gerarSenha', function(e){
+            e.preventDefault();
+
+            const form = $(this).closest("form");
+
+            Swal.fire({
+                title: "Realmente deseja reiniciar a senha deste usuário?",
+                showDenyButton: true,
+                denyButtonText: "Não",
+                confirmButtonText: "Sim",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                form.trigger("submit");
+                Swal.fire("Senha reiniciada e enviada por email ao usuário!", "", "success");
+            }
+        })
+        })
+
+
+        $(document).ready(function(){
+            carregarTabela();
+        })
+
+        function carregarTabela() {
+            const nome = $('#Nome').val();
+
+            $.ajax({
+                url: '/Admin/Index',
+                type: 'POST',
+                data: { Nome: nome },
+
+                beforeSend: function () {
+                    $("#loading").show();            // mostra o loading
+                    $("#tabela-usuarios").hide();    // esconde a tabela
+                },
+
+                success: function (resultado) {
+                    $("#tabela-usuarios").html(resultado);
+                },
+
+                complete: function () {
+                    $("#loading").hide();           // esconde o loading
+                    $("#tabela-usuarios").show();   // exibe a tabela
+                },
+
+                success: function (resultado) {
+                    $("#tabela-usuarios").html(resultado);
+                },
+                error: function () {
+                    alert("Erro ao carregar tabela.");
+                }
+            });
+        }
+
+
+
+    </script>
+
+}

@@ -1,0 +1,62 @@
+﻿@model UsuarioModel;
+@{
+    ViewData["Title"] = "Cadastro de usuário";
+}
+
+<div class="row px-5 mb-2">
+    <h2 class="text-uppercase">
+        Novo usuário
+    </h2>
+</div>
+<hr />
+
+<form method="post" asp-action="Cadastro">
+    <input type="hidden" asp-for="ID" />
+
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingNome" asp-for="NomeCompleto">
+                <label for="floatingNome">Nome</label>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-floating">
+                <input type="email" class="form-control" id="floatingEmail" asp-for="Email">
+                <label for="floatingEmail">Email</label>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingUsuario" asp-for="Usuario">
+                <label for="floatingUsuario">Usuario</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-floating">
+                <select class="form-select" asp-for="Tipo" id="floatingTipo" aria-label="Tipo">
+                    <option selected disabled>Selecione um tipo</option>
+                    <option value="C">Usuario Comum</option>
+                    <option value="A">Administrador</option>
+                </select>
+                <label for="floatingTipo">Tipo</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Voltar</button>
+        </div>
+    </div>
+
+
+</form>

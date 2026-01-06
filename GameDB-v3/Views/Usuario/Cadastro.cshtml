@@ -1,0 +1,133 @@
+﻿@model UsuarioModel;
+
+
+<div class="row mb-2">
+    <h2 class="text-uppercase">
+        Cadastre-se
+    </h2>
+</div>
+
+<hr />
+
+<form method="post" id="form-cadastro">
+    <input type="hidden" asp-for="ID" />
+
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="email" class="form-control" id="floatingEmail" asp-for="Email" placeholder=" ">
+                <label for="floatingEmail">Email</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingUsuario" asp-for="Usuario" placeholder=" ">
+                <label for="floatingUsuario">Usuario</label>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingNome" asp-for="NomeCompleto" placeholder=" ">
+                <label for="floatingNome">Nome Completo</label>
+            </div>
+        </div>
+        <div class="col">
+            <select asp-for="Genero" class="form-select py-3">
+                <option disabled selected>GENERO</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+                <option value="O">Outro</option>
+            </select>
+        </div>
+    </div>
+
+    @if (Model.ID.HasValue || Model.SenhaTemporaria == true)
+    {
+        <div class="row mb-3">
+            <div class="row mx-auto">
+                <span class="alert alert-warning"> Por motivos de segurança, recomendamos que você troque sua senha agora. </span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingSenha" asp-for="Senha" placeholder=" ">
+                    <label for="floatingSenha">Senha</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingSenha" asp-for="ConfirmacaoSenha" placeholder=" ">
+                    <label for="floatingSenha">Confirmação de senha</label>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mb-3">
+        <div class="col-auto">
+            <button type="button" id="btnSalvar" class="btn btn-success">
+                <span id="texto-salvar">
+                    Salvar
+                </span>
+                <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
+            </button>
+        </div>
+        <div class="col-auto">
+            @if (Model.ID == null)
+            {
+                <a asp-controller="Home" asp-action="Login" class="btn btn-secondary">Voltar</a>
+            }
+            else
+            {
+                <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">Voltar</a>
+            }
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $('#btnSalvar').on('click', function () {
+            $.ajax({
+                url: '/Usuario/Cadastro',
+                type: 'POST',
+                data: $('#form-cadastro').serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function () {
+                    $('#btnSalvar').prop('disabled', true);
+                },
+                complete: function () {
+                    $('#btnSalvar').prop('disabled', false);
+                }
+            })
+            .done(function (response) {
+                if (response.success) {
+                    window.location.href = response.redirectUrl;
+                }
+            })
+            .fail(function (xhr) {
+                if (xhr.responseJSON) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: xhr.responseJSON.title ?? 'Erro',
+                        html: xhr.responseJSON.detail
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Erro inesperado ao processar a requisição.'
+                    });
+                }
+            });
+        });
+
+
+    </script>
+}

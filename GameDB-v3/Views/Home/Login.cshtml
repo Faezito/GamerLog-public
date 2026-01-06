@@ -1,0 +1,102 @@
+﻿@model UsuarioModel
+@{
+    ViewData["Title"] = "Login";
+}
+<style>
+    .form-floating > .form-control:focus ~ label::after,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+    .form-floating > .form-control-plaintext ~ label::after,
+    .form-floating > .form-select ~ label::after {
+        background-color: transparent !important;
+        color: black;
+    }
+</style>
+
+<div class="row d-flex justify-content-center">
+    <div class="mx-auto mx-sm-1 col-12 col-sm-6 col-md-6 col-lg-4 py-5">
+        <div class="">
+            <div class="card-body px-3 py-4 bg-dark rounded-3 shadow-lg">
+                <div class="">
+                    <h2 class="display-4 mb-3 text-light text-center">GamerLog</h2>
+                    <h5 class="text-center mb-3">Organizando sua jogatina!</h5>
+
+                    <form class="form" method="post" id="form-login">
+                        @if (ViewData["MSG_E"] != null)
+                        {
+                            <span class="alert alert-danger fw-bold m-0">
+                                @ViewData["MSG_E"]
+                            </span>
+                        }
+                        <div class="form-floating mb-3">
+                            <input id="Login" name="Login" type="text" class="form-control" placeholder=" " required />
+                            <label class="text-dark" for="Login">Usuario ou E-mail</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input id="Senha" name="Senha" type="password" class="form-control" placeholder=" " required />
+                            <label class="text-dark" for="Senha">Senha</label>
+                        </div>
+
+                        <div class="text-center w-100 mb-3">
+                            <button type="button" class="btn btn-primary w-100 py-3" id="btnLogin">
+                                <span id="texto-login">
+                                    ACESSAR
+                                </span>
+                                <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
+                            </button>
+                        </div>
+
+                    </form>
+                    <p>
+                        Não possui uma conta? <a class="link-opacity-0" asp-action="Cadastro" asp-controller="Usuario">Cadastre-se</a>
+                    </p>
+
+                    <p>
+                        Esqueceu sua senha? <a class="link-opacity-0" asp-action="RecuperarSenha" asp-controller="Home">Recuperar senha</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on('click', '#btnLogin', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/Home/Login',
+                type: 'POST',
+                data: $('#form-login').serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function () {
+                    $('#btnLogin').prop('disabled', true);
+                },
+                complete: function () {
+                    $('#btnLogin').prop('disabled', false);
+                },
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: response.title ?? 'Erro',
+                            text: response.message
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Erro inesperado ao tentar logar'
+                    });
+                }
+            });
+        });
+    </script>
+}

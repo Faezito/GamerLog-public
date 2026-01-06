@@ -1,0 +1,103 @@
+﻿@{
+    var usuario = new UsuarioModel();
+    usuario = LoginUsuario.GetCliente();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GamerLog</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/jquery.rateyo.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GameDB_v3.styles.css" asp-append-version="true" />
+
+</head>
+<body class="bg-mainblue text-light">
+    <header>
+        @if (controller != "Home")
+        {
+            @await Component.InvokeAsync("Navbar")
+        }
+    </header>
+    <div class="container">
+        <main role="main" class="py-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted border-top border-dark position-absolute bottom-0 w-100 mb-3">
+        <div class="container d-flex gap-5 text-light mt-3">
+            <span>&copy; 2025 - Desenvolvido por Faé</span> <a class="link-light" href="https://portfolio2025-vm6w.onrender.com/">Sobre</a>
+        </div>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery.rateyo.min.js"></script> 
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/jquery-mask/jquery.mask.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="~/js/js-loading-overlay.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    @if (TempData["ALERT_E"] != null)
+    {
+        <script>
+            Swal.fire({
+                title: "Erro",
+                text: '@Html.Raw(TempData["ALERT_E"])',
+                icon: "error"
+            });
+        </script>
+    }
+
+    @if (TempData["ALERT_S"] != null)
+    {
+        <script>
+            Swal.fire({
+                html: '@Html.Raw(TempData["ALERT_S"])',
+                icon: "success"
+            });
+        </script>
+    }
+
+    @if (TempData["MSG_E"] != null)
+    {
+        <script>
+            Swal.fire({
+                title: "Erro",
+                text: '@Html.Raw(TempData["MSG_E"])',
+                icon: "error"
+            });
+        </script>
+    }
+
+    @if (TempData["MSG_S"] != null)
+    {
+        <script>
+            Swal.fire({
+                html: '@Html.Raw(TempData["MSG_S"])',
+                icon: "success"
+            });
+        </script>
+    }
+
+    <script>
+        if (request.responseJSON != undefined) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: request.responseJSON.detail
+        });
+        }
+    </script>
+
+
+</body>
+</html>

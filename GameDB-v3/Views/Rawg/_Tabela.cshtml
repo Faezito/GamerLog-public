@@ -1,0 +1,42 @@
+﻿@model List<RawgGameDto>
+
+<hr />
+
+@foreach (var game in Model)
+{
+    <div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
+        <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@game.Id" class="link-light card-game-link">
+            <div class="position-relative">
+                <img src="@game.Background_Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
+                    <h5 class="card-title fw-bold mb-0 text-uppercase tracking-wider" style="text-shadow: 2px 2px 4px #000000, -2px -2px 4px #000;">
+                        @game.Name
+                    </h5>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="row mb-4 justify-content-center">
+                    <div class="col-7 text-center border-end border-secondary">
+                        <span class="d-flex align-items-center justify-content-center mb-1">
+                            <i class="bi bi-clock-history me-2 text-info"></i>
+                            <span class="small text-secondary text-uppercase fw-semibold fs-9">Lançamento</span>
+                        </span>
+                        <span class="small fw-bold">@(game.Released == null ? " " : game.Released?.ToString("dd 'de' MMM 'de' yyyy"))</span>
+                    </div>
+
+                    <div class="col-5 text-center ps-3">
+                        <span class="d-flex align-items-center justify-content-center mb-1">
+                            <i class="bi bi-check-circle me-2 text-@game.MetacriticCor"></i>
+                            <span class="small text-secondary text-uppercase fw-semibold fs-9">Metacritic</span>
+                        </span>
+                        <span class="badge rounded-pill bg-@game.MetacriticCor-soft text-@game.MetacriticCor border border-@game.MetacriticCor">@game.Metacritic</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+}
+
+

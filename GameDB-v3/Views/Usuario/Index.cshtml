@@ -1,0 +1,95 @@
+﻿@model UsuarioModel;
+@{
+    ViewData["Title"] = "Painél do usuário";
+}
+
+<div class="row">
+    <div class="col">
+        <h4 class="fw-bold">Olá, @Model.Usuario!</h4>
+    </div>
+    <div class="col text-end">
+        <form method="post" class="" id="pesquisar">
+            <div class="row justify-content-end g-2">
+                <div class="col">
+                    <input type="text" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
+                </div>
+                <div class="col">
+                    <select name="Status" id="Status" class="form-select" required>
+                        <option>TODOS</option>
+                        <option value="1">Jogando</option>
+                        <option value="2">História Principal concluída</option>
+                        <option value="3">História Principal + secundárias concluídas</option>
+                        <option value="9">Todas as Conquistas obtidas (Platina)</option>
+                        <option value="0">Abandonado</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-secondary" id="pesquisar-jogos">Pesquisar</button>
+                </div>
+                <div class="col-auto">
+                    <a role="button" class="btn btn-primary" asp-action="Index" asp-controller="Rawg">Adicionar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr class="my-3" />
+
+<div id="tabela-jogos" class="row gap-5 justify-content-center">
+</div>
+
+<div id="loading" style="display:none; text-align:center; padding:20px;">
+    <span class="spinner-border" role="status"></span>
+</div>
+
+@section Scripts {
+    <script>
+        $('#pesquisar-jogos').on('click', function () {
+            carregarTabela();
+        });
+
+        $(document).ready(function(){
+            carregarTabela();
+        })
+
+        function carregarTabela() {
+            const titulo = $('#titulo').val();
+
+            $.ajax({
+                url: '/Jogo/ListarJogos',
+                type: 'POST',
+                dataType: 'html',
+                data: $('#pesquisar').serialize(),
+
+                beforeSend: function () {
+                },
+
+                success: function (resultado) {
+                    $("#tabela-jogos").html(resultado);
+                    initRatings("#tabela-jogos");
+                },
+
+                complete: function () {
+                },
+
+                error: function () {
+                }
+            });
+
+        $(document).ready(function () {
+          initRatings();
+        });
+        }
+
+
+        $('#pesquisar').on('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                $('#pesquisar-jogos').click();
+            }
+        });
+
+    </script>
+}
+

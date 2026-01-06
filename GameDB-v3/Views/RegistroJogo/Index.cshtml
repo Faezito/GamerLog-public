@@ -1,0 +1,309 @@
+﻿@model JogoModel
+
+@{
+    decimal? tempoJogado = ViewBag.tempoJogado ?? 0;
+}
+
+<div class="row">
+    <div class="col-12 col-lg-3">
+        <div class="">
+            <div class="row justify-content-center mb-3 rounded-3 shadow-lg" style="background-image: url('@Model.CaminhoImagem'); background-size: cover; background-position: center; height: 200px; height: 200px;">
+            </div>
+
+            @if (tempoJogado == null)
+            {
+                <span class="fs-5 w-auto my-auto">Nenhuma jogatina registrada.</span>
+            }
+            else
+            {
+                <span class="fs-5 w-auto my-auto">(@tempoJogado horas registradas)</span>
+            }
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-9">
+        <div class="row mb-2">
+            <div class="col-10">
+                <h2 class="text-uppercase w-auto">
+                    @Model.Titulo
+                </h2>
+                <span class="fs-8">Lançado em @Model.DataLancamento?.ToString("dd 'de' MMM 'de' yyyy", new CultureInfo("pt-BR")) por @Model.Publisher</span>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-secondary" asp-action="Index" asp-controller="Usuario">Voltar</a>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="col-10">
+                <table class="table">
+                    <tr>
+                        <td class="text-light">Genero:</td>
+                        <td class="text-light">@Model.Genero</td>
+                    </tr>
+                    <tr>
+                        <td class="text-light">Metacritic Score:</td>
+                        <td><span class="@Model.MetacriticCor">@Model.Metacritic</span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-2 align-bottom">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-success mt-5">
+                    NOVO
+                </a>
+            </div>
+        </div>
+
+        <hr />
+
+        <div id="lista-registros"></div>
+    </div>
+</div>
+
+@* MODAL CADASTRO *@
+<div class="modal fade text-black" id="Modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h3>Como está sendo sua jogatina?</h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="form-cadastro">
+                    @Html.HiddenFor(x => x.ID)
+                    @Html.AntiForgeryToken()
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="PlataformaID" class="form-label">Plataforma</label>
+                            <select class="form-control" name="PlataformaID" required>
+                                <option disabled selected>PLATAFORMA</option>
+                                @await Component.InvokeAsync("DropPlataformas")
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="hidden" name="Nota" id="Nota" />
+                            <label class="form-label">Avaliação:</label>
+                            <div id="rating-edit" class="mx-auto"></div>
+                        </div>
+
+                        <div class="col">
+                            <label for="tempoJogado" class="form-label">Tempo Jogado</label>
+                            <div class="input-group mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="tempoJogado"
+                                       name="TempoJogadoString"
+                                       required>
+                                <span class="input-group-text">horas</span>
+                            </div>
+                        </div>
+
+
+                        <div class="col">
+                            <label for="Status" class="form-label">Situação</label>
+                            <select name="Status" id="Status" class="form-select" required>
+                                <option selected disabled>SITUAÇÃO</option>
+                                <option value="1">Jogando</option>
+                                <option value="2">História Principal concluída</option>
+                                <option value="3">História Principal + secundárias concluídas</option>
+                                <option value="9">Todas as Conquistas obtidas (Platina)</option>
+                                <option value="0">Abandonado</option>
+                            </select>
+                        </div>
+
+                        <div class="col" id="inputZerado">
+                            <label for="DataZerado" class="form-label">Data Zerado</label>
+                            <input type="text"
+                                   class="form-control date"
+                                   id="DataZerado"
+                                   name="DataZerado">
+                        </div>
+
+                        <div class="col" id="inputPlatinado">
+                            <label for="DataPlatinado" class="form-label">Data Platinado</label>
+                            <input type="text"
+                                   class="form-control date"
+                                   id="DataPlatinado"
+                                   name="DataPlatinado">
+                        </div>
+
+                        <div class="col" id="inputJogado">
+                            <label for="DataUltimaSessao" class="form-label">Última Sessão</label>
+                            <input type="text"
+                                   class="form-control date"
+                                   id="DataUltimaSessao"
+                                   name="DataUltimaSessao">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <textarea class="form-control" name="Obs" placeholder=" " id="floatingTextarea"></textarea>
+                                <label for="floatingTextarea" class="">Observações</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-auto">
+                            <button type="button" id="btnSalvar" class="btn btn-success">
+                                <span id="texto-salvar">
+                                    Salvar
+                                </span>
+                                <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" data-bs-dismiss="modal"
+                                    class="btn btn-secondary">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $.get('/RegistroJogo/ListarRegistros', { id: @Model.ID })
+                .done(function (html) {
+                    $('#lista-registros').html(html);
+                    initRatings("#lista-registros");
+
+                })
+                .fail(function (err) {
+                    Swal.fire('Erro', 'Erro ao carregar registros', 'error');
+                });
+                $('#inputZerado').hide()
+                $('#inputPlatinado').hide()
+                $('.date').mask('00/00/0000');
+        });
+
+        $("#rating-edit").rateYo({
+            rating: 0,
+            starWidth: "32px",
+            ratedFill: "#ffc107",
+            precision: 1,
+            onSet: function (rating) {
+                $("#Nota").val(Math.round(rating * 20));
+            }
+        });
+
+        // DELETAR
+
+        $(document).on('click','.deletar', function(e){
+            e.preventDefault();
+
+            const form = $(this).closest("form");
+
+            Swal.fire({
+                title: "Realmente deseja deletar este registro?",
+                showDenyButton: true,
+                denyButtonText: "Não",
+                confirmButtonText: "Sim",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                form.trigger("submit");
+            }
+        })
+        })
+
+        // SALVAR
+
+        $('#btnSalvar').on('click', function () {
+            $.ajax({
+                url: '/Jogo/Registro',
+                type: 'POST',
+                data: $('#form-cadastro').serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function () {
+                    $('#btnSalvar').prop('disabled', true);
+                },
+                complete: function () {
+                    $('#btnSalvar').prop('disabled', false);
+                }
+            })
+            .done(function (response) {
+                if (response.success) {
+                    window.location.href = response.redirectUrl;
+                }
+            })
+            .fail(function (xhr) {
+                if (xhr.responseJSON) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: xhr.responseJSON.title ?? 'Erro',
+                        html: xhr.responseJSON.detail
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Erro inesperado ao processar a requisição.'
+                    });
+                }
+            });
+        });
+
+        // ALTERNAR DATAS
+
+        $('#Status').on('change', function(evt){
+            const status = Number($(this).val());
+            if (status == 2)
+            {
+                $('#inputZerado').show()
+                    .find('input, select, textarea')
+                    .prop('disabled', false);
+
+                $('#inputPlatinado').hide()
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+
+                $('#inputJogado').hide()
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+            }
+            else if (status == 9)
+            {
+                $('#inputZerado').hide()
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+
+                $('#inputPlatinado').show()
+                    .find('input, select, textarea')
+                    .prop('disabled', false);
+
+                $('#inputJogado').hide()
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+            }
+            else
+            {
+                $('#inputZerado').hide()
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+
+                $('#inputPlatinado').hide()
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+
+                $('#inputJogado').show()
+                    .find('input, select, textarea')
+                    .prop('disabled', false);
+            }
+
+        })
+
+    </script>
+}
+
+

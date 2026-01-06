@@ -1,0 +1,44 @@
+﻿@model List<UsuarioModel>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>#</th>
+            <th>#</th>
+            <th>#</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.NomeCompleto</td>
+                <td>@u.Usuario</td>
+                <td>@u.Email</td>
+                <td>
+                    <a asp-action="Cadastro" class="btn btn-outline-primary" asp-route-id="@u.ID">
+                        Editar
+                    </a>
+                </td>
+                <td>
+                    <form method="post" asp-action="GerarSenha" asp-controller="Admin" asp-route-id="@u.ID">
+                        <button type="submit" class="btn btn-warning gerarSenha" id="GerarSenha">
+                            Gerar Senha
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" asp-action="Deletar" asp-controller="Admin" asp-route-id="@u.ID">
+                        <button type="submit" class="btn btn-danger deletar" id="Deletar">
+                            Deletar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

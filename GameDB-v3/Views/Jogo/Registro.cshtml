@@ -1,0 +1,78 @@
+﻿@model JogoModel
+
+<div class="row mb-2">
+    <h2 class="text-uppercase">
+        Registre sua jogatina
+    </h2>
+</div>
+<hr />
+<div class="row">
+    <div class="col-4">
+        <img src="@Model.CaminhoImagem" alt="Alternate Text" class="w-100" />
+    </div>
+    <div class="col-8">
+        <h4>@Model.Titulo</h4>
+        <h5>@Model.Genero | @Model.Metacritic</h5>
+        <h5>@Model.DataLancamento?.ToString("yyyy-MM-dd") | @Model.Publisher</h5>
+    </div>
+</div>
+
+<form method="post" asp-action="Registro">
+    <input type="hidden" asp-for="ID" />
+
+    @Html.HiddenFor(x => x.ID)
+
+    <div class="row mb-3">
+        <div class="col">
+            <select class="form-control py-3" id="floatingNome" name="PlataformaID" required>
+                <option disabled selected>PLATAFORMA</option>
+                @await Component.InvokeAsync("DropPlataformas")
+            </select>
+        </div>
+
+        <div class="col">
+            <div class="form-floating">
+                <input type="number" class="form-control" id="floatingTempo" name="TempoJogado" placeholder=" " required>
+                <label for="floatingTempo">Tempo Jogado</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating">
+                <input type="number" class="form-control" id="floatingNota" name="Nota" placeholder=" " required>
+                <label for="floatingNota">Avaliação</label>
+            </div>
+
+        </div>
+        <div class="col">
+                <select name="Status" class="form-select py-3" required>
+                    <option selected disabled>STATUS</option>
+                    <option value="J">Jogando</option>
+                    <option value="Z">História Principal concluída</option>
+                    <option value="F">História Principal + secundárias concluídas</option>
+                    <option value="P">Todas as Conquistas obtidas (Platina)</option>
+                    <option value="A">Abandonado</option>
+                </select>
+            </div>
+    </div>
+    <div class="row mb-3">
+        <div class="form-floating">
+            <textarea class="form-control" name="Nota" placeholder=" " id="floatingTextarea"></textarea>
+            <label for="floatingTextarea">Observações</label>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">Voltar</button>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <script>
+    </script>
+}

@@ -1,0 +1,39 @@
+﻿@model List<RegistroJogoModel>
+
+@if (Model.Count <= 0)
+{
+    <h4>Nenhuma jogatina registrada.</h4>
+}
+else
+{
+    <h4>Seu histórico de jogatinas</h4>
+
+    <table class="table">
+        <tbody>
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td class="text-light">@game.DataAdicionado.ToString("dd/MM/yyyy")</td>
+                    <td class="text-light">@game.StatusTexto</td>
+                    <td class="text-light">@game.Plataforma</td>
+                    <td class="text-light">
+                        <div class="rating"
+                             data-nota="@game.Nota"
+                             data-readonly="true">
+                        </div>
+                    </td>
+                    <td class="text-light">@game.Obs</td>
+                    <td class="text-light">
+                        @* TODO: COLOCAR ÍCONE DE LIXEIRA AO INVÉS DO Excluir *@
+                        <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
+                            <button type="submit" class="btn btn-danger deletar" id="Deletar">
+                                Deletar
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

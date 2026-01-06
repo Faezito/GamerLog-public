@@ -1,2 +1,2 @@
-# GamerLog-public
-GamerLog's public version
+# GameDB-v3
+Game tracking platform.

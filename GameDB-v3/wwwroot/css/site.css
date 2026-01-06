@@ -1,0 +1,242 @@
+:root {
+    --mainblue-dark: #0f172a;
+    --mainblue: #21335f;
+    --darkblue: #001bff;
+    --orange: #ffa900;
+    --brown: #6a5100;
+    --darkgray: #6b6a6a;
+    --lightgray: #cfcfcf;
+    --darkpurple: #020617;
+}
+
+html {
+    font-size: 14px;
+}
+
+.tracking-wider {
+    letter-spacing: 1px;
+}
+
+.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.2);
+}
+
+.card {
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+.bg-dark {
+    background-color: var(--darkpurple) !important;
+}
+
+.card-game:hover {
+    box-shadow: 0px 0px 15px white;
+}
+
+.form-floating > .form-control:focus ~ label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+.form-floating > .form-control-plaintext ~ label::after,
+.form-floating > .form-select ~ label::after {
+    background-color: transparent !important;
+    color: black;
+}
+
+.form-floating label {
+    color: black !important;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+a {
+    text-decoration: none;
+}
+
+table,
+table thead,
+table tbody,
+table tr,
+table th,
+table td {
+    background-color: transparent !important;
+    border: none;
+    color: white;
+}
+
+/* FONT SIZES PERSONALIZADOS */
+
+.fs-7 {
+    font-size: 0.9rem;
+}
+
+.fs-8 {
+    font-size: 0.8rem;
+}
+
+.fs-9 {
+    font-size: 0.7rem;
+}
+
+.fs-10 {
+    font-size: 0.6rem;
+}
+
+
+/* CORES DE TEXTO PERSONALIZADAS */
+
+.text-mainblue {
+    color: var(--mainblue);
+}
+
+.text-darkblue {
+    color: var(--darkblue);
+}
+
+.text-orange {
+    color: var(--orange);
+}
+
+.text-brown {
+    color: var(--brown);
+}
+
+.text-darkgray {
+    color: var(--darkgray);
+}
+
+.text-lightgray {
+    color: var(--lightgray);
+}
+
+
+/* CORES DE BACKGROUND PERSONALIZADAS */
+
+
+.bg-mainblue {
+    background-color: var(--mainblue);
+}
+
+.bg-darkblue {
+    background-color: var(--darkblue);
+}
+
+.bg-orange {
+    background-color: var(--orange);
+}
+
+.bg-brown {
+    background-color: var(--brown);
+}
+
+.bg-darkgray {
+    background-color: var(--darkgray);
+}
+
+.bg-lightgray {
+    background-color: var(--lightgray);
+}
+
+
+/* CORES DE BOTOES PERSONALIZADAS */
+
+.btn-mainblue {
+    --bs-btn-bg: var(--mainblue);
+    --bs-btn-border-color: var(--mainblue);
+    --bs-btn-color: #fff;
+}
+
+.btn-darkblue {
+    --bs-btn-bg: var(--darkblue);
+    --bs-btn-border-color: var(--darkblue);
+    --bs-btn-color: #fff;
+}
+
+.btn-orange {
+    --bs-btn-bg: var(--orange);
+    --bs-btn-border-color: var(--orange);
+    --bs-btn-color: #000;
+}
+
+.btn-brown {
+    --bs-btn-bg: var(--brown);
+    --bs-btn-border-color: var(--brown);
+    --bs-btn-color: #fff;
+}
+
+.btn-darkgray {
+    --bs-btn-bg: var(--darkgray);
+    --bs-btn-border-color: var(--darkgray);
+    --bs-btn-color: #fff;
+}
+
+.btn-lightgray {
+    --bs-btn-bg: var(--lightgray);
+    --bs-btn-border-color: var(--lightgray);
+    --bs-btn-color: #000;
+}
+
+
+/* CORES LI */
+
+.list-group-item-mainblue {
+    background-color: var(--mainblue);
+    color: #fff;
+}
+
+.list-group-item-darkblue {
+    background-color: var(--darkblue);
+    color: #fff;
+}
+
+.list-group-item-orange {
+    background-color: var(--orange);
+    color: #000;
+}
+
+.list-group-item-brown {
+    background-color: var(--brown);
+    color: #fff;
+}
+
+.list-group-item-darkgray {
+    background-color: var(--darkgray);
+    color: #fff;
+}
+
+.list-group-item-lightgray {
+    background-color: var(--lightgray);
+    color: #000;
+}
+
+
+/* NOTAS ESTRELA */
+
+.rating-input i {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ffc107;
+}
+
+    .rating-input i.bi-star-fill {
+        color: #ffc107;
+    }

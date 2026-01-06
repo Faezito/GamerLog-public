@@ -399,3 +399,12 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+GameDB-v3/.config/dotnet-tools.json
+GameDB-v3/wwwroot/lib/bootstrap/LICENSE
+GameDB-v3/wwwroot/lib/jquery-validation-unobtrusive/LICENSE.txt
+GameDB-v3/wwwroot/lib/jquery-validation/dist/additional-methods.js
+GameDB-v3/wwwroot/lib/jquery-validation/dist/additional-methods.min.js
+GameDB-v3/wwwroot/lib/jquery-validation/LICENSE.md
+GameDB-v3/wwwroot/lib/jquery/LICENSE.txt
+GameDB-v3/appsettings.Development.json
+GameDB-v3/appsettings.json
