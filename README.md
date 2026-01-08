@@ -11,6 +11,6 @@ Desenvolvido em .NET e SQL Server, com dados dos jogos vindos da API do Rawg, ca
 # Roadmap
 
 - Dashboard com dados interessantes, como gêneros mais jogados, tempo de jogo estimado, plataformas mais jogadas, etc.
-- Rede social integrada para debater opiniões, compartilhar dicas, truques e conquistas.
+- Rede social integrada para compartilhar opiniões, dicas, truques e conquistas.
 - Sistema de comentários nos registros de jogos de outros jogadores.
 
