@@ -12,7 +12,7 @@
                 <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-primary" id="pesquisar-jogos">Pesquisar</button>
+                <button type="button" class="btn btn-secondary" id="pesquisar-jogos">Pesquisar</button>
             </div>
             <div class="col-auto">
                 <a asp-action="Index" asp-controller="Usuario" class="btn btn-secondary" id="pesquisar-jogos">Voltar</a>
@@ -68,14 +68,6 @@
                 }
             });
         }
-
-        $('#pesquisar').on('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                $('#pesquisar-jogos').click();
-            }
-        });
-
     </script>
 
 }

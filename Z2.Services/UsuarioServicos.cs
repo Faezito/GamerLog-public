@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using GenerativeAI;
+using Org.BouncyCastle.Crypto;
 using System.Web.Mvc;
 using Z1.Model;
 using Z3.DataAccess;
@@ -7,11 +8,11 @@ namespace Z2.Services
 {
     public interface IUsuarioServicos
     {
-        Task<List<UsuarioModel>> Listar(int? id, string? nome, string? email, string? usuario);
+        Task<List<UsuarioModel>> Listar(int? id, string? nome, string? email, string? GoogleId, string? usuario);
         Task<int?> Cadastrar(UsuarioModel model);
         Task Deletar(UsuarioModel model);
-        Task<UsuarioModel> Obter(int? id, string? email);
-        Task<UsuarioModel> Login(string? usuario, string Senha);
+        Task<UsuarioModel> Obter(int? id, string? GoogleId, string? email);
+        Task<UsuarioModel> Login(string? GoogleId, string? usuario, string Senha);
         Task AtualizarSenha(UsuarioModel model);
     }
 
@@ -47,15 +48,15 @@ namespace Z2.Services
             await _daUsuario.Deletar(model);
         }
 
-        public async Task<List<UsuarioModel>> Listar(int? id, string? nome, string? email, string? usuario)
+        public async Task<List<UsuarioModel>> Listar(int? id, string? nome, string? GoogleId, string? email, string? usuario)
         {
-            List<UsuarioModel> lst = await _daUsuario.Listar(id, nome, email, usuario);
+            List<UsuarioModel> lst = await _daUsuario.Listar(id, nome, GoogleId, email, usuario);
             return lst;
         }
 
-        public async Task<UsuarioModel> Login(string? usuario, string Senha)
+        public async Task<UsuarioModel> Login(string? GoogleId, string? usuario, string Senha)
         {
-            var user = await _daUsuario.Obter(null, usuario);
+            var user = await _daUsuario.Obter(null, usuario, GoogleId);
 
             if (user != null)
             {
@@ -64,13 +65,12 @@ namespace Z2.Services
                     return user;
                 }
             }
-
             return null;
         }
 
-        public async Task<UsuarioModel> Obter(int? id, string? email)
+        public async Task<UsuarioModel> Obter(int? id, string? GoogleId, string? email)
         {
-            var lst = await _daUsuario.Listar(id, null, null, email);
+            var lst = await _daUsuario.Listar(id, null, GoogleId, null, email);
             return lst.SingleOrDefault();
         }
     }

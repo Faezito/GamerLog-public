@@ -21,7 +21,32 @@
                 }
                 else
                 {
-                    <a class="ms-3 text-light" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                    @if (Model != null)
+                    {
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle text-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @Model.NomeCompleto.Split(" ")[0]
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item"
+                                       role="button"
+                                       asp-area=""
+                                       asp-controller="Usuario"
+                                       asp-action="Cadastro"
+                                       asp-route-id="@Model.ID">
+                                        Perfil
+                                    </a>
+                                </li>
+
+                                @if (Model.Tipo == "A")
+                                {
+                                    <li><a class="dropdown-item" role="" asp-controller="Admin" asp-action="Index">Painel Administrativo</a></li>
+                                }
+                                <li><a class="dropdown-item" role="button" asp-area="" asp-controller="Home" asp-action="Logout">Sair</a></li>
+                            </ul>
+                        </div>
+                    }
                 }
             </div>
         </div>

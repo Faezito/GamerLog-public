@@ -79,6 +79,8 @@ namespace Z2.Services.Externo
                 string assunto = string.Empty;
                 string corpo = string.Empty;
 
+                // TODO: USAR O ESTILO DO E-MAIL DE RECUPERAÇÃO NO E-MAIL DE CADASTRO
+
                 if (cadastro == true)
                 {
                     assunto = "Bem-vindo ao GamerLog 🎮 Sua conta está pronta!";

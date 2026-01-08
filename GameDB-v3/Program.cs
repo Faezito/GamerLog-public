@@ -12,12 +12,56 @@ using Z2.Services.Externo;
 using Z3.DataAccess;
 using Z3.DataAccess.Database;
 using Z3.DataAccess.Externo;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.DataProtection;
+using System.Security.Claims;
 using Z4.Bibliotecas;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
+
+// Autenticação única
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/Home/Login";
+    options.AccessDeniedPath = "/Home/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
+})
+.AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["GoogleAuth:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"];
+    googleOptions.CallbackPath = "/signin-google";
+
+    // Claims extras
+    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+});
+
+// Data Protection persistente
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"C:\keys")) // LOCAL NO SERVIDOR
+    .SetApplicationName("LOGIN");  //MUDAR DE ACORDO COM O NOME DO APP
+
+// Sessão
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 builder.Services.AddScoped<IDapper, DapperDatabase>(x =>
 {
@@ -52,13 +96,13 @@ builder.Services.AddScoped<IJogoDataAccess, JogoDataAccess>();
 builder.Services.AddScoped<IPlataformaServicos, PlataformaServicos>();
 builder.Services.AddScoped<IPlataformaDataAccess, PlataformaDataAccess>();
 
-// Cookies
+//// Cookies
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.CheckConsentNeeded = context => true;
-    options.MinimumSameSitePolicy = SameSiteMode.None;
-});
+//builder.Services.Configure<CookiePolicyOptions>(options =>
+//{
+//    options.CheckConsentNeeded = context => true;
+//    options.MinimumSameSitePolicy = SameSiteMode.None;
+//});
 
 builder.Services.AddHttpClient<RawgService>(client =>
 {
@@ -67,24 +111,24 @@ builder.Services.AddHttpClient<RawgService>(client =>
 });
 
 
-// Configurações de sessão
+//// Configurações de sessão
 
 builder.Services.AddMemoryCache(); // serve para guardar os dados na memória
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(1);
-    options.IOTimeout = TimeSpan.FromHours(1);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromHours(1);
+//    options.IOTimeout = TimeSpan.FromHours(1);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
-builder.Services.AddAuthentication("CookieAuth")
-    .AddCookie("CookieAuth", options =>
-    {
-        options.LoginPath = "/Login/Index";
-    });
+//builder.Services.AddAuthentication("CookieAuth")
+//    .AddCookie("CookieAuth", options =>
+//    {
+//        options.LoginPath = "/Login/Index";
+//    });
 
 
 builder.Services.AddScoped<Sessao>();
@@ -96,7 +140,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseCookiePolicy();
 app.UseSession();
 

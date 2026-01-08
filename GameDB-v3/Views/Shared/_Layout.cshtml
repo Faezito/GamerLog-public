@@ -1,6 +1,9 @@
 ﻿@{
-    var usuario = new UsuarioModel();
-    usuario = LoginUsuario.GetCliente();
+    UsuarioModel usuario = null;
+    if (User?.Identity?.IsAuthenticated ?? false)
+    {
+        usuario = this.User.ObterUsuario();
+    }
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
 }
 
@@ -12,6 +15,9 @@
     <title>@ViewData["Title"] - GamerLog</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/jquery.rateyo.min.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/lib/fontawesome/fontawesome.min.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/lib/fontawesome/solid.min.css" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GameDB_v3.styles.css" asp-append-version="true" />
 
@@ -31,11 +37,17 @@
 
     <footer class="footer text-muted border-top border-dark position-absolute bottom-0 w-100 mb-3">
         <div class="container d-flex gap-5 text-light mt-3">
-            <span>&copy; 2025 - Desenvolvido por Faé</span> <a class="link-light" href="https://portfolio2025-vm6w.onrender.com/">Sobre</a>
+            <span>&copy; 2025 - Desenvolvido por Faé</span> <a class="link-light" href="https://portfolio2025-vm6w.onrender.com/" target="_blank">Sobre</a>
         </div>
     </footer>
 
-
+    <script asp-append-version="true" src="~/lib/summernote/summernote-bs5.min.js"></script>
+    <script asp-append-version="true" src="~/lib/summernote/summernote-pt-BR.min.js"></script>
+    <script asp-append-version="true" src="~/lib/echarts/echarts.min.js"></script>
+    <script asp-append-version="true" src="~/lib/echarts/echartsGlobal.js"></script>
+    <script asp-append-version="true" src="~/js/graficos/graficos.js"></script>
+    <script asp-append-version="true" src="~/lib/fontawesome/fontawesome.min.js"></script>
+    <script asp-append-version="true" src="~/lib/fontawesome/solid.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/jquery.rateyo.min.js"></script> 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -61,7 +73,7 @@
     {
         <script>
             Swal.fire({
-                html: '@Html.Raw(TempData["ALERT_S"])',
+                text: '@Html.Raw(TempData["ALERT_S"])',
                 icon: "success"
             });
         </script>
@@ -82,7 +94,7 @@
     {
         <script>
             Swal.fire({
-                html: '@Html.Raw(TempData["MSG_S"])',
+                text: '@Html.Raw(TempData["MSG_S"])',
                 icon: "success"
             });
         </script>

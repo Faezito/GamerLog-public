@@ -13,12 +13,12 @@ namespace Z3.DataAccess
 {
     public interface IUsuarioDataAccess
     {
-        Task<List<UsuarioModel>> Listar(int? id, string? nome, string? usuario, string? email);
+        Task<List<UsuarioModel>> Listar(int? id, string? nome, string? GoogleId, string? usuario, string? email);
         Task<int?> Adicionar(UsuarioModel model);
         Task Atualizar(UsuarioModel model);
         Task AtualizarSenha(UsuarioModel model);
         Task Deletar(UsuarioModel model);
-        Task<UsuarioModel> Obter(int? id, string? usuario);
+        Task<UsuarioModel> Obter(int? id, string? GoogleId, string? usuario);
     }
 
     public class UsuarioDataAccess : IUsuarioDataAccess
@@ -43,6 +43,7 @@ NomeCompleto
 ,Tipo
 ,Genero
 ,DataCriacao
+,GoogleId
 )
 OUTPUT INSERTED.ID
 VALUES (
@@ -52,7 +53,8 @@ VALUES (
 @Senha,
 @Tipo,
 @Genero,
-@DataCriacao
+@DataCriacao,
+@GoogleId
 )
 ";
                 return await _dapper.ExecuteAsync(sql: sql, commandType: System.Data.CommandType.Text, param: model);
@@ -76,7 +78,7 @@ VALUES (
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Ocorreu um erro inesperado ao salvar os dados.");
             }
         }
 
@@ -135,13 +137,14 @@ WHERE ID = @Id
             }
         }
 
-        public async Task<List<UsuarioModel>> Listar(int? id, string? nome, string? usuario, string? email)
+        public async Task<List<UsuarioModel>> Listar(int? id, string? nome, string? GoogleId, string? usuario, string? email)
         {
             try
             {
                 string sql = @"
 SELECT ID
 ,NomeCompleto
+,GoogleId
 ,Usuario
 ,Email
 ,Senha
@@ -152,6 +155,7 @@ SELECT ID
 FROM dbo.Usuarios WITH(NOLOCK)
 WHERE DataDeletado IS NULL
 AND (@id IS NULL OR ID = @id)
+AND (@GoogleId IS NULL OR GoogleId = @GoogleId)
 AND (@nome IS NULL OR NomeCompleto LIKE CONCAT(@nome, '%'))
 AND (@usuario IS NULL OR Usuario LIKE CONCAT(@usuario, '%'))
 AND (@email IS NULL OR Email LIKE CONCAT(@email, '%'))
@@ -162,7 +166,8 @@ AND (@email IS NULL OR Email LIKE CONCAT(@email, '%'))
                     id = id,
                     nome = nome,
                     usuario = usuario,
-                    email = email
+                    email = email,
+                    GoogleId = GoogleId
                 };
 
                 var ret = await _dapper.QueryAsync<UsuarioModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
@@ -197,7 +202,7 @@ WHERE ID = @id
             }
         }
 
-        public async Task<UsuarioModel> Obter(int? id, string? usuario)
+        public async Task<UsuarioModel> Obter(int? id, string? usuario, string? GoogleId)
         {
             try
             {
@@ -211,9 +216,11 @@ SELECT ID
 ,Genero
 ,DataCriacao
 ,DataDeletado
+,GoogleId
 FROM dbo.Usuarios WITH(NOLOCK)
 WHERE DataDeletado IS NULL
 AND (@id IS NULL OR ID = @id)
+AND (@GoogleId IS NULL OR GoogleId = @GoogleId)
 AND ((Usuario = @usuario)
 OR (Email = @usuario))
 ";
@@ -221,7 +228,8 @@ OR (Email = @usuario))
                 var obj = new
                 {
                     id = id,
-                    usuario = usuario
+                    usuario = usuario,
+                    GoogleId = GoogleId
                 };
                 return await _dapper.QueryFirstOrDefaultAsync<UsuarioModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
             }

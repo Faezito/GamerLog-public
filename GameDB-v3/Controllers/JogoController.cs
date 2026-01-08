@@ -1,4 +1,5 @@
-﻿using GameDB_v3.Libraries.Lang;
+﻿using GameDB_v3.Extensions;
+using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Z1.Model;
 using Z1.Model.APIs;
 using Z2.Services;
 using Z2.Services.Externo;
+using Z4.Bibliotecas;
 
 namespace GameDB_v3.Controllers
 {
@@ -60,40 +62,53 @@ namespace GameDB_v3.Controllers
         [HttpPost]
         public async Task<IActionResult> Registro(int id, RegistroJogoModel registro)
         {
-            var usuario = _login.GetCliente();
-            var jogo = await _jogos.Obter(id);
-            var tempoStr = string.IsNullOrWhiteSpace(registro.TempoJogadoString) ? "0" : registro.TempoJogadoString;
-            registro.TempoJogado = decimal.Parse(tempoStr, new CultureInfo("pt-BR"));
-
-            if (jogo == null)
+            try
             {
-                try
+                var usuario = this.User.ObterUsuario();
+                var jogo = await _jogos.Obter(id);
+                var tempoStr = string.IsNullOrWhiteSpace(registro.TempoJogadoString) ? "0" : registro.TempoJogadoString;
+                registro.TempoJogado = decimal.Parse(tempoStr, new CultureInfo("pt-BR"));
+
+                if (jogo == null)
                 {
                     int jogoID = await _jogos.Cadastro(id, jogo);
                     jogo = await _jogos.Obter(jogoID);
                 }
-                catch (Exception ex)
+
+                registro.JogoID = jogo.ID.Value;
+                registro.UsuarioID = usuario.ID.Value;
+                registro.DataAdicionado = DateTime.Now;
+
+                if (registro.UltimaSessao == null)
                 {
-                    return Problem(
-                        title: "Erro",
-                        detail: ex.Message,
-                        statusCode: StatusCodes.Status500InternalServerError
-                    );
+                    if (registro.DataPlatinado == null)
+                        registro.UltimaSessao = registro.DataZerado;
+                    else
+                        registro.UltimaSessao = registro.DataPlatinado;
                 }
+
+                var ret = ManipularModels.ValidarRegistro(registro);
+
+                if (ret.valido == false)
+                    return Problem(title: "Erro", detail: ret.mensagem);
+
+                await _registro.Inserir(registro);
+
+                TempData["MSG_S"] = Mensagem.S_CADASTRADO;
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("Index", "Usuario")
+                });
             }
-
-            registro.JogoID = jogo.ID.Value;
-            registro.UsuarioID = usuario.ID.Value;
-            registro.DataAdicionado = DateTime.Now;
-
-            await _registro.Inserir(registro);
-
-            TempData["MSG_S"] = Mensagem.S_CADASTRADO;
-            return Json(new
+            catch (Exception ex)
             {
-                success = true,
-                redirectUrl = Url.Action("Index", "Usuario")
-            });
+                return Problem(
+                    title: "Erro",
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
         }
 
         [HttpPost]
@@ -101,7 +116,7 @@ namespace GameDB_v3.Controllers
         {
             try
             {
-                var usuario = _login.GetCliente();
+                var usuario = this.User.ObterUsuario();
                 var lst = await _jogos.Listar(id, titulo, status, usuario.ID.Value);
 
                 return PartialView("_Tabela", lst);

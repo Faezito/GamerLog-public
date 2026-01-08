@@ -1,4 +1,5 @@
-﻿using GameDB_v3.Libraries.Login;
+﻿using GameDB_v3.Extensions;
+using GameDB_v3.Libraries.Login;
 using Microsoft.AspNetCore.Mvc;
 using Z1.Model;
 using Z2.Services;
@@ -15,7 +16,7 @@ namespace GameDB_v3.Views.Shared.Components.Navbar
         public async Task<IViewComponentResult> InvokeAsync()
         {
             UsuarioModel usuario = new();
-            usuario = _login.GetCliente();
+            usuario = ViewContext.HttpContext.User.ObterUsuario();
 
             return View("Default", usuario);
         }

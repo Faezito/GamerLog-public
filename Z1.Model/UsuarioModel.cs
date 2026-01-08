@@ -24,5 +24,6 @@ namespace Z1.Model
         public DateTime? DataCriacao { get; set; }
         public DateTime? DataDeletado { get; set; }
         public bool SenhaTemporaria { get; set; }
+        public string? GoogleId { get; set; }
     }
 }

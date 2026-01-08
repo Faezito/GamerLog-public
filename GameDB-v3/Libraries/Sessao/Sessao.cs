@@ -1,51 +1,89 @@
-﻿using System.Drawing;
-
-namespace GameDB_v3.Libraries.Sessao
+﻿namespace GameDB_v3.Libraries.Sessao
 {
     public class Sessao
     {
-        IHttpContextAccessor _context;
+        private readonly IHttpContextAccessor _context;
+
         public Sessao(IHttpContextAccessor context)
         {
             _context = context;
         }
 
-        public void Cadastrar(string Key, string Valor)
+        public void Cadastrar(string key, string valor)
         {
-            _context.HttpContext.Session.SetString(Key, Valor);
+            _context.HttpContext?.Session.SetString(key, valor);
         }
 
-        public void Atualizar(string Key, string Valor)
+        public void Atualizar(string key, string valor)
         {
-            if (Existe(Key))
-            {
-                _context.HttpContext.Session.Remove(Key);
-            }
-            _context.HttpContext.Session.SetString(Key, Valor);
+            _context.HttpContext?.Session.SetString(key, valor);
         }
 
-        public void Remover(string Key)
+        public void Remover(string key)
         {
-            _context.HttpContext.Session.Remove(Key);
+            _context.HttpContext?.Session.Remove(key);
         }
 
-        public string Consultar(string Key)
+        public string Consultar(string key)
         {
-            return _context.HttpContext.Session.GetString(Key);
+            return _context.HttpContext?.Session.GetString(key);
         }
 
-        public bool Existe(string Key)
+        public bool Existe(string key)
         {
-            if (_context.HttpContext.Session.GetString(Key) == null)
-            {
-                return false;
-            }
-            return true;
+            return _context.HttpContext?.Session.GetString(key) != null;
         }
 
         public void RemoverTodos()
         {
-            _context.HttpContext.Session.Clear();
+            _context.HttpContext?.Session.Clear();
         }
     }
+
+    //public class Sessao
+    //{
+    //    IHttpContextAccessor _context;
+    //    public Sessao(IHttpContextAccessor context)
+    //    {
+    //        _context = context;
+    //    }
+
+    //    public void Cadastrar(string Key, string Valor)
+    //    {
+    //        _context.HttpContext.Session.SetString(Key, Valor);
+    //    }
+
+    //    public void Atualizar(string Key, string Valor)
+    //    {
+    //        if (Existe(Key))
+    //        {
+    //            _context.HttpContext.Session.Remove(Key);
+    //        }
+    //        _context.HttpContext.Session.SetString(Key, Valor);
+    //    }
+
+    //    public void Remover(string Key)
+    //    {
+    //        _context.HttpContext.Session.Remove(Key);
+    //    }
+
+    //    public string Consultar(string Key)
+    //    {
+    //        return _context.HttpContext.Session.GetString(Key);
+    //    }
+
+    //    public bool Existe(string Key)
+    //    {
+    //        if (_context.HttpContext.Session.GetString(Key) == null)
+    //        {
+    //            return false;
+    //        }
+    //        return true;
+    //    }
+
+    //    public void RemoverTodos()
+    //    {
+    //        _context.HttpContext.Session.Clear();
+    //    }
+    //}
 }

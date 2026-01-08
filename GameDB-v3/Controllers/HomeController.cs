@@ -1,7 +1,10 @@
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
-using GenerativeAI.Types;
+using GameDB_v3.Libraries.Sessao;
+using GenerativeAI;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Z1.Model;
@@ -17,17 +20,20 @@ namespace GameDB_v3.Controllers
         private readonly IEmailServicos _emailServicos;
         private readonly LoginUsuario _login;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Sessao _sessao;
 
         public HomeController(IUsuarioServicos seUsuario,
             LoginUsuario login,
             IHttpContextAccessor httpContextAccessor,
-            IEmailServicos emailServicos
+            IEmailServicos emailServicos,
+            Sessao sessao
             )
         {
             _seUsuario = seUsuario;
             _login = login;
             _httpContextAccessor = httpContextAccessor;
             _emailServicos = emailServicos;
+            _sessao = sessao;
         }
 
         // LOGIN
@@ -47,53 +53,66 @@ namespace GameDB_v3.Controllers
         public async Task<IActionResult> Login([FromForm] string? Login, string? Senha)
         {
             UsuarioModel user = new();
-            user = await _seUsuario.Login(Login, Senha);
+            user = await _seUsuario.Login(null, Login, Senha);
 
             if (user == null)
             {
-                TempData["MSG_E"] = "Credenciais inválidas.";
+                return Problem(title: "Erro", detail: "Credenciais inválidas.");
             }
 
             try
             {
-                if (user != null)
+                // CRIAÇÃO DOS CLAIMS
+                var claims = new List<Claim>()
                 {
-                    _login.Login(user);
+                    new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                    new Claim(ClaimTypes.Name, user.NomeCompleto),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Tipo)
+                };
 
-                    _httpContextAccessor.HttpContext.Session.SetInt32("ID", user.ID.Value);
-                    _httpContextAccessor.HttpContext.Session.SetString("Nome", user.NomeCompleto);
-                    _httpContextAccessor.HttpContext.Session.SetString("Tipo", user.Tipo);
+                // Identidade
+                var identity = new ClaimsIdentity(
+                    claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme
+                );
 
-                    var validarSenha = ManipularModels.ValidarSenha(user.Senha);
+                // Criar principal
+                var principal = new ClaimsPrincipal(identity);
 
-                    if (!validarSenha.senhaValida)
+                // Efetuar login via cookie
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
+                    new AuthenticationProperties()
                     {
-                        user.SenhaTemporaria = true;
-
-                        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                        {
-                            return Json(new
-                            {
-                                success = true,
-                                redirectUrl = Url.Action("Cadastro", "Usuario", new { id = user.ID })
-                            });
-                        }
-
-                        return RedirectToAction("Cadastro", "Usuario", new { id = user.ID });
+                        IsPersistent = true,       // manter logado
+                        ExpiresUtc = DateTime.UtcNow.AddHours(3)
                     }
-                    else
+                );
+
+                // Salvar dados complementares na sessão
+                _sessao.Cadastrar("NomeUsuario", user.NomeCompleto);
+                _sessao.Cadastrar("ID", user.ID.ToString());
+                _sessao.Cadastrar("Tipo", user.Tipo.ToString());
+
+                var validarSenha = ManipularModels.ValidarSenha(user.Senha);
+
+                if (!validarSenha.senhaValida)
+                {
+                    user.SenhaTemporaria = true;
+                    TempData["MSG_A"] = "Sua senha não é segura, recomendamos a troca da mesma imediatamente!";
+
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                     {
-                        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                        return Json(new
                         {
-                            return Json(new
-                            {
-                                success = true,
-                                redirectUrl = Url.Action("Index", "Usuario")
-                            });
-                        }
-
-                        return RedirectToAction("Index", "Usuario");
+                            success = true,
+                            redirectUrl = Url.Action("Cadastro", "Usuario", new { id = user.ID })
+                        });
                     }
+
+                    return RedirectToAction("Cadastro", "Usuario", new { id = user.ID });
                 }
                 else
                 {
@@ -101,14 +120,14 @@ namespace GameDB_v3.Controllers
                     {
                         return Json(new
                         {
-                            success = false,
-                            message = "Credenciais inválidas."
+                            success = true,
+                            redirectUrl = Url.Action("Index", "Usuario", new { id = user.ID })
                         });
                     }
 
-                    TempData["MSG_E"] = "Credenciais inválidas.";
-                    return View();
+                    return RedirectToAction("Index", "Usuario", new { id = user.ID });
                 }
+
             }
             catch (Exception ex)
             {
@@ -122,9 +141,8 @@ namespace GameDB_v3.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            _login.Logout();
-            _httpContextAccessor.HttpContext.Session.Clear();
             await HttpContext.SignOutAsync();
+            _sessao.RemoverTodos();
             return RedirectToAction(nameof(Login));
         }
 
@@ -140,7 +158,7 @@ namespace GameDB_v3.Controllers
         {
             try
             {
-                UsuarioModel usuario = await _seUsuario.Obter(null, email.Trim().ToLower());
+                UsuarioModel usuario = await _seUsuario.Obter(null, null, email.Trim().ToLower());
 
                 if (usuario == null)
                 {
@@ -165,37 +183,6 @@ namespace GameDB_v3.Controllers
                     detail: ex.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                     );
-            }
-        }
-
-
-
-        // TODO: REMOVER SE NÃO FIZER FALTA
-        public async Task GerarSenha(UsuarioModel model)
-        {
-            try
-            {
-                model.Senha = KeyGenerator.GetUniqueKey(6);
-
-                await _seUsuario.AtualizarSenha(model);
-                model = await _seUsuario.Obter(model.ID.Value, null);
-
-                string destinatario = model.Email.Trim();
-                string assunto = "Recuperação de senha - GamerLog";
-                string corpo = $@"
-Olá, {model.NomeCompleto} você solicitou a recuperação da sua senha. <br />
-Segue abaixo sua nova senha, basta fazer login com seu usuário ou e-mail, e a senha abaixo. <br />
-<h4> {model.Senha} </h4>
-
-<a href='https://gamerlog.runasp.net/'>Acessar</a>
-
-";
-
-                await _emailServicos.EnviarEmailAsync(destinatario, assunto, corpo);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿@model UsuarioModel;
+
 @{
     ViewData["Title"] = "Painél do usuário";
 }
@@ -81,15 +82,6 @@
           initRatings();
         });
         }
-
-
-        $('#pesquisar').on('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                $('#pesquisar-jogos').click();
-            }
-        });
-
     </script>
 }
 

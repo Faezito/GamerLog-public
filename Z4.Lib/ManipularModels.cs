@@ -63,6 +63,21 @@ namespace Z4.Bibliotecas
             return (valido, mensagem);
         }
 
+        public static (bool valido, string? mensagem) ValidarRegistro(RegistroJogoModel model)
+        {
+            bool valido = true;
+            string mensagem = string.Empty;
+
+            if ((model.UsuarioID == 0) || (model.JogoID == 0) || (model.PlataformaID == 0) || (model.Status == 0)
+                )
+            {
+                mensagem += "Preencha todos os campos. <br />";
+                valido = false;
+            }
+
+            return (valido, mensagem);
+        }
+
         public static (bool senhaValida, string? mensagem) ValidarSenha(string senha)
         {
             bool senhaValida = true;
@@ -105,6 +120,20 @@ namespace Z4.Bibliotecas
                                             );
 
             return dataConvertida;
+        }
+
+        public static string GerarUsuario(string email, string id)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(id))
+            {
+                throw new Exception("Usuário inválido.");
+            }
+
+            var usermail = email.Split("@")[0];
+            id = id.Substring(3, 6);
+
+            string usuario = usermail + '.' + id;
+            return usuario;
         }
     }
 }

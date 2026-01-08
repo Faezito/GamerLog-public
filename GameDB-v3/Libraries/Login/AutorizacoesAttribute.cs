@@ -12,61 +12,107 @@ namespace GameDB_v3.Libraries.Login
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            // Recupera serviço de login
-            var loginUsuario = (LoginUsuario)context.HttpContext.RequestServices
-                .GetService(typeof(LoginUsuario));
+            var user = context.HttpContext.User;
 
-            var usuario = loginUsuario.GetCliente();
-
-            // Se não estiver logado
-            if (usuario == null)
+            if (!user.Identity.IsAuthenticated)
             {
-                //context.HttpContext.Items["MSG_E"] = "Sessão expirada, faça login novamente.";
-                context.Result = new JsonResult(new
-                {
-                    success = false,
-                    swal = new
-                    {
-                        icon = "error",
-                        title = "Sessão expirada",
-                        text = "Faça login novamente"
-                    }
-                });
-
                 context.Result = new RedirectToActionResult("Login", "Home", null);
                 return;
             }
 
-            // Se nenhum cargo foi exigido, permite acesso
             if (string.IsNullOrEmpty(Tipos))
                 return;
 
-            // Converte string em lista
-            var tiposPermitidos = Tipos.Split(',')
-                                         .Select(c => c.Trim().ToLower())
-                                         .ToList();
+            var tiposPermitidos = Tipos
+                .Split(',')
+                .Select(t => t.Trim().ToLower())
+                .ToList();
 
-            var cargoUsuario = usuario.Tipo.ToLower();
+            var tipoUsuario = user.FindFirst("Tipo")?.Value?.ToLower();
 
-            // Se usuário não possui cargo ou cargo não está na lista:
-            if (string.IsNullOrEmpty(cargoUsuario) ||
-                !tiposPermitidos.Contains(cargoUsuario))
+            if (tipoUsuario == null || !tiposPermitidos.Contains(tipoUsuario))
             {
-                //context.HttpContext.Items["MSG_E"] = "Acesso negado.";
+                bool isAjax = context.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
-                context.Result = new JsonResult(new
+                if (isAjax)
                 {
-                    success = false,
-                    swal = new
+                    context.Result = new JsonResult(new
                     {
-                        icon = "error",
-                        title = "Acesso negado!",
-                        text = "Você não tem permissão para acessar esta página."
-                    }
-                });
-                context.Result = new RedirectToActionResult("Login", "Home", null);
-                return;
+                        sucesso = false,
+                        erro = "Acesso negado."
+                    });
+                    context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return;
+                }
+                else
+                {
+                    context.Result = new RedirectToActionResult("Login", "Home", null);
+                }
             }
         }
     }
+
+    //public class AutorizacoesAttribute : Attribute, IAuthorizationFilter
+    //{
+    //    public string Tipos { get; set; } // Ex: "Admin,Gerente"
+
+    //    public void OnAuthorization(AuthorizationFilterContext context)
+    //    {
+    //        // Recupera serviço de login
+    //        var loginUsuario = (LoginUsuario)context.HttpContext.RequestServices
+    //            .GetService(typeof(LoginUsuario));
+
+    //        var usuario = loginUsuario.GetCliente();
+
+    //        // Se não estiver logado
+    //        if (usuario == null)
+    //        {
+    //            //context.HttpContext.Items["MSG_E"] = "Sessão expirada, faça login novamente.";
+    //            context.Result = new JsonResult(new
+    //            {
+    //                success = false,
+    //                swal = new
+    //                {
+    //                    icon = "error",
+    //                    title = "Sessão expirada",
+    //                    text = "Faça login novamente"
+    //                }
+    //            });
+
+    //            context.Result = new RedirectToActionResult("Login", "Home", null);
+    //            return;
+    //        }
+
+    //        // Se nenhum cargo foi exigido, permite acesso
+    //        if (string.IsNullOrEmpty(Tipos))
+    //            return;
+
+    //        // Converte string em lista
+    //        var tiposPermitidos = Tipos.Split(',')
+    //                                     .Select(c => c.Trim().ToLower())
+    //                                     .ToList();
+
+    //        var cargoUsuario = usuario.Tipo.ToLower();
+
+    //        // Se usuário não possui cargo ou cargo não está na lista:
+    //        if (string.IsNullOrEmpty(cargoUsuario) ||
+    //            !tiposPermitidos.Contains(cargoUsuario))
+    //        {
+    //            //context.HttpContext.Items["MSG_E"] = "Acesso negado.";
+
+    //            context.Result = new JsonResult(new
+    //            {
+    //                success = false,
+    //                swal = new
+    //                {
+    //                    icon = "error",
+    //                    title = "Acesso negado!",
+    //                    text = "Você não tem permissão para acessar esta página."
+    //                }
+    //            });
+    //            context.Result = new RedirectToActionResult("Login", "Home", null);
+    //            return;
+    //        }
+    //    }
+    //}
 }

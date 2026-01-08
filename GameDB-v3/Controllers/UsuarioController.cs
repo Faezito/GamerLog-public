@@ -1,7 +1,9 @@
-﻿using GameDB_v3.Libraries.Filtros;
+﻿using GameDB_v3.Extensions;
+using GameDB_v3.Libraries.Filtros;
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using GameDB_v3.Libraries.Sessao;
+using GenerativeAI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
@@ -31,10 +33,14 @@ namespace GameDB_v3.Controllers
 
         [Autorizacoes]
         [ValidateHttpRefererAttributes]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var usuario = _login.GetCliente();
-            UsuarioModel model = await _seUsuario.Obter(usuario.ID.Value, null);
+            UsuarioModel model = new();
+            if (id == null)
+            {
+                id = this.User.GetUserId();
+            }
+            model = await _seUsuario.Obter(id, null, null);
 
             return View(model);
         }
@@ -49,7 +55,7 @@ namespace GameDB_v3.Controllers
             {
                 try
                 {
-                    model = await _seUsuario.Obter(id.Value, null);
+                    model = await _seUsuario.Obter(id.Value, null, null);
                 }
                 catch (Exception ex)
                 {
@@ -156,31 +162,5 @@ namespace GameDB_v3.Controllers
                 );
             }
         }
-
-        // TODO: REMOVER SE NÃO FIZER FALTA
-        private async Task EnviarSenhaPorEmail(UsuarioModel model)
-        {
-            try
-            {
-                string primeiroNome = model.NomeCompleto.Split(" ")[0];
-
-                string destinatario = model.Email.Trim();
-                string assunto = "Recuperação de senha - GamerLog";
-                string corpo = $@"
-Olá, {primeiroNome} você solicitou a recuperação da sua senha. <br />
-Segue sua nova senha, recomendamos a troca imediata desta senha. <br />
-<h4> {model.Senha} </h4>
-
-<a href='https://gamerlog.runasp.net/'>Acessar</a>
-                ";
-
-                await _emailServicos.EnviarEmailAsync(destinatario, assunto, corpo);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using GameDB_v3.Libraries.Filtros;
+﻿using GameDB_v3.Extensions;
+using GameDB_v3.Libraries.Filtros;
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace GameDB_v3.Controllers
         {
             try
             {
-                var usuario = _login.GetCliente();
+                var usuario = this.User.ObterUsuario();
 
                 var jogo = await _jogos.Obter(id);
 
@@ -73,7 +74,7 @@ namespace GameDB_v3.Controllers
         {
             try
             {
-                var usuario = _login.GetCliente();
+                var usuario = this.User.ObterUsuario();
                 List<RegistroJogoModel> registros = await _registro.Listar(id, usuario.ID.Value);
 
                 return PartialView("_Registros", registros);
@@ -90,7 +91,7 @@ namespace GameDB_v3.Controllers
         {
             try
             {
-                var usuario = _login.GetCliente();
+                var usuario = this.User.ObterUsuario();
                 await _registro.Deletar(id, usuario.ID.Value);
                 TempData["MSG_S"] = Mensagem.S_DELETADO;
 

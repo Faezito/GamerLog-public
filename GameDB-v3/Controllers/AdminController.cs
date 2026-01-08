@@ -1,4 +1,5 @@
 ﻿using GameDB_v3.Libraries.Login;
+using GenerativeAI;
 using Microsoft.AspNetCore.Mvc;
 using Z1.Model;
 using Z2.Services;
@@ -31,11 +32,11 @@ namespace KitchenApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Usuarios(int? id, string? Nome, string? email, string? usuario)
+        public async Task<IActionResult> Usuarios(int? id, string? Nome, string? email, string? GoogleId, string? usuario)
         {
             try
             {
-                List<UsuarioModel> lst = await _seUsuario.Listar(id, Nome, email, usuario);
+                List<UsuarioModel> lst = await _seUsuario.Listar(id, Nome, email, GoogleId, usuario);
                 return PartialView("_TabelaUsuarios", lst);
             }
             catch (Exception ex)
@@ -56,7 +57,7 @@ namespace KitchenApp.Controllers
             {
                 try
                 {
-                    model = await _seUsuario.Obter(id.Value, null);
+                    model = await _seUsuario.Obter(id.Value, null, null);
                 }
                 catch (Exception ex)
                 {
@@ -100,7 +101,7 @@ namespace KitchenApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Deletar(int id)
         {
-            UsuarioModel model = await _seUsuario.Obter(id, null);
+            UsuarioModel model = await _seUsuario.Obter(id, null, null);
 
             try
             {
@@ -123,7 +124,7 @@ namespace KitchenApp.Controllers
         { 
             try
             {
-                UsuarioModel usuario = await _seUsuario.Obter(id, null);
+                UsuarioModel usuario = await _seUsuario.Obter(id, null, null);
                 usuario.Senha = KeyGenerator.GetUniqueKey(6);
                 await _seUsuario.AtualizarSenha(usuario);
                 await _emailServicos.EnviarSenhaPorEmail(false, usuario);

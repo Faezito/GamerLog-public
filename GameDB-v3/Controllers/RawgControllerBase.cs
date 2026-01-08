@@ -17,8 +17,19 @@ namespace GameDB_v3.Controllers
         [HttpGet("games")]
         public async Task<IActionResult> GetGames(int page = 1)
         {
-            var games = await _rawg.ObterJogos(page);
-            return Ok(games);
+            try
+            {
+                var games = await _rawg.ObterJogos(page);
+                return Ok(games);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    title: "Erro",
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
         }
     }
 }

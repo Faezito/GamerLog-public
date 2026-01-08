@@ -13,6 +13,9 @@ namespace Z2.Services.Externo
 
     public class GeminiServicos : IGeminiServicos
     {
+        //private readonly GenerativeModel _model;
+        //private readonly string key = "AIzaSyA1agzr919eGe5lXyZ7qsett25Yqj1eAx0"; //Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+        //private readonly string versao = "gemini-2.5-flash";
         private readonly IAPIsServicos _apis;
         public GeminiServicos(IAPIsServicos apis)
         {

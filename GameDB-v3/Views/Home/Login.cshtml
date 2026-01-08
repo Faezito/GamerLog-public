@@ -10,6 +10,30 @@
         background-color: transparent !important;
         color: black;
     }
+
+    .google-material {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 500;
+        transition: 0.2s;
+        width: fit-content;
+    }
+
+        .google-material img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .google-material:hover {
+            background: #f5f5f5;
+        }
 </style>
 
 <div class="row d-flex justify-content-center">
@@ -44,16 +68,36 @@
                                 </span>
                                 <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
                             </button>
+                            <div class="row py-2">
+                                <div class="col-6 fs-7 text-start">
+                                    <a class="link-light" asp-action="Cadastro" asp-controller="Usuario">Cadastre-se</a>
+                                </div>
+                                <div class="col-6 fs-7 text-end">
+                                    <a class="link-light" asp-action="RecuperarSenha" asp-controller="Home">Esqueci minha senha</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row justify-content-center mb-3">
+                            <div class="col-5">
+                                <hr />
+                            </div>
+                            <div class="col-2 text-center fs-8 mt-1">
+                                OU
+                            </div>
+                            <div class="col-5">
+                                <hr />
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mb-3">
+                            <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="google-material">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+                            </a>
                         </div>
 
                     </form>
-                    <p>
-                        Não possui uma conta? <a class="link-opacity-0" asp-action="Cadastro" asp-controller="Usuario">Cadastre-se</a>
-                    </p>
-
-                    <p>
-                        Esqueceu sua senha? <a class="link-opacity-0" asp-action="RecuperarSenha" asp-controller="Home">Recuperar senha</a>
-                    </p>
                 </div>
             </div>
         </div>
@@ -85,15 +129,17 @@
                         Swal.fire({
                             icon: 'error',
                             title: response.title ?? 'Erro',
-                            text: response.message
+                            text: response.detail
                         });
                     }
                 },
                 error: function (xhr) {
+                    let json = xhr.responseJSON;
+
                     Swal.fire({
                         icon: 'error',
-                        title: 'Erro',
-                        text: 'Erro inesperado ao tentar logar'
+                        title: json?.title ?? 'Erro',
+                        text: json?.detail ?? 'Ocorreu um erro inesperado.'
                     });
                 }
             });
