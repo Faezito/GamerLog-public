@@ -58,12 +58,11 @@ namespace GameDB_v3.Controllers
             var nome = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var nick = ManipularModels.GerarUsuario(email, id);
 
-            // Verifica se usuário já existe em sua base
+            // Verifica se usuário já existe no banco
             UsuarioModel usuario = await _seUsuario.Obter(null, id, email);
 
             if (usuario == null)
             {
-                // Cria novo usuário
                 usuario = new UsuarioModel()
                 {
                     NomeCompleto = nome,
@@ -97,6 +96,71 @@ namespace GameDB_v3.Controllers
                 });
 
             return RedirectToAction("Index", "Usuario", new { id = usuario.ID });
+        }
+
+
+        public IActionResult VincularGoogle(int usuarioId)
+        {
+            var redirectUrl = Url.Action("GoogleVincular", "GoogleLogin");
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl,
+                Items = { { "usuarioId", usuarioId.ToString() } }
+            };
+
+            return Challenge(props, GoogleDefaults.AuthenticationScheme);
+        }
+
+
+        public async Task<IActionResult> GoogleVincular()
+        {
+            // Autentica via esquema do Google
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            if (!result.Succeeded)
+                return Problem(detail: "Falha ao autenticar no Google.");
+
+            var usuarioIdString = result.Properties.Items["usuarioId"];
+            if (!int.TryParse(usuarioIdString, out int usuarioId))
+                return Problem(detail: "ID de usuário inválido.");
+
+            // Pega claims retornadas pelo Google
+            var googleId = result.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = result.Principal.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (googleId == null)
+                return Problem(detail: "GoogleId não encontrado.");
+
+            // Carrega usuário do banco
+            var usuario = await _seUsuario.Obter(usuarioId, null, null);
+
+            if (usuario == null)
+                return Problem(detail: "Usuário não encontrado.");
+
+            if (!string.IsNullOrWhiteSpace(usuario.GoogleId))
+                return Problem(detail: "Usuário já possui conta Google vinculada.");
+
+            // Atualiza no banco
+            usuario.GoogleId = googleId;
+            await _seUsuario.Cadastrar(usuario);
+
+            // Recria o cookie interno com claims completas
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.ID.ToString()));
+            identity.AddClaim(new Claim(ClaimTypes.Email, usuario.Email));
+            identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NomeCompleto));
+            identity.AddClaim(new Claim("Tipo", usuario.Tipo));
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddHours(3)
+                });
+
+            return RedirectToAction("Index", "Usuario");
         }
     }
 }

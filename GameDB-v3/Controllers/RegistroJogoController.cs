@@ -54,9 +54,11 @@ namespace GameDB_v3.Controllers
                 decimal? mediaAvaliacoes = registros.Any()
                         ? registros.Average(x => (decimal?)x.Nota)
                         : null; decimal? tempoJogado = registros.Sum(x => x.TempoJogado);
+                string ultimaSessao = registros.Max(x=>x.UltimaSessao)?.ToString("dd/MM/yyyy");
 
                 ViewBag.mediaAvaliacoes = mediaAvaliacoes;
                 ViewBag.tempoJogado = tempoJogado;
+                ViewBag.ultimaSessao = ultimaSessao;
 
                 return View(jogo);
             }

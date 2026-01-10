@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    @if (Model.ID.HasValue || Model.SenhaTemporaria == true)
+    @if (Model.ID.HasValue && Model.SenhaTemporaria == true)
     {
         <div class="row mb-3">
             <div class="row mx-auto">
@@ -67,10 +67,12 @@
         </div>
     }
 
+
     <div class="row mb-3">
         <div class="col-auto">
             <button type="button" id="btnSalvar" class="btn btn-success">
                 <span id="texto-salvar">
+                    <i class="fa-regular fa-floppy-disk"></i>&nbsp;
                     Salvar
                 </span>
                 <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
@@ -83,11 +85,26 @@
             }
             else
             {
-                <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">Voltar</a>
+                <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">
+                    <i class="fa-solid fa-reply"></i>&nbsp;
+                    Voltar
+                </a>
             }
         </div>
     </div>
 </form>
+
+@if (Model.ID.HasValue && Model.GoogleId == null)
+{
+    <form method="get" asp-action="VincularGoogle" asp-controller="GoogleLogin">
+        <input type="hidden" name="usuarioId" value="@Model.ID" />
+        <button type="submit" class="google-material">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+            Vincular conta
+        </button>
+    </form>
+}
+
 
 @section Scripts {
     <script>

@@ -92,6 +92,7 @@ SET Email = COALESCE(@Email, Email),
 Senha = COALESCE(@Senha, Senha),
 Tipo = COALESCE(@Tipo, Tipo),
 NomeCompleto = COALESCE(@NomeCompleto, NomeCompleto),
+GoogleId = COALESCE(@GoogleId, GoogleId),
 Genero = COALESCE(@Genero, Genero)
 WHERE ID = @id
 ";

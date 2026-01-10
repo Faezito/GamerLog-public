@@ -89,6 +89,9 @@ namespace GameDB_v3.Controllers
                         registro.UltimaSessao = registro.DataPlatinado;
                 }
 
+                if (registro.UltimaSessao == null && registro.DataPlatinado == null && registro.DataZerado == null)
+                    return Problem(detail: "Você precisa inserir uma data para sua última jogatina.");
+
                 var ret = ManipularModels.ValidarRegistro(registro);
 
                 if (ret.valido == false)

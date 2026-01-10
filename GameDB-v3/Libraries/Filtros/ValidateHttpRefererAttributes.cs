@@ -10,41 +10,49 @@ namespace GameDB_v3.Libraries.Filtros
     {
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            string referer = context.HttpContext.Request.Headers["Referer"].ToString();
-            if (string.IsNullOrEmpty(referer))
+            var user = context.HttpContext.User;
+
+            if (!user.Identity.IsAuthenticated)
             {
-                var tempDataFactory = context.HttpContext
-                    .RequestServices
-                    .GetRequiredService<ITempDataDictionaryFactory>();
-
-                var tempData = tempDataFactory.GetTempData(context.HttpContext);
-
-                tempData["MSG_E"] = "Sessão inválida ou acesso não autorizado.";
-
                 context.Result = new RedirectToActionResult("Login", "Home", null);
-
-                //context.Result = new ContentResult() { Content = "Acesso negado." };
+                return;
             }
-            else
-            {
-                Uri uri = new Uri(referer);
 
-                string hostReferer = uri.Host;
-                string hostServer = context.HttpContext.Request.Host.Host;
+            //string referer = context.HttpContext.Request.Headers["Referer"].ToString();
+            //if (string.IsNullOrEmpty(referer))
+            //{
+            //    var tempDataFactory = context.HttpContext
+            //        .RequestServices
+            //        .GetRequiredService<ITempDataDictionaryFactory>();
 
-                if (hostReferer != hostServer)
-                {
-                    var tempDataFactory = context.HttpContext
-                        .RequestServices
-                        .GetRequiredService<ITempDataDictionaryFactory>();
+            //    var tempData = tempDataFactory.GetTempData(context.HttpContext);
 
-                    var tempData = tempDataFactory.GetTempData(context.HttpContext);
+            //    tempData["MSG_E"] = "Sessão inválida ou acesso não autorizado.";
 
-                    tempData["MSG_E"] = "Sessão inválida ou acesso não autorizado.";
+            //    context.Result = new RedirectToActionResult("Login", "Home", null);
 
-                    context.Result = new RedirectToActionResult("Login", "Home", null);
-                }
-            }
+            //    //context.Result = new ContentResult() { Content = "Acesso negado." };
+            //}
+            //else
+            //{
+            //    Uri uri = new Uri(referer);
+
+            //    string hostReferer = uri.Host;
+            //    string hostServer = context.HttpContext.Request.Host.Host;
+
+            //    if (hostReferer != hostServer)
+            //    {
+            //        var tempDataFactory = context.HttpContext
+            //            .RequestServices
+            //            .GetRequiredService<ITempDataDictionaryFactory>();
+
+            //        var tempData = tempDataFactory.GetTempData(context.HttpContext);
+
+            //        tempData["MSG_E"] = "Sessão inválida ou acesso não autorizado.";
+
+            //        context.Result = new RedirectToActionResult("Login", "Home", null);
+            //    }
+            //}
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

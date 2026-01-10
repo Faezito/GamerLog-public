@@ -114,6 +114,9 @@ R.[ID]
 	WHEN Status = 9 THEN 'Todas as conquistas obtidas (Platinado)'
  END AS StatusTexto
 ,[Obs]
+,UltimaSessao
+,DataZerado
+,DataPlatinado
 FROM [dbo].[RegistrosJogos] R  WITH(NOLOCK)
 INNER JOIN Plataformas P ON P.ID = R.PlataformaID
 WHERE UsuarioID = @usuarioId

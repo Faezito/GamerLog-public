@@ -23,11 +23,10 @@ else
                         </div>
                     </td>
                     <td class="text-light">@game.Obs</td>
-                    <td class="text-light">
-                        @* TODO: COLOCAR ÍCONE DE LIXEIRA AO INVÉS DO Excluir *@
+                    <td class="text-light px-0 text-end">
                         <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
                             <button type="submit" class="btn btn-danger deletar" id="Deletar">
-                                Deletar
+                                <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </form>
 

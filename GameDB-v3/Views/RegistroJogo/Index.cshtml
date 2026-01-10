@@ -2,6 +2,8 @@
 
 @{
     decimal? tempoJogado = ViewBag.tempoJogado ?? 0;
+    string? ultimaSessao = ViewBag.ultimaSessao ?? string.Empty;
+    decimal? mediaAvaliacoes = ViewBag.mediaAvaliacoes;
 }
 
 <div class="row">
@@ -16,7 +18,12 @@
             }
             else
             {
-                <span class="fs-5 w-auto my-auto">(@tempoJogado horas registradas)</span>
+                <span class="fs-5 w-auto my-auto">@tempoJogado horas registradas</span> <br />
+                <span class="fs-5 w-auto my-auto">Última sessão: @ultimaSessao</span> <br />
+                <span class="rating text-center"
+                      data-nota="@mediaAvaliacoes"
+                      data-readonly="true">
+                </span>
             }
         </div>
     </div>
@@ -29,8 +36,11 @@
                 </h2>
                 <span class="fs-8">Lançado em @Model.DataLancamento?.ToString("dd 'de' MMM 'de' yyyy", new CultureInfo("pt-BR")) por @Model.Publisher</span>
             </div>
-            <div class="col-2">
-                <a class="btn btn-secondary" asp-action="Index" asp-controller="Usuario">Voltar</a>
+            <div class="col-2 text-end">
+                <a class="btn btn-secondary" asp-action="Index" asp-controller="Usuario">
+                <i class="fa-solid fa-reply"></i>&nbsp;
+                    Voltar
+                    </a>
             </div>
         </div>
 
@@ -48,9 +58,9 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-2 align-bottom">
+            <div class="col-2 align-bottom text-end">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-success mt-5">
-                    NOVO
+                    <i class="fa-solid fa-feather-pointed"></i>
                 </a>
             </div>
         </div>

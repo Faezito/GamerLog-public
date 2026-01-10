@@ -1,5 +1,6 @@
 ﻿@model JogoModel
 
+
 <div class="row mb-2">
     <h2 class="text-uppercase">
         Registre sua jogatina
@@ -66,7 +67,10 @@
             <button type="submit" class="btn btn-success">Salvar</button>
         </div>
         <div class="col-auto">
-            <button type="button" asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">Voltar</button>
+            <button type="button" asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">
+                <i class="fa-solid fa-reply"></i>&nbsp;
+
+                Voltar</button>
         </div>
     </div>
 </form>
@@ -74,5 +78,6 @@
 
 @section Scripts {
     <script>
+        alert("Página encontrada!");
     </script>
 }

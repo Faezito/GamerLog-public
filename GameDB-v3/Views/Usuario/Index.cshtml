@@ -9,10 +9,21 @@
         <h4 class="fw-bold">Olá, @Model.Usuario!</h4>
     </div>
     <div class="col text-end">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-pesquisar">
-            Pesquisar
-        </button>
-        <a role="button" class="btn btn-primary" asp-action="Index" asp-controller="Rawg">Adicionar</a>
+        <form class="" id="pesquisar">
+            <div class="row justify-content-end g-2">
+                <div class="col-8">
+                    <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
+                </div>
+                @*         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-pesquisar">
+            <i class="fa-solid fa-filter"></i>
+        </button> *@
+                <div class="col-auto">
+                    <a role="button" class="btn btn-primary" asp-action="Index" asp-controller="Rawg">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -31,8 +42,7 @@
 
 
 <!-- MODAL PESQUISA -->
-
-<div class="modal fade" id="modal-pesquisar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-pesquisar" aria-hidden="true">
+@* <div class="modal fade" id="modal-pesquisar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-pesquisar" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -44,10 +54,6 @@
             <div class="modal-body">
                 <form class="" id="pesquisar">
                     <div class="row justify-content-end g-2">
-                        <div class="col-8">
-                            <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
-                        </div>
-
                         <div class="col-4">
                             <select name="ano" id="ano" class="form-select">
                                 <option selected>ANO</option>
@@ -91,7 +97,7 @@
         </div>
     </div>
 </div>
-
+ *@
 @section Scripts {
     <script>
         $('#pesquisar').on('submit', function (e) {
