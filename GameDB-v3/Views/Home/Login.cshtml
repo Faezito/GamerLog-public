@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="text-center w-100 mb-3">
-                            <button type="button" class="btn btn-primary w-100 py-3" id="btnLogin">
+                            <button type="submit" class="btn btn-primary w-100 py-3" id="btnLogin">
                                 <span id="texto-login">
                                     ACESSAR
                                 </span>
@@ -106,7 +106,7 @@
 
 @section Scripts {
     <script>
-        $(document).on('click', '#btnLogin', function (e) {
+        $("#form-login").on('submit', function (e) {
             e.preventDefault();
 
             $.ajax({

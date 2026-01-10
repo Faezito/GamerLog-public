@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-secondary" id="pesquisar-jogos">Pesquisar</button>
             </div>
             <div class="col-auto">
-                <a asp-action="Index" asp-controller="Usuario" class="btn btn-secondary" id="pesquisar-jogos">Voltar</a>
+                <a asp-action="Index" asp-controller="Usuario" class="btn btn-secondary">Voltar</a>
             </div>
         </div>
     </form>
@@ -30,7 +30,8 @@
 
 @section Scripts {
     <script>
-        $('#pesquisar-jogos').on('click', function () {
+        $('#pesquisar').on('submit', function (e) {
+            e.preventDefault()
             carregarTabela();
         });
 

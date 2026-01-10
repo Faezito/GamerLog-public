@@ -1,0 +1,48 @@
+﻿@{
+    int JogadoAnoAtual = ViewBag.JogadoAnoAtual;
+    int JogadoAnoAnterior = ViewBag.JogadoAnoAnterior;
+    string? GeneroFavorito = ViewBag.GeneroFavorito;
+    string? JogoMaisJogado = ViewBag.JogoMaisJogado;
+    int QtdJogosZerados = ViewBag.QtdJogosZerados;
+    int QtdJogosPlatinados = ViewBag.QtdJogosPlatinados;
+    int QtdJogosAbandonados = ViewBag.QtdJogosAbandonados;
+}
+
+<div class="alert row">
+    <table>
+    <tr>
+        <td>Jogados este ano</td>
+        <td>@JogadoAnoAtual</td>
+    </tr>
+    <tr>
+        <td>Jogados ano passado</td>
+        <td>@JogadoAnoAnterior</td>
+    </tr>
+
+    <tr>
+        <td>Gênero mais jogado</td>
+        <td>@GeneroFavorito</td>
+    </tr>
+    <tr>
+        <td>Jogo Mais Jogado</td>
+        <td>@JogoMaisJogado</td>
+    </tr>
+
+    <tr>
+        <td>Gênero mais jogado</td>
+        <td>@GeneroFavorito</td>
+    </tr>
+    <tr>
+        <td>Zerados</td>
+        <td>@QtdJogosZerados</td>
+    </tr>
+    <tr>
+        <td>Platinados</td>
+        <td>@QtdJogosPlatinados</td>
+    </tr>
+    <tr>
+        <td>Abandonados</td>
+        <td>@QtdJogosAbandonados</td>
+    </tr>
+</table>
+</div>

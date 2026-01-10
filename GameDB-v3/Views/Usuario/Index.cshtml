@@ -9,10 +9,10 @@
         <h4 class="fw-bold">Olá, @Model.Usuario!</h4>
     </div>
     <div class="col text-end">
-        <form method="post" class="" id="pesquisar">
+        <form class="" id="pesquisar">
             <div class="row justify-content-end g-2">
                 <div class="col">
-                    <input type="text" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
+                    <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
                 </div>
                 <div class="col">
                     <select name="Status" id="Status" class="form-select" required>
@@ -24,8 +24,9 @@
                         <option value="0">Abandonado</option>
                     </select>
                 </div>
+
                 <div class="col-auto">
-                    <button type="button" class="btn btn-secondary" id="pesquisar-jogos">Pesquisar</button>
+                    <button type="submit" class="btn btn-secondary" id="pesquisar-jogos">Pesquisar</button>
                 </div>
                 <div class="col-auto">
                     <a role="button" class="btn btn-primary" asp-action="Index" asp-controller="Rawg">Adicionar</a>
@@ -34,6 +35,7 @@
         </form>
     </div>
 </div>
+@* @await Component.InvokeAsync("ResumoJogador") *@
 
 <hr class="my-3" />
 
@@ -46,7 +48,13 @@
 
 @section Scripts {
     <script>
-        $('#pesquisar-jogos').on('click', function () {
+        $('#pesquisar').on('submit', function (e) {
+            e.preventDefault()
+            carregarTabela();
+        });
+
+        $("#titulo").on('keyup', function (e) {
+            e.preventDefault()
             carregarTabela();
         });
 
