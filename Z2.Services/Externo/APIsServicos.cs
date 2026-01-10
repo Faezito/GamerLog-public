@@ -14,6 +14,7 @@ namespace Z2.Services.Externo
         Task<int?> Cadastro(int id);
         Task Deletar(int id);
         Task<List<APIModel>> Listar(int? id);
+        Task<string> ObterChaveApi(int id);
     }
 
     public class APIsServicos : IAPIsServicos
@@ -50,6 +51,17 @@ namespace Z2.Services.Externo
         public async Task<APIModel> Obter(int id)
         {
             return await _apis.Obter(id);
+        }
+
+
+        public async Task<string> ObterChaveApi(int id)
+        {
+            string chave = string.Empty;
+
+            APIModel rawg = await Obter(id);
+            chave = rawg.Token;
+
+            return chave;
         }
     }
 }

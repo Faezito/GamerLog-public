@@ -101,6 +101,8 @@ namespace Z2.Services
 
         private async Task<string> ObterGeneroEPublisher(string titulo)
         {
+            string res = string.Empty;
+
             string prompt = @$"
 Considerando:
 Publishers: 1 - Nintendo, 2 - Sony Interactive Entertainment, 3 - Microsoft Studios, 4 - Xbox Game Studios, 5 - Bethesda Softworks, 6 - Activision, 7 - Activision Blizzard, 8 - Blizzard Entertainment, 9 - Electronic Arts, 10 - EA Sports, 11 - Ubisoft, 12 - Take-Two Interactive, 13 - Rockstar Games, 14 - 2K Games, 15 - Square Enix, 16 - Capcom, 17 - Bandai Namco Entertainment, 18 - Sega, 19 - Konami, 20 - Warner Bros. Games, 21 - Valve, 22 - CD Projekt, 23 - CD Projekt Red, 24 - Epic Games, 25 - THQ Nordic, 26 - Embracer Group, 27 - Focus Entertainment, 28 - Paradox Interactive, 29 - Devolver Digital, 30 - Team17, 31 - Annapurna Interactive, 32 - Private Division, 33 - 505 Games, 34 - Deep Silver, 35 - Nacon, 36 - SNK, 37 - Atlus, 38 - Koei Tecmo, 39 - FromSoftware, 40 - Larian Studios, 41 - Remedy Entertainment, 42 - Obsidian Entertainment, 43 - Supergiant Games, 44 - Playdead, 45 - Hello Games, 46 - Mojang Studios, 47 - Riot Games, 48 - Behaviour Interactive, 49 - Telltale Games, 50 - Gearbox Publishing, 51 - Pearl Abyss, 52 - NCSoft, 53 - Nexon, 54 - NetEase Games, 55 - Tencent Games
@@ -113,7 +115,7 @@ Qual é o gênero e publisher do jogo {titulo}?";
             int idGemini = 1;
 
             string[] errosGemini = ["Erro:429", "Erro:503"];
-            string res = await _gemini.Prompt(prompt, idGemini);
+            res = await _gemini.Prompt(prompt, idGemini);
             while (errosGemini.Contains(res) && idGemini < 4)
             {
                 idGemini += 1;

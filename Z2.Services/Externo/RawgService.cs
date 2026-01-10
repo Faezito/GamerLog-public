@@ -14,20 +14,25 @@ namespace Z2.Services.Externo
     {
         private readonly HttpClient _http;
         private readonly string _apiKey;
+        private readonly IAPIsServicos _apis;
 
-        public RawgService(HttpClient http, IConfiguration config)
+
+        public RawgService(HttpClient http, IConfiguration config, IAPIsServicos apis)
         {
             _http = http;
             _apiKey = config["Rawg:ApiKey"];
+            _apis = apis;
+
         }
 
         public async Task<List<RawgGameDto>> ObterJogos(int page = 1, int pageSize = 20, string? titulo = " ")
         {
             if(titulo == null) titulo = " ";
             var search = Uri.EscapeDataString(titulo);
+            string chaveApi = await _apis.ObterChaveApi(11);
 
             var url =
-                $"games?key={_apiKey}" +
+                $"games?key={chaveApi}" +
                 $"&search={search}" +
                 $"&search_precise=true" +
                 $"&page={page}" +
@@ -40,12 +45,17 @@ namespace Z2.Services.Externo
 
         public async Task<RawgGameDto> ObterJogoPorID(int id)
         {
-            var url = $"games/{id}?key={_apiKey}";
+            string chaveApi = await _apis.ObterChaveApi(11);
+
+            var url = $"games/{id}?key={chaveApi}";
 
             RawgGameDto response = await _http
                 .GetFromJsonAsync<RawgGameDto>(url);
 
             return response;
         }
+
+
+
     }
 }

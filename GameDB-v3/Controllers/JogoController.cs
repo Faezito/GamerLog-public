@@ -1,4 +1,5 @@
 ﻿using GameDB_v3.Extensions;
+using GameDB_v3.Libraries.Filtros;
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using Microsoft.AspNetCore.Components.Forms;
@@ -37,6 +38,7 @@ namespace GameDB_v3.Controllers
         }
 
         [HttpGet]
+        [ValidateHttpRefererAttributes]
         public async Task<IActionResult> Registro(int id)
         {
             try

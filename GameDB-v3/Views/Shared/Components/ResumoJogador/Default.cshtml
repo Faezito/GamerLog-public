@@ -6,43 +6,87 @@
     int QtdJogosZerados = ViewBag.QtdJogosZerados;
     int QtdJogosPlatinados = ViewBag.QtdJogosPlatinados;
     int QtdJogosAbandonados = ViewBag.QtdJogosAbandonados;
+    decimal tempoJogado = ViewBag.HorasJogadas;
+
+    int porcJogados = 0;
+    string porcCor = string.Empty;
+    if (JogadoAnoAnterior > 0)
+    {
+        porcJogados = JogadoAnoAtual / JogadoAnoAnterior;
+        porcCor = porcJogados >= 0 ? "text-success" : "text-danger";
+    }
+
+
 }
 
-<div class="alert row">
-    <table>
-    <tr>
-        <td>Jogados este ano</td>
-        <td>@JogadoAnoAtual</td>
-    </tr>
-    <tr>
-        <td>Jogados ano passado</td>
-        <td>@JogadoAnoAnterior</td>
-    </tr>
+<div class="row alert alert-light text-dark">
+    <div class="col-12 col-sm-6">
+        <div class="row text-center">
+            <div class="col-4">
+                @* JOGADOS ANO *@
+                <span class="fs-5 position-relative">
+                    @JogadoAnoAtual
 
-    <tr>
-        <td>Gênero mais jogado</td>
-        <td>@GeneroFavorito</td>
-    </tr>
-    <tr>
-        <td>Jogo Mais Jogado</td>
-        <td>@JogoMaisJogado</td>
-    </tr>
+                    @if (JogadoAnoAnterior > 0)
+                    {
+                        <span class="fs-10 p-1 position-absolute top-0 start-100 @porcCor">@porcJogados</span>
+                    }
+                </span>
+            </div>
+            @* GENERO JOGADO *@
+            <div class="col-4">
+                <span class="fs-5">
+                    @GeneroFavorito
+                </span>
+            </div>
 
-    <tr>
-        <td>Gênero mais jogado</td>
-        <td>@GeneroFavorito</td>
-    </tr>
-    <tr>
-        <td>Zerados</td>
-        <td>@QtdJogosZerados</td>
-    </tr>
-    <tr>
-        <td>Platinados</td>
-        <td>@QtdJogosPlatinados</td>
-    </tr>
-    <tr>
-        <td>Abandonados</td>
-        <td>@QtdJogosAbandonados</td>
-    </tr>
-</table>
+            @* TEMPO JOGADO *@
+            <div class="col-4">
+                <span class="fs-5">@tempoJogado</span>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-4 fs-8">
+                Jogados este ano
+            </div>
+            <div class="col-4 fs-8">
+                Gênero mais jogado
+            </div>
+            <div class="col-4 fs-8">
+                Horas jogadas
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-sm-6">
+        <div class="row text-center">
+
+            @* ZERADOS *@
+            <div class="col-4 text-success">
+                <span class="fs-5">@QtdJogosZerados</span>
+            </div>
+
+            @* PLATINADOS *@
+            <div class="col-4 text-primary">
+                <span class="fs-5">@QtdJogosPlatinados</span>
+            </div>
+
+            @* ABANDONADOS *@
+            <div class="col-4 text-danger">
+                <span class="fs-5">@QtdJogosAbandonados</span>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-4 fs-8">
+                Jogos zerados
+            </div>
+            <div class="col-4 fs-8">
+                Platinados
+            </div>
+            <div class="col-4 fs-8">
+                Abandonados
+            </div>
+        </div>
+    </div>
 </div>
