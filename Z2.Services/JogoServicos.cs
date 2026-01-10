@@ -16,7 +16,7 @@ namespace Z2.Services
     public interface IJogoServicos
     {
         Task<List<JogoModel>> Listar(int? id, string? titulo);
-        Task<List<RegistroJogoModel>> Listar(int? id, string? titulo, int? status, int usuarioID);
+        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null);
         Task<int> Cadastro(int id, JogoModel jogo);
         Task<JogoModel> Obter(int id);
     }
@@ -87,9 +87,9 @@ namespace Z2.Services
             return lst;
         }
 
-        public async Task<List<RegistroJogoModel>> Listar(int? id, string? titulo, int? status, int usuarioID)
+        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null)
         {
-            var lst = await _daJogo.ListarJogosDoUsuario(id, titulo, status, usuarioID);
+            var lst = await _daJogo.ListarJogosDoUsuario(id, titulo, status, usuarioID, ano);
             return lst;
         }
 

@@ -16,6 +16,7 @@ namespace Z3.DataAccess
         Task<List<RegistroJogoModel>> Listar(int jogoId, int usuarioId);
         Task<RegistroJogoModel> Obter(int jogoId, int usuarioId);
         Task<List<RegistroJogoModel>> ListarRecentes(int usuarioId);
+        Task<List<int?>> ListarAnos(int usuarioId);
     }
 
     public class RegistroJogoDataAccess : IRegistroJogoDataAccess
@@ -43,9 +44,9 @@ AND UsuarioID = @usuarioId
                 };
                 await _dapper.ExecuteAsync(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -125,9 +126,9 @@ AND JogoID = @jogoId
                 };
                 return await _dapper.QueryAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
         public async Task<RegistroJogoModel> Obter(int jogoId, int usuarioId)
@@ -155,9 +156,9 @@ SELECT TOP 1 R.[ID]
                 };
                 return await _dapper.QuerySingleOrDefaultAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -185,9 +186,41 @@ SELECT TOP 10 R.[ID]
                 };
                 return await _dapper.QueryAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
+            }
+        }
+
+        public async Task<List<int?>> ListarAnos(int usuarioId)
+        {
+            try
+            {
+                string sql = @"
+WITH CTE_BASE AS (
+SELECT DISTINCT
+--COALESCE(
+--      LEFT([DataZerado], 4)
+--      ,LEFT([DataPlatinado], 4)
+--      ,LEFT([UltimaSessao], 4)
+--      )
+    LEFT([UltimaSessao], 4)AS ANO
+  FROM [db36109].[dbo].[RegistrosJogos] WITH(NOLOCK)
+  WHERE UsuarioID = @usuarioId
+)
+SELECT * FROM CTE_BASE WITH(NOLOCK)
+WHERE ANO IS NOT NULL
+
+";
+                var obj = new
+                {
+                    usuarioId = usuarioId
+                };
+                return await _dapper.QueryAsync<int?>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

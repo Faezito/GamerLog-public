@@ -25,7 +25,7 @@ namespace GameDB_v3.Views.Shared.Components.Navbar
 
             int anoAtual = DateTime.Now.Year;
 
-            List<RegistroJogoModel> lstJogosUsuario = await _seJogo.Listar(null, null, null, usuario.ID.Value);
+            List<RegistroJogoModel> lstJogosUsuario = await _seJogo.ListarJogosDoUsuario(null, null, null, usuario.ID.Value, null);
             ViewBag.JogadoAnoAtual = lstJogosUsuario.Where(x => x.UltimaSessao?.Year == anoAtual).Count();
             ViewBag.JogadoAnoAnterior = lstJogosUsuario.Where(x => x.UltimaSessao?.Year == (anoAtual-1)).Count();
             ViewBag.GeneroFavorito = lstJogosUsuario
@@ -38,7 +38,7 @@ namespace GameDB_v3.Views.Shared.Components.Navbar
             ViewBag.QtdJogosZerados = lstJogosUsuario.Where(x=>x.DataZerado?.Year == (anoAtual - 1)).Count();
             ViewBag.QtdJogosPlatinados = lstJogosUsuario.Where(x=>x.DataPlatinado?.Year == (anoAtual - 1)).Count();
             ViewBag.QtdJogosAbandonados = lstJogosUsuario.Where(x=>x.Status == 0).Count();
-            ViewBag.HorasJogadas = lstJogosUsuario.Select(x => x.TempoJogado).Sum();
+            ViewBag.HorasJogadas = lstJogosUsuario.Select(x => x.TempoJogadoTotal).Sum();
 
 
             return View("Default");

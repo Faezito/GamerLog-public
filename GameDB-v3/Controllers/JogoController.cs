@@ -114,34 +114,34 @@ namespace GameDB_v3.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListarJogos(int? id, int? status, string? titulo, int? Ordem)
+        public async Task<IActionResult> ListarJogos(int? id, int? status, string? titulo, int? Ordem, int? ano = null)
         {
             try
             {
                 var usuario = this.User.ObterUsuario();
-                var lst = await _jogos.Listar(id, titulo, status, usuario.ID.Value);
+                var lst = await _jogos.ListarJogosDoUsuario(id, titulo, status, usuario.ID.Value, ano);
 
-                //switch (Ordem)
-                //{
-                //    case null: //sessao
-                //        lst = lst;
-                //        break;
-                //    case 0: //sessao
-                //        lst = lst.OrderBy(x => x.UltimaSessao).ToList();
-                //        break;
-                //    case 1: //jogando
-                //        lst = lst.OrderBy(x => x.Status).ToList();
-                //        break;
-                //    case 2: //zerado
-                //        lst = lst.OrderBy(x => x.DataZerado).ToList();
-                //        break;
-                //    case 3: //sessao
-                //        lst = lst.OrderBy(x => x.DataPlatinado).ToList();
-                //        break;
-                //    case 4: //sessao
-                //        lst = lst.OrderBy(x => x.Titulo).ToList();
-                //        break;
-                //}
+                switch (Ordem)
+                {
+                    case null: //sessao
+                        lst = lst;
+                        break;
+                    case 0: //sessao
+                        lst = lst.OrderBy(x => x.UltimaSessao).ToList();
+                        break;
+                    case 1: //jogando
+                        lst = lst.OrderBy(x => x.Status).ToList();
+                        break;
+                    case 2: //zerado
+                        lst = lst.OrderBy(x => x.DataZerado).ToList();
+                        break;
+                    case 3: //sessao
+                        lst = lst.OrderBy(x => x.DataPlatinado).ToList();
+                        break;
+                    case 4: //sessao
+                        lst = lst.OrderBy(x => x.Titulo).ToList();
+                        break;
+                }
 
                 return PartialView("_Tabela", lst);
             }

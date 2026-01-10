@@ -15,6 +15,8 @@ namespace Z2.Services
         Task<List<RegistroJogoModel>> Listar(int jogoId, int usuarioId);
         Task<RegistroJogoModel> Obter(int jogoId, int usuarioId);
         Task<List<RegistroJogoModel>> ListarRecentes(int usuarioId);
+        Task<List<int?>> ListarAnos(int usuarioId);
+
     }
 
     public class RegistroJogoServicos : IRegistroJogoServicos
@@ -39,6 +41,11 @@ namespace Z2.Services
         public async Task<List<RegistroJogoModel>> Listar(int jogoId, int usuarioId)
         {
             return await _daReg.Listar(jogoId, usuarioId);
+        }
+
+        public async Task<List<int?>> ListarAnos(int usuarioId)
+        {
+            return await _daReg.ListarAnos(usuarioId);
         }
 
         public async Task<List<RegistroJogoModel>> ListarRecentes(int usuarioId)

@@ -8,18 +8,19 @@
     int QtdJogosAbandonados = ViewBag.QtdJogosAbandonados;
     decimal tempoJogado = ViewBag.HorasJogadas;
 
-    int porcJogados = 0;
+    decimal porcJogados = 0;
     string porcCor = string.Empty;
     if (JogadoAnoAnterior > 0)
     {
         porcJogados = JogadoAnoAtual / JogadoAnoAnterior;
         porcCor = porcJogados >= 0 ? "text-success" : "text-danger";
+        porcCor = porcJogados switch { > 0 => "text-success", < 0 => "text-danger", 0 => string.Empty };
     }
 
 
 }
 
-<div class="row alert alert-light text-dark">
+<div class="row alert shadow-lg bg-darkblue text-light mt-3">
     <div class="col-12 col-sm-6">
         <div class="row text-center">
             <div class="col-4">
@@ -27,9 +28,13 @@
                 <span class="fs-5 position-relative">
                     @JogadoAnoAtual
 
-                    @if (JogadoAnoAnterior > 0)
+                    @if (porcJogados >= 0)
                     {
-                        <span class="fs-10 p-1 position-absolute top-0 start-100 @porcCor">@porcJogados</span>
+                        <span class="fs-10 p-1 position-absolute top-0 start-100 text-success">+@porcJogados.ToString("P1")</span>
+                    }
+                    else
+                    {
+                        <span class="fs-10 p-1 position-absolute top-0 start-100 text-danger">-@porcJogados.ToString("P1")</span>
                     }
                 </span>
             </div>
@@ -63,17 +68,17 @@
         <div class="row text-center">
 
             @* ZERADOS *@
-            <div class="col-4 text-success">
+            <div class="col-4">
                 <span class="fs-5">@QtdJogosZerados</span>
             </div>
 
             @* PLATINADOS *@
-            <div class="col-4 text-primary">
+            <div class="col-4">
                 <span class="fs-5">@QtdJogosPlatinados</span>
             </div>
 
             @* ABANDONADOS *@
-            <div class="col-4 text-danger">
+            <div class="col-4">
                 <span class="fs-5">@QtdJogosAbandonados</span>
             </div>
         </div>

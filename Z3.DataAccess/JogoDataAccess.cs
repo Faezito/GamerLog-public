@@ -11,7 +11,7 @@ namespace Z3.DataAccess
     public interface IJogoDataAccess
     {
         Task<List<JogoModel>> Listar(int? id, string? titulo);
-        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID);
+        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano);
         Task<int> Adicionar(JogoModel model);
         Task<int> Atualizar(JogoModel model);
         Task Deletar(int id);
@@ -137,7 +137,7 @@ AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
             }
         }
 
-        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID)
+        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano)
         {
             try
             {
@@ -148,7 +148,8 @@ AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
                     id = id,
                     titulo = titulo,
                     usuarioID = usuarioID,
-                    status = status
+                    status = status,
+                    ano = ano
                 };
                 return await _dapper.QueryAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.StoredProcedure, param: obj);
             }
