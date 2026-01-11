@@ -122,7 +122,15 @@
                             </select>
                         </div>
 
-                        <div class="col" id="inputZerado">
+                        <div class="col" id="DataInput">
+                            <label for="DataInput" class="form-label">Data</label>
+                            <input type="text"
+                                   class="form-control date"
+                                   id="DataInput"
+                                   name="DataInput" required>
+                        </div>
+
+@*                         <div class="col" id="inputZerado">
                             <label for="DataZerado" class="form-label">Data Zerado</label>
                             <input type="text"
                                    class="form-control date"
@@ -145,7 +153,7 @@
                                    id="UltimaSessao"
                                    name="UltimaSessao">
                         </div>
-                    </div>
+ *@                    </div>
 
                     <div class="row mb-3">
                         <div class="col">
@@ -266,52 +274,52 @@
 
         // ALTERNAR DATAS
 
-        $('#Status').on('change', function(evt){
-            const status = Number($(this).val());
-            if (status == 2)
-            {
-                $('#inputZerado').show()
-                    .find('input, select, textarea')
-                    .prop('disabled', false);
+        // $('#Status').on('change', function(evt){
+        //     const status = Number($(this).val());
+        //     if (status == 2)
+        //     {
+        //         $('#inputZerado').show()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', false);
 
-                $('#inputPlatinado').hide()
-                    .find('input, select, textarea')
-                    .prop('disabled', true);
+        //         $('#inputPlatinado').hide()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', true);
 
-                $('#inputJogado').hide()
-                    .find('input, select, textarea')
-                    .prop('disabled', true);
-            }
-            else if (status == 9)
-            {
-                $('#inputZerado').hide()
-                    .find('input, select, textarea')
-                    .prop('disabled', true);
+        //         $('#inputJogado').hide()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', true);
+        //     }
+        //     else if (status == 9)
+        //     {
+        //         $('#inputZerado').hide()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', true);
 
-                $('#inputPlatinado').show()
-                    .find('input, select, textarea')
-                    .prop('disabled', false);
+        //         $('#inputPlatinado').show()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', false);
 
-                $('#inputJogado').hide()
-                    .find('input, select, textarea')
-                    .prop('disabled', true);
-            }
-            else
-            {
-                $('#inputZerado').hide()
-                    .find('input, select, textarea')
-                    .prop('disabled', true);
+        //         $('#inputJogado').hide()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', true);
+        //     }
+        //     else
+        //     {
+        //         $('#inputZerado').hide()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', true);
 
-                $('#inputPlatinado').hide()
-                    .find('input, select, textarea')
-                    .prop('disabled', true);
+        //         $('#inputPlatinado').hide()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', true);
 
-                $('#inputJogado').show()
-                    .find('input, select, textarea')
-                    .prop('disabled', false);
-            }
+        //         $('#inputJogado').show()
+        //             .find('input, select, textarea')
+        //             .prop('disabled', false);
+        //     }
 
-        })
+        // })
 
     </script>
 }

@@ -68,29 +68,27 @@ namespace GameDB_v3.Controllers
             {
                 var usuario = this.User.ObterUsuario();
                 var jogo = await _jogos.Obter(id);
+
                 var tempoStr = string.IsNullOrWhiteSpace(registro.TempoJogadoString) ? "0" : registro.TempoJogadoString;
                 registro.TempoJogado = decimal.Parse(tempoStr, new CultureInfo("pt-BR"));
 
-                if (jogo == null)
-                {
-                    int jogoID = await _jogos.Cadastro(id, jogo);
-                    jogo = await _jogos.Obter(jogoID);
-                }
 
                 registro.JogoID = jogo.ID.Value;
                 registro.UsuarioID = usuario.ID.Value;
                 registro.DataAdicionado = DateTime.Now;
 
-                if (registro.UltimaSessao == null)
+                switch (registro.Status)
                 {
-                    if (registro.DataPlatinado == null)
-                        registro.UltimaSessao = registro.DataZerado;
-                    else
-                        registro.UltimaSessao = registro.DataPlatinado;
+                    case 2:
+                        registro.DataZerado = registro.DataInput;
+                        break;
+                    case 9:
+                        registro.DataPlatinado = registro.DataInput;
+                        break;
+                    default:
+                        registro.UltimaSessao = registro.DataInput;
+                        break;
                 }
-
-                if (registro.UltimaSessao == null && registro.DataPlatinado == null && registro.DataZerado == null)
-                    return Problem(detail: "Você precisa inserir uma data para sua última jogatina.");
 
                 var ret = ManipularModels.ValidarRegistro(registro);
 
@@ -103,7 +101,7 @@ namespace GameDB_v3.Controllers
                 return Json(new
                 {
                     success = true,
-                    redirectUrl = Url.Action("Index", "Usuario")
+                    redirectUrl = Url.Action("Index", "RegistroJogo", new { registro.ID })
                 });
             }
             catch (Exception ex)

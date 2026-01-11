@@ -22,6 +22,7 @@ namespace Z1.Model
         public DateTime? UltimaSessao { get; set; }
         public DateTime? DataPlatinado { get; set; }
         public DateTime? DataZerado { get; set; }
+        public DateTime? DataInput { get; set; }
         public int? Nota {  get; set; }
         public int Status { get; set; } // 0 - abandonado, 1 - jogando, 2 - finalizado, 3 - 100%, 9 - platinado
 

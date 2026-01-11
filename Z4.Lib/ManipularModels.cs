@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Microsoft.Win32;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -68,7 +69,7 @@ namespace Z4.Bibliotecas
             bool valido = true;
             string mensagem = string.Empty;
 
-            if ((model.UsuarioID == 0) || (model.JogoID == 0) || (model.PlataformaID == 0) || (model.Status == 0)
+            if ((model.UsuarioID == 0) || (model.JogoID == 0) || (model.PlataformaID == 0) || (model.Status == 0 || model.DataInput == null)
                 )
             {
                 mensagem += "Preencha todos os campos. <br />";

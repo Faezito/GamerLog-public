@@ -6,33 +6,41 @@
 }
 else
 {
-    <h4>Seu histórico de jogatinas</h4>
-
     <table class="table">
-        <tbody>
-            @foreach (var game in Model)
-            {
-                <tr>
-                    <td class="text-light">@game.DataAdicionado.ToString("dd/MM/yyyy")</td>
-                    <td class="text-light">@game.StatusTexto</td>
-                    <td class="text-light">@game.Plataforma</td>
-                    <td class="text-light">
-                        <div class="rating"
-                             data-nota="@game.Nota"
-                             data-readonly="true">
-                        </div>
-                    </td>
-                    <td class="text-light">@game.Obs</td>
-                    <td class="text-light px-0 text-end">
-                        <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
-                            <button type="submit" class="btn btn-danger deletar" id="Deletar">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </form>
+        <thead>
+            <tr>
+                <td class="text-light text-center fs-bold fs-7">Data</td>
+                <td class="text-light text-center fs-bold fs-7">Status</td>
+                <td class="text-light text-center fs-bold fs-7">Plataforma</td>
+                <td class="text-light text-center fs-bold fs-7">Avaliação</td>
+                <td class="text-light text-center fs-bold fs-7">Observação</td>
+                <td class="text-light text-center fs-bold fs-7"></td>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        @foreach (var game in Model)
+        {
+            <tr class="">
+                <td class="text-light text-center">@game.DataAdicionado.ToString("dd/MM/yyyy")</td>
+                <td class="text-light text-center">@game.StatusTexto</td>
+                <td class="text-light">@game.Plataforma</td>
+                <td class="text-light text-center">
+                    <div class="rating"
+                         data-nota="@game.Nota"
+                         data-readonly="true">
+                    </div>
+                </td>
+                <td class="text-light">@game.Obs</td>
+                <td class="text-light px-0 text-end">
+                    <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
+                        <button type="submit" class="btn btn-danger deletar" id="Deletar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
 
-                    </td>
-                </tr>
-            }
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 }
