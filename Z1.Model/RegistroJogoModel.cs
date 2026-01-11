@@ -29,6 +29,8 @@ namespace Z1.Model
         public string? Obs {  get; set; }
         public string? StatusTexto { get; set; }
         public string? StatusCor { get; set; }
+        public string? TierTxt { get; set; }
+        public int? Tier { get; set; }
 
 
     }

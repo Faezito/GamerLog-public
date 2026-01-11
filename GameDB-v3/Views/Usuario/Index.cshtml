@@ -14,12 +14,9 @@
                 <div class="col-8">
                     <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
                 </div>
-                @*         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-pesquisar">
-            <i class="fa-solid fa-filter"></i>
-        </button> *@
                 <div class="col-auto">
                     <a role="button" class="btn btn-primary" asp-action="Index" asp-controller="Rawg">
-                        <i class="fa-solid fa-gamepad"></i>
+                        <i class="fa-solid fa-gamepad"></i>&nbsp; NOVO
                     </a>
                 </div>
             </div>
@@ -52,7 +49,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="" id="pesquisar">
+                <form class="" id="filtrar">
                     <div class="row justify-content-end g-2">
                         <div class="col-4">
                             <select name="ano" id="ano" class="form-select">
@@ -88,7 +85,6 @@
 
                     </div>
                 </form>
-
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-secondary" form="pesquisar" id="pesquisar-jogos" data-bs-dismiss="modal">Pesquisar</button>
@@ -105,12 +101,13 @@
             carregarTabela();
         });
 
+        $('#filtrar').on('submit', function (e) {
+            e.preventDefault()
+            filtrarTabela();
+        });
+
         $('#limpar-pesquisa').on('click', function(e){
-            $('#titulo').val(null)
-            $('#ano').val(null)
-            $('#Status').val(null)
-            $('#Ordem').val(null)
-            $('#pesquisar-jogos').click()
+            window.location.reload()
         })
 
         $("#titulo").on('keyup', function (e) {
@@ -146,9 +143,38 @@
                 }
             });
 
-        $(document).ready(function () {
-          initRatings();
-        });
+            $(document).ready(function () {
+              initRatings();
+            });
+        }
+
+        function filtrarTabela() {
+            const titulo = $('#titulo').val();
+
+            $.ajax({
+                url: '/Jogo/ListarJogos',
+                type: 'POST',
+                dataType: 'html',
+                data: $('#filtrar').serialize(),
+
+                beforeSend: function () {
+                },
+
+                success: function (resultado) {
+                    $("#tabela-jogos").html(resultado);
+                    initRatings("#tabela-jogos");
+                },
+
+                complete: function () {
+                },
+
+                error: function () {
+                }
+            });
+
+            $(document).ready(function () {
+              initRatings();
+            });
         }
     </script>
 }

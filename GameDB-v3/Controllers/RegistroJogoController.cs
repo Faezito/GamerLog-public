@@ -34,29 +34,27 @@ namespace GameDB_v3.Controllers
             try
             {
                 var usuario = this.User.ObterUsuario();
-
                 var jogo = await _jogos.Obter(id);
 
                 if (jogo == null)
                 {
-                    try
-                    {
-                        int jogoID = await _jogos.Cadastro(id, jogo);
-                        jogo = await _jogos.Obter(jogoID);
-                    }
-                    catch (Exception ex)
-                    {
-                        return Problem(title: "Erro ao carregar registros", detail: ex.Message);
-                    }
+                    int jogoID = await _jogos.Inserir(id, jogo);
+                    jogo = await _jogos.Obter(jogoID);
+                }
+
+                if (jogo.GeneroID == 0 || jogo.PublisherID == 0 || jogo.GeneroID == null || jogo.PublisherID == null)
+                {
+                    int jogoID = await _jogos.Atualizar(id, jogo);
+                    jogo = await _jogos.Obter(jogoID);
                 }
 
                 var registros = await _registro.Listar(id, usuario.ID.Value);
                 decimal? mediaAvaliacoes = registros.Any()
                         ? registros.Average(x => (decimal?)x.Nota)
                         : null; decimal? tempoJogado = registros.Sum(x => x.TempoJogado);
-                string ultimaSessao = registros.Max(x=>x.UltimaSessao)?.ToString("dd/MM/yyyy");
+                string ultimaSessao = registros.Max(x => x.UltimaSessao)?.ToString("dd/MM/yyyy");
 
-                ViewBag.mediaAvaliacoes = mediaAvaliacoes;
+                ViewBag.mediaAvaliacoes = mediaAvaliacoes ?? 0m;
                 ViewBag.tempoJogado = tempoJogado;
                 ViewBag.ultimaSessao = ultimaSessao;
 

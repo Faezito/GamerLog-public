@@ -47,7 +47,7 @@ namespace GameDB_v3.Controllers
 
         [HttpGet]
         [ValidateHttpRefererAttributes]
-        public async Task<IActionResult> Cadastro(int? id)
+        public async Task<IActionResult> Cadastro(int? id, bool? senhaTemporaria)
         {
             UsuarioModel model = new();
 
@@ -66,6 +66,9 @@ namespace GameDB_v3.Controllers
                     );
                 }
             }
+            if(senhaTemporaria == true)
+                model.SenhaTemporaria = senhaTemporaria.Value;
+
             return View(model);
         }
 
@@ -114,7 +117,7 @@ namespace GameDB_v3.Controllers
                         );
                     }
 
-                    TempData["MSG_S"] = Mensagem.S_CADASTRADO;
+                    TempData["MSG_S"] = "Cadastrado com sucesso! Confira sua caixa de e-mail para prosseguir. (Confira sua caixa de spam e lixeira caso o e-mail não apareça.)";
 
                     return Json(new
                     {

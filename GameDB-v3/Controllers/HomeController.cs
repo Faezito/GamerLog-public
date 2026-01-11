@@ -108,11 +108,11 @@ namespace GameDB_v3.Controllers
                         return Json(new
                         {
                             success = true,
-                            redirectUrl = Url.Action("Cadastro", "Usuario", new { id = user.ID })
+                            redirectUrl = Url.Action("Cadastro", "Usuario", new { id = user.ID, senhaTemporaria = user.SenhaTemporaria })
                         });
                     }
 
-                    return RedirectToAction("Cadastro", "Usuario", new { id = user.ID });
+                    return RedirectToAction("Cadastro", "Usuario", new { id = user.ID, senhaTemporaria = user.SenhaTemporaria });
                 }
                 else
                 {

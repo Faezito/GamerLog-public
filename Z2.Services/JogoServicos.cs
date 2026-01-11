@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using GenerativeAI.Types;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +11,18 @@ using Z1.Model;
 using Z1.Model.APIs;
 using Z2.Services.Externo;
 using Z3.DataAccess;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Z2.Services
 {
     public interface IJogoServicos
     {
         Task<List<JogoModel>> Listar(int? id, string? titulo);
-        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null);
+        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null, int? mes = null);
         Task<int> Cadastro(int id, JogoModel jogo);
         Task<JogoModel> Obter(int id);
+        Task<int> Inserir(int id, JogoModel jogo);
+        Task<int> Atualizar(int id, JogoModel jogo);
     }
 
     public class JogoServicos : IJogoServicos
@@ -44,9 +48,9 @@ namespace Z2.Services
             {
                 rawgJogo = await _rawg.ObterJogoPorID(id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
             if (jogo == null)
@@ -78,7 +82,68 @@ namespace Z2.Services
                     throw;
                 }
             }
+
             return await _daJogo.Atualizar(jogo);
+        }
+
+        public async Task<int> Inserir(int id, JogoModel jogo)
+        {
+            RawgGameDto rawgJogo = new();
+            rawgJogo = await _rawg.ObterJogoPorID(id);
+
+            try
+            {
+                string GeneroEPublisher = await ObterGeneroEPublisher(rawgJogo.Name);
+                string genero = GeneroEPublisher.Split(",")[0].Trim();
+                string publisher = GeneroEPublisher.Split(",")[1].Trim();
+
+                int generoID = int.TryParse(genero, out int generoValor) ? generoValor : 0;
+                int publisherID = int.TryParse(publisher, out int publisherValor) ? publisherValor : 0;
+
+                jogo = new JogoModel
+                {
+                    ID = rawgJogo.Id,
+                    Titulo = rawgJogo.Name,
+                    DataLancamento = rawgJogo.Released,
+                    Metacritic = rawgJogo.Metacritic,
+                    CaminhoImagem = rawgJogo.Background_Image,
+                    GeneroID = generoID,
+                    PublisherID = publisherID
+                };
+
+                return await _daJogo.Adicionar(jogo);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<int> Atualizar(int id, JogoModel jogo)
+        {
+            try
+            {
+                string GeneroEPublisher = await ObterGeneroEPublisher(jogo.Titulo);
+                string genero = GeneroEPublisher.Split(",")[0].Trim();
+                string publisher = GeneroEPublisher.Split(",")[1].Trim();
+
+                int generoID = int.TryParse(genero, out int generoValor) ? generoValor : 0;
+                int publisherID = int.TryParse(publisher, out int publisherValor) ? publisherValor : 0;
+
+                jogo = new JogoModel
+                {
+                    ID = jogo.ID,
+                    GeneroID = generoID,
+                    PublisherID = publisherID
+                };
+
+                return await _daJogo.Atualizar(jogo);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<List<JogoModel>> Listar(int? id, string? titulo)
@@ -87,9 +152,9 @@ namespace Z2.Services
             return lst;
         }
 
-        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null)
+        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null, int? mes = null)
         {
-            var lst = await _daJogo.ListarJogosDoUsuario(id, titulo, status, usuarioID, ano);
+            var lst = await _daJogo.ListarJogosDoUsuario(id, titulo, status, usuarioID, ano, mes);
             return lst;
         }
 
@@ -123,7 +188,8 @@ Qual é o gênero e publisher do jogo {titulo}?";
             }
             if (errosGemini.Contains(res))
             {
-                throw new Exception("Sistema sobrecarregado, tente novamente mais tarde.");
+                res = "(0,0)";
+                //throw new Exception("Sistema sobrecarregado, tente novamente mais tarde.");
             }
 
             res = res.Replace("(", "").Replace(")", "");

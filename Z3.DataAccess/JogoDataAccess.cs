@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Z1.Model;
 using Z3.DataAccess.Database;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Z3.DataAccess
 {
     public interface IJogoDataAccess
     {
         Task<List<JogoModel>> Listar(int? id, string? titulo);
-        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano);
+        Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano, int? mes);
         Task<int> Adicionar(JogoModel model);
         Task<int> Atualizar(JogoModel model);
         Task Deletar(int id);
@@ -70,12 +71,13 @@ VALUES (
 UPDATE dbo.Jogos
 SET 
 Titulo = COALESCE(@Titulo, Titulo)
-,Genero = COALESCE(@Genero, Genero)
-,Publisher = COALESCE(@Publisher, Publisher)
+,GeneroID = COALESCE(@GeneroID, GeneroID)
+,PublisherID = COALESCE(@PublisherID, PublisherID)
 ,DataLancamento = COALESCE(@DataLancamento, DataLancamento)
 ,Metacritic = COALESCE(@Metacritic, Metacritic)
 ,CaminhoImagem = COALESCE(@CaminhoImagem, CaminhoImagem)
-WHERE ID = @id
+OUTPUT INSERTED.ID
+WHERE ID = @ID
 ";
                 int? id = await _dapper.ExecuteAsync(sql: sql, commandType: System.Data.CommandType.Text, param: model);
                 return id.Value;
@@ -137,7 +139,7 @@ AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
             }
         }
 
-        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano)
+        public async Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano, int? mes)
         {
             try
             {
@@ -149,7 +151,8 @@ AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
                     titulo = titulo,
                     usuarioID = usuarioID,
                     status = status,
-                    ano = ano
+                    ano = ano,
+                    mes = mes
                 };
                 return await _dapper.QueryAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.StoredProcedure, param: obj);
             }
@@ -158,7 +161,7 @@ AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
                 throw ex;
             }
         }
-        
+
         public async Task<JogoModel> Obter(int id)
         {
             try
@@ -175,9 +178,9 @@ J.ID
 ,Metacritic
 ,CaminhoImagem
 FROM [dbo].[Jogos] J WITH(NOLOCK)
-INNER JOIN [dbo].Generos G ON J.GeneroID = G.ID
-INNER JOIN [dbo].Publishers P ON J.PublisherID = P.ID
-WHERE (@id IS NULL OR J.ID = @id)
+LEFT JOIN [dbo].Generos G ON J.GeneroID = G.ID
+LEFT JOIN [dbo].Publishers P ON J.PublisherID = P.ID
+WHERE J.ID = @id
 ";
 
             var obj = new

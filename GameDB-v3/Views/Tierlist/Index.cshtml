@@ -1,0 +1,70 @@
+﻿@model RegistroJogoModel;
+
+@{
+    ViewData["Title"] = "Painél do usuário";
+    UsuarioModel usuario = this.User.ObterUsuario();
+}
+
+<div class="row">
+    <div class="col-12 col-sm-4">
+        <h4 class="fw-bold">GERADOR DE TIER LIST</h4>
+    </div>
+    <div class="col text-end">
+        <form class="" id="pesquisar">
+            <input asp-for="UsuarioID" value="@usuario.ID" type="hidden" />
+            <div class="row justify-content-end g-2">
+                <div class="col-auto">
+                    <select name="Ano" id="Ano" class="form-select">
+                        <option selected>TODOS</option>
+                        @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
+                    </select>
+                </div>
+@*                 <div class="col-auto">
+                    @await Component.InvokeAsync("DropMeses")
+                </div> *@
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary" form="pesquisar" id="pesquisar-jogos" data-bs-dismiss="modal">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+<div id="tabela-jogos" class="row gap-5 justify-content-center">
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $('#pesquisar').on('submit', function (e) {
+            e.preventDefault()
+            carregarTabela();
+        });
+
+        function carregarTabela() {
+            $.ajax({
+                url: '/Tierlist/Gerar',
+                type: 'POST',
+                dataType: 'html',
+                data: $('#pesquisar').serialize(),
+
+                beforeSend: function () {
+                },
+
+                success: function (resultado) {
+                    $("#tabela-jogos").html(resultado);
+                },
+
+                complete: function () {
+                },
+
+                error: function () {
+                }
+            });
+        }
+    </script>
+}
+
+

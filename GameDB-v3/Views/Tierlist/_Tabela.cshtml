@@ -1,0 +1,65 @@
+﻿@{
+    List<RegistroJogoModel> S = ViewBag.S;
+    List<RegistroJogoModel> A = ViewBag.A;
+    List<RegistroJogoModel> B = ViewBag.B;
+    List<RegistroJogoModel> C = ViewBag.C;
+    List<RegistroJogoModel> D = ViewBag.D;
+}
+
+
+<table class="table">
+    <tr class="border-bottom-1">
+        <td class="align-middle bg-primary text-center text-light" style="width: 100px;">S</td>
+        <td>
+            @foreach (var item in S)
+            {
+                <img src="@item.CaminhoImagem" class="mb-2 me-2 rounded-2" style="width: 120px; height: 60px; object-fit: cover;">
+            }
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="align-middle text-center bg-success text-light" style="width: 100px;">A</td>
+        <td>
+            @foreach (var item in A)
+            {
+                <img src="@item.CaminhoImagem" class="mb-2 me-2 rounded-2" style="width: 120px; height: 60px; object-fit: cover;">
+            }
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="align-middle text-center bg-success-subtle" style="width: 100px;">B</td>
+        <td>
+            @foreach (var item in B)
+            {
+                <img src="@item.CaminhoImagem" class="mb-2 me-2 rounded-2" style="width: 120px; height: 60px; object-fit: cover;">
+            }
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="align-middle text-center bg-warning" style="width: 100px;">C</td>
+        <td class="">
+            @foreach (var item in C)
+            {
+                <img src="@item.CaminhoImagem" class="mb-2 me-2 rounded-2" style="width: 120px; height: 60px; object-fit: cover;">
+            }
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="align-middle text-center bg-danger text-light" style="width: 100px;">D</td>
+        <td>
+            @foreach (var item in D)
+            {
+                <img src="@item.CaminhoImagem" class="mb-2 me-2 rounded-2" style="width: 120px; height: 60px; object-fit: cover;">
+            }
+        </td>
+    </tr>
+</table>
+
