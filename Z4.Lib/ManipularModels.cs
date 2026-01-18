@@ -38,7 +38,7 @@ namespace Z4.Bibliotecas
 
             // VALIDAÇÃO DE SENHA
 
-            if (model.SenhaTemporaria == false)
+            if (model.SenhaTemporaria == false && model.GoogleId == null)
             {
                 if (string.IsNullOrWhiteSpace(model.Senha)
                     || string.IsNullOrWhiteSpace(model.ConfirmacaoSenha)

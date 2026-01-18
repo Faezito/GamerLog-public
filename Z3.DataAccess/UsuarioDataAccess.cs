@@ -89,6 +89,7 @@ VALUES (
                 string sql = @"
 UPDATE dbo.Usuarios
 SET Email = COALESCE(@Email, Email),
+Usuario = COALESCE(@Usuario, Usuario),
 Senha = COALESCE(@Senha, Senha),
 Tipo = COALESCE(@Tipo, Tipo),
 NomeCompleto = COALESCE(@NomeCompleto, NomeCompleto),
