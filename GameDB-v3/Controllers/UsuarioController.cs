@@ -46,16 +46,14 @@ namespace GameDB_v3.Controllers
         }
 
         [HttpGet]
-        [ValidateHttpRefererAttributes]
-        public async Task<IActionResult> Cadastro(int? id, bool? senhaTemporaria)
+        public async Task<IActionResult> Edicao(int id, bool? senhaTemporaria)
         {
-            UsuarioModel model = new();
-
-            if (id.HasValue)
+            try
             {
+                UsuarioModel model = new();
                 try
                 {
-                    model = await _seUsuario.Obter(id.Value, null, null);
+                    model = await _seUsuario.Obter(id, null, null);
                 }
                 catch (Exception ex)
                 {
@@ -65,97 +63,42 @@ namespace GameDB_v3.Controllers
                         statusCode: StatusCodes.Status500InternalServerError
                     );
                 }
-            }
-            if(senhaTemporaria == true)
-                model.SenhaTemporaria = senhaTemporaria.Value;
+                if (senhaTemporaria == true)
+                    model.SenhaTemporaria = senhaTemporaria.Value;
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    title: "Erro",
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Cadastro(UsuarioModel model)
+        public async Task<IActionResult> Edicao(UsuarioModel model)
         {
             try
             {
-                if (!ModelState.IsValid)
+                model.SenhaTemporaria = false;
+                var valido = ManipularModels.ValidarUsuario(model);
+
+                if (!valido.valido)
+                    return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
+
+                await _seUsuario.Cadastrar(model);
+                TempData["MSG_S"] = Mensagem.S_EDITADO;
+
+                return Json(new
                 {
-                    var mensagens = ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList();
+                    success = true,
+                    redirectUrl = Url.Action("Index", "Usuario", model)
 
-                    return Problem(
-                        detail: string.Join("<br/>", mensagens),
-                        title: "Erro de validação",
-                        statusCode: StatusCodes.Status400BadRequest
-                    );
-                }
-                model.Tipo = "C";
-                int? id;
-
-                //se não existir, cria
-                if (!model.ID.HasValue)
-                {
-                    try
-                    {
-                        model.SenhaTemporaria = true;
-                        var valido = ManipularModels.ValidarUsuario(model);
-                        if (!valido.valido)
-                            return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
-
-                        model.Senha = KeyGenerator.GetUniqueKey(6);
-
-                        id = await _seUsuario.Cadastrar(model);
-                        await _emailServicos.EnviarSenhaPorEmail(true, model);
-                    }
-                    catch (Exception ex)
-                    {
-                        return Problem(
-                            title: "Erro",
-                            detail: ex.Message,
-                            statusCode: StatusCodes.Status500InternalServerError
-                        );
-                    }
-
-                    TempData["MSG_S"] = "Cadastrado com sucesso! Confira sua caixa de e-mail para prosseguir. (Confira sua caixa de spam e lixeira caso o e-mail não apareça.)";
-
-                    return Json(new
-                    {
-                        success = true,
-                        redirectUrl = Url.Action("Login", "Home")
-                    });
-                }
-                // se existir, edita
-                else
-                {
-                    try
-                    {
-                        model.SenhaTemporaria = false;
-                        var valido = ManipularModels.ValidarUsuario(model);
-
-                        if (!valido.valido)
-                            return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
-
-                        await _seUsuario.Cadastrar(model);
-                        TempData["MSG_S"] = Mensagem.S_EDITADO;
-
-                        return Json(new
-                        {
-                            success = true,
-                            redirectUrl = Url.Action("Index", "Usuario", model)
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        return Problem(
-                            title: "Erro",
-                            detail: ex.Message,
-                            statusCode: StatusCodes.Status500InternalServerError
-                        );
-                    }
-                }
+                });
             }
-            // TODO: COLOCAR ESTE RETORNO PARA TODOS OS CATCH DE CONTROLLER
             catch (Exception ex)
             {
                 return Problem(

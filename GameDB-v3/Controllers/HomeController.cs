@@ -108,7 +108,7 @@ namespace GameDB_v3.Controllers
                         return Json(new
                         {
                             success = true,
-                            redirectUrl = Url.Action("Cadastro", "Usuario", new { id = user.ID, senhaTemporaria = user.SenhaTemporaria })
+                            redirectUrl = Url.Action("Edicao", "Usuario", new { id = user.ID, senhaTemporaria = user.SenhaTemporaria })
                         });
                     }
 
@@ -183,6 +183,47 @@ namespace GameDB_v3.Controllers
                     detail: ex.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                     );
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Cadastro()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Cadastro(UsuarioModel model)
+        {
+            try
+            {
+                model.Tipo = "C";
+                int? id;
+                model.SenhaTemporaria = true;
+                var valido = ManipularModels.ValidarUsuario(model);
+
+                if (!valido.valido)
+                    return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
+
+                model.Senha = KeyGenerator.GetUniqueKey(6);
+
+                id = await _seUsuario.Cadastrar(model);
+                await _emailServicos.EnviarSenhaPorEmail(true, model);
+                TempData["MSG_S"] = "Cadastrado com sucesso! Confira sua caixa de e-mail para prosseguir. (Confira sua caixa de spam e lixeira caso o e-mail não apareça.)";
+
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("Login", "Home")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    title: "Erro",
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
             }
         }
     }

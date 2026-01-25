@@ -1,5 +1,38 @@
 ﻿@model UsuarioModel;
 
+<style>
+    .form-floating > .form-control:focus ~ label::after,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+    .form-floating > .form-control-plaintext ~ label::after,
+    .form-floating > .form-select ~ label::after {
+        background-color: transparent !important;
+        color: black;
+    }
+
+    .google-material {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 500;
+        transition: 0.2s;
+        width: fit-content;
+    }
+
+        .google-material img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .google-material:hover {
+            background: #f5f5f5;
+        }
+</style>
 
 <div class="row mb-2">
     <h2 class="text-uppercase">
@@ -44,31 +77,6 @@
         </div>
     </div>
 
-    @if (Model.ID.HasValue && Model.SenhaTemporaria == true)
-    {
-        <div class="row mb-3">
-            <div class="row mx-auto">
-                <span class="alert alert-warning"> Por motivos de segurança, recomendamos que você troque sua senha agora. </span>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col">
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingSenha" asp-for="Senha" placeholder=" ">
-                    <label for="floatingSenha">Senha</label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingSenha" asp-for="ConfirmacaoSenha" placeholder=" ">
-                    <label for="floatingSenha">Confirmação de senha</label>
-                </div>
-            </div>
-        </div>
-    }
-
-
     <div class="row mb-3">
         <div class="col-auto">
             <button type="button" id="btnSalvar" class="btn btn-success btn-sm">
@@ -80,31 +88,17 @@
             </button>
         </div>
         <div class="col-auto">
-            @if (Model.ID == null)
-            {
-                <a asp-controller="Home" asp-action="Login" class="btn btn-secondary btn-sm">Voltar</a>
-            }
-            else
-            {
-                <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary btn-sm">
-                    <i class="fa-solid fa-reply"></i>&nbsp;
-                    Voltar
-                </a>
-            }
+            <a asp-controller="Home" asp-action="Login" class="btn btn-secondary btn-sm">Voltar</a>
         </div>
     </div>
 </form>
 
-@if (Model.ID.HasValue && Model.GoogleId == null)
-{
-    <form method="get" asp-action="VincularGoogle" asp-controller="GoogleLogin">
-        <input type="hidden" name="usuarioId" value="@Model.ID" />
-        <button type="submit" class="btn btn-light btn-sm google-material border shadow shadow-sm">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 20px;">
-            Vincular conta
-        </button>
-    </form>
-}
+
+<div class="row justify-content-center mb-3">
+    <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="google-material">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+    </a>
+</div>
 
 
 @section Scripts {
@@ -113,7 +107,7 @@
 
         $('#btnSalvar').on('click', function () {
             $.ajax({
-                url: '/Usuario/Cadastro',
+                url: '/Home/Cadastro',
                 type: 'POST',
                 data: $('#form-cadastro').serialize(),
                 headers: {
