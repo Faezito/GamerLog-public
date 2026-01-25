@@ -95,6 +95,7 @@ builder.Services.AddScoped<IJogoServicos, JogoServicos>();
 builder.Services.AddScoped<IJogoDataAccess, JogoDataAccess>();
 builder.Services.AddScoped<IPlataformaServicos, PlataformaServicos>();
 builder.Services.AddScoped<IPlataformaDataAccess, PlataformaDataAccess>();
+builder.Services.AddScoped<ISteamServicos, SteamServicos>();
 
 //// Cookies
 

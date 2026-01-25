@@ -21,14 +21,15 @@ namespace GameDB_v3.Controllers
         private readonly Sessao _sessao;
         private readonly LoginUsuario _login;
         private readonly IJogoServicos _jogos;
+        private readonly ISteamServicos _steam;
 
-
-        public UsuarioController(IUsuarioServicos seUsuario, IEmailServicos emailServicos, Sessao sessao, LoginUsuario login)
+        public UsuarioController(IUsuarioServicos seUsuario, IEmailServicos emailServicos, Sessao sessao, LoginUsuario login, ISteamServicos steam)
         {
             _seUsuario = seUsuario;
             _emailServicos = emailServicos;
             _sessao = sessao;
             _login = login;
+            _steam = steam;
         }
 
         [Autorizacoes]
@@ -114,6 +115,14 @@ namespace GameDB_v3.Controllers
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObterPerfilSteam()
+        {
+            string steamId = "76561198098162132 ";
+            Player player = await _steam.GetPlayerAsync(steamId);
+            return View(player);
         }
     }
 }
