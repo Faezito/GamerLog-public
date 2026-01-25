@@ -6,7 +6,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <td class="text-light text-center fs-bold fs-7">Data</td>
@@ -17,30 +17,33 @@ else
                 <td class="text-light text-center fs-bold fs-7"></td>
             </tr>
         </thead>
-        <tbody class="table-group-divider">
-        @foreach (var game in Model)
-        {
-            <tr class="">
-                <td class="text-light text-center">@game.DataAdicionado.ToString("dd/MM/yyyy")</td>
-                <td class="text-light text-center">@game.StatusTexto</td>
-                <td class="text-light">@game.Plataforma</td>
-                <td class="text-light text-center">
-                    <div class="rating"
-                         data-nota="@game.Nota"
-                         data-readonly="true">
-                    </div>
-                </td>
-                <td class="text-light">@game.Obs</td>
-                <td class="text-light px-0 text-end">
-                    <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
-                        <button type="submit" class="btn btn-danger deletar" id="Deletar">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </form>
+        <tbody class="">
+            @foreach (var game in Model)
+            {
+                <tr class="">
+                    <td class="text-light text-center">@game.UltimaSessao?.ToString("dd/MM/yyyy")</td>
+                    <td class="text-light text-center">@game.StatusTexto</td>
+                    <td class="text-light">@game.Plataforma</td>
+                    <td class="text-light d-flex justify-content-center">
+                        <div class="rating"
+                             data-nota="@game.Nota"
+                             data-bs-toggle="popover"
+                             data-bs-trigger="hover focus"
+                             data-bs-placement="top"
+                             data-readonly="true">
+                        </div>
+                    </td>
+                    <td class="text-light">@game.Obs</td>
+                    <td class="text-light px-0 text-end">
+                        <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
+                            <button type="submit" class="btn btn-danger btn-sm deletar" id="Deletar">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </form>
 
-                </td>
-            </tr>
-        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }

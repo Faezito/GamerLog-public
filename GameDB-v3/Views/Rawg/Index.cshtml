@@ -4,20 +4,21 @@
 }
 
 <div class="row mb-3">
-    <h2 class="col-2">JOGOS</h2>
-
+    <div class="col-12 col-sm-4">
+        <h4 class="fw-bold text-center text-sm-start">JOGOS</h4>
+    </div>
     <form class="col" id="pesquisar">
         <div class="row justify-content-end g-2">
-            <div class="col">
-                <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Pesquisar jogo" />
+            <div class="col-12 col-sm-4">
+                <input type="text" id="titulo" name="titulo" class="form-control-sm w-100" placeholder="Pesquisar jogo" />
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary" id="pesquisar-jogos">
+            <div class="col-6 col-sm-auto">
+                <button type="submit" class="btn btn-primary btn-sm w-100" id="pesquisar-jogos">
                     <i class="fa-solid fa-magnifying-glass"></i>&nbsp;
                     Pesquisar</button>
             </div>
-            <div class="col-auto">
-                <a asp-action="Index" asp-controller="Usuario" class="btn btn-secondary">
+            <div class="col-6 col-sm-auto">
+                <a asp-action="Index" asp-controller="Usuario" class="btn btn-secondary btn-sm w-100">
                     <i class="fa-solid fa-reply"></i>&nbsp;
                     Voltar</a>
             </div>

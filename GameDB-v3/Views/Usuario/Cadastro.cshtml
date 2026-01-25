@@ -71,7 +71,7 @@
 
     <div class="row mb-3">
         <div class="col-auto">
-            <button type="button" id="btnSalvar" class="btn btn-success">
+            <button type="button" id="btnSalvar" class="btn btn-success btn-sm">
                 <span id="texto-salvar">
                     <i class="fa-regular fa-floppy-disk"></i>&nbsp;
                     Salvar
@@ -82,11 +82,11 @@
         <div class="col-auto">
             @if (Model.ID == null)
             {
-                <a asp-controller="Home" asp-action="Login" class="btn btn-secondary">Voltar</a>
+                <a asp-controller="Home" asp-action="Login" class="btn btn-secondary btn-sm">Voltar</a>
             }
             else
             {
-                <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">
+                <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary btn-sm">
                     <i class="fa-solid fa-reply"></i>&nbsp;
                     Voltar
                 </a>
@@ -99,7 +99,7 @@
 {
     <form method="get" asp-action="VincularGoogle" asp-controller="GoogleLogin">
         <input type="hidden" name="usuarioId" value="@Model.ID" />
-        <button type="submit" class="btn btn-light google-material border shadow shadow-sm">
+        <button type="submit" class="btn btn-light btn-sm google-material border shadow shadow-sm">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 20px;">
             Vincular conta
         </button>

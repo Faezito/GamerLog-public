@@ -68,6 +68,8 @@ namespace GameDB_v3.Controllers
             {
                 var usuario = this.User.ObterUsuario();
                 var jogo = await _jogos.Obter(id);
+                if (usuario == null || jogo == null)
+                    throw new Exception("Erro ao obter jogo, tente novamente mais tarde.");
 
                 var tempoStr = string.IsNullOrWhiteSpace(registro.TempoJogadoString) ? "0" : registro.TempoJogadoString;
                 registro.TempoJogado = decimal.Parse(tempoStr, new CultureInfo("pt-BR"));
@@ -90,10 +92,11 @@ namespace GameDB_v3.Controllers
                         break;
                 }
 
-                var ret = ManipularModels.ValidarRegistro(registro);
+                registro.UltimaSessao = registro.UltimaSessao ?? registro.DataInput;
+                //var ret = ManipularModels.ValidarRegistro(registro);
 
-                if (ret.valido == false)
-                    return Problem(title: "Erro", detail: ret.mensagem);
+                //if (ret.valido == false)
+                //    return Problem(title: "Erro", detail: ret.mensagem);
 
                 await _registro.Inserir(registro);
 

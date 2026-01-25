@@ -100,6 +100,12 @@ function initRatings(context) {
             ratedFill: "#ffc107"
         });
 
+        // Define o conteúdo do popover dinamicamente
+        $(this).attr("data-bs-content", `Nota: ${nota}`);
+
+        // Inicializa o popover do Bootstrap
+        new bootstrap.Popover(this);
+
     });
 }
 

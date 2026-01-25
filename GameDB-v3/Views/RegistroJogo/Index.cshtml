@@ -37,10 +37,10 @@
                 <span class="fs-8">Lançado em @Model.DataLancamento?.ToString("dd 'de' MMM 'de' yyyy", new CultureInfo("pt-BR")) por @Model.Publisher</span>
             </div>
             <div class="col-2 text-end">
-                <a class="btn btn-secondary" asp-action="Index" asp-controller="Usuario">
-                <i class="fa-solid fa-reply"></i>&nbsp;
-                    Voltar
-                    </a>
+                <a class="btn btn-secondary btn-sm" asp-action="Index" asp-controller="Usuario">
+                    <i class="fa-solid fa-reply"></i>&nbsp;
+                        Voltar
+                </a>
             </div>
         </div>
 
@@ -59,8 +59,8 @@
                 </table>
             </div>
             <div class="col-2 align-bottom text-end">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-success mt-5">
-                    <i class="fa-solid fa-feather-pointed"></i>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-success btn-sm mt-5">
+                    <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
         </div>
@@ -92,9 +92,15 @@
                             </select>
                         </div>
                         <div class="col">
-                            <input type="hidden" name="Nota" id="Nota" />
+                            <input type="hidden" name="Nota" id="Nota" required />
                             <label class="form-label">Avaliação:</label>
-                            <div id="rating-edit" class="mx-auto"></div>
+                            <div id="rating-edit"
+                                 class="mx-auto"
+                                 data-bs-toggle="popover"
+                                 data-bs-trigger="hover focus"
+                                 data-bs-placement="top"
+                                 data-bs-content="Nota: 0"
+                            ></div>
                         </div>
 
                         <div class="col">
@@ -129,31 +135,7 @@
                                    id="DataInput"
                                    name="DataInput" required>
                         </div>
-
-@*                         <div class="col" id="inputZerado">
-                            <label for="DataZerado" class="form-label">Data Zerado</label>
-                            <input type="text"
-                                   class="form-control date"
-                                   id="DataZerado"
-                                   name="DataZerado">
-                        </div>
-
-                        <div class="col" id="inputPlatinado">
-                            <label for="DataPlatinado" class="form-label">Data Platinado</label>
-                            <input type="text"
-                                   class="form-control date"
-                                   id="DataPlatinado"
-                                   name="DataPlatinado">
-                        </div>
-
-                        <div class="col" id="inputJogado">
-                            <label for="UltimaSessao" class="form-label">Última Sessão</label>
-                            <input type="text"
-                                   class="form-control date"
-                                   id="UltimaSessao"
-                                   name="UltimaSessao">
-                        </div>
- *@                    </div>
+                    </div>
 
                     <div class="row mb-3">
                         <div class="col">
@@ -166,7 +148,7 @@
 
                     <div class="row mb-3">
                         <div class="col-auto">
-                            <button type="button" id="btnSalvar" class="btn btn-success">
+                            <button type="button" id="btnSalvar" class="btn btn-success btn-sm">
                                 <span id="texto-salvar">
                                     Salvar
                                 </span>
@@ -175,7 +157,7 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" data-bs-dismiss="modal"
-                                    class="btn btn-secondary">
+                                    class="btn btn-secondary btn-sm">
                                 Cancelar
                             </button>
                         </div>
@@ -271,6 +253,34 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+
+        let notaInicial = $("#Nota").val() || 0;
+
+        $("#rating-edit").rateYo({
+            rating: notaInicial,
+            fullStar: true,
+            starWidth: "25px"
+        }).on("rateyo.change", function (e, data) {
+
+            let nota5 = data.rating;      // 0 a 5
+            let nota100 = nota5 * 20;      // 0 a 100
+
+            $("#Nota").val(nota100);
+
+            let texto = `Nota: ${nota100.toFixed(0)}/100`;
+            $(this).attr("data-bs-content", texto);
+
+            let popover = bootstrap.Popover.getInstance(this);
+            if (popover) {
+                popover.setContent({ '.popover-body': texto });
+            }
+});
+
+    // Inicializa o popover
+    let popover = new bootstrap.Popover(document.getElementById("rating-edit"));
+});
 
         // ALTERNAR DATAS
 
