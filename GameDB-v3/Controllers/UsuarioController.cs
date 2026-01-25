@@ -46,10 +46,14 @@ namespace GameDB_v3.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edicao(int id, bool? senhaTemporaria)
+        [Autorizacoes]
+        [ValidateHttpRefererAttributes]
+        public async Task<IActionResult> Edicao(bool? senhaTemporaria)
         {
             try
             {
+                int id = this.User.GetUserId();
+
                 UsuarioModel model = new();
                 try
                 {
@@ -83,6 +87,9 @@ namespace GameDB_v3.Controllers
         {
             try
             {
+                if (this.User.GetUserId() != model.ID)
+                    return Forbid();
+
                 model.SenhaTemporaria = false;
                 var valido = ManipularModels.ValidarUsuario(model);
 
