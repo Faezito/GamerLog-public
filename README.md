@@ -1,5 +1,6 @@
 # GamerLog
 Plataforma para registro e acompanhamento de jogatinas.
+Acesso: https://gamerlog.runasp.net/
 
 # Como usar
 Basta criar sua conta, fazer login e começar a registrar suas jogatinas.
