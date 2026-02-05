@@ -19,6 +19,7 @@ namespace Z3.DataAccess
         Task AtualizarSenha(UsuarioModel model);
         Task Deletar(UsuarioModel model);
         Task<UsuarioModel> Obter(int? id, string? GoogleId, string? usuario);
+        Task<UsuarioModel> ObterPorSteam(string? steamId);
     }
 
     public class UsuarioDataAccess : IUsuarioDataAccess
@@ -44,6 +45,11 @@ NomeCompleto
 ,Genero
 ,DataCriacao
 ,GoogleId
+,SteamID
+,SteamUsername
+,SteamAvatar
+,SteamProfileUrl
+,SenhaTemporaria
 )
 OUTPUT INSERTED.ID
 VALUES (
@@ -54,7 +60,12 @@ VALUES (
 @Tipo,
 @Genero,
 @DataCriacao,
-@GoogleId
+@GoogleId,
+@steamid,
+@personaname, 
+@avatarmedium,
+@profileurl,
+SenhaTemporaria
 )
 ";
                 return await _dapper.ExecuteAsync(sql: sql, commandType: System.Data.CommandType.Text, param: model);
@@ -94,6 +105,11 @@ Senha = COALESCE(@Senha, Senha),
 Tipo = COALESCE(@Tipo, Tipo),
 NomeCompleto = COALESCE(@NomeCompleto, NomeCompleto),
 GoogleId = COALESCE(@GoogleId, GoogleId),
+SteamID = COALESCE(@steamid, SteamID),
+SteamAvatar = COALESCE(@avatarmedium, SteamAvatar),
+SteamUsername = COALESCE(@personaname, SteamUsername),
+SteamProfileUrl = COALESCE(@profileurl, SteamProfileUrl),
+SenhaTemporaria = COALESCE(@SenhaTemporaria, SenhaTemporaria),
 Genero = COALESCE(@Genero, Genero)
 WHERE ID = @id
 ";
@@ -144,16 +160,21 @@ WHERE ID = @Id
             try
             {
                 string sql = @"
-SELECT ID
-,NomeCompleto
-,GoogleId
-,Usuario
-,Email
-,Senha
-,Tipo
-,Genero
-,DataCriacao
-,DataDeletado
+SELECT [ID]
+      ,[GoogleId]
+      ,[NomeCompleto]
+      ,[Usuario]
+      ,[Senha]
+      ,[Email]
+      ,[DataCriacao]
+      ,[DataDeletado]
+      ,[Tipo]
+      ,[Genero]
+      ,[SteamID]
+      ,[SteamUsername]
+      ,[SteamAvatar]
+      ,[SteamProfileUrl]
+      ,SenhaTemporaria
 FROM dbo.Usuarios WITH(NOLOCK)
 WHERE DataDeletado IS NULL
 AND (@id IS NULL OR ID = @id)
@@ -187,7 +208,7 @@ AND (@email IS NULL OR Email LIKE CONCAT(@email, '%'))
             {
                 string sql = @"
 UPDATE dbo.Usuarios
-SET Senha = @Senha
+SET Senha = @Senha, SenhaTemporaria = @SenhaTemporaria
 WHERE ID = @id
 ";
                 var obj = new
@@ -209,16 +230,21 @@ WHERE ID = @id
             try
             {
                 string sql = @"
-SELECT ID
-,NomeCompleto
-,Usuario
-,Email
-,Senha
-,Tipo
-,Genero
-,DataCriacao
-,DataDeletado
-,GoogleId
+SELECT [ID]
+      ,[GoogleId]
+      ,[NomeCompleto]
+      ,[Usuario]
+      ,[Senha]
+      ,[Email]
+      ,[DataCriacao]
+      ,[DataDeletado]
+      ,[Tipo]
+      ,[Genero]
+      ,[SteamID]
+      ,[SteamUsername]
+      ,[SteamAvatar]
+      ,[SteamProfileUrl]
+      ,SenhaTemporaria
 FROM dbo.Usuarios WITH(NOLOCK)
 WHERE DataDeletado IS NULL
 AND (@id IS NULL OR ID = @id)
@@ -232,6 +258,43 @@ OR (Email = @usuario))
                     id = id,
                     usuario = usuario,
                     GoogleId = GoogleId
+                };
+                return await _dapper.QueryFirstOrDefaultAsync<UsuarioModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<UsuarioModel> ObterPorSteam(string? steamId)
+        {
+            try
+            {
+                string sql = @"
+SELECT [ID]
+      ,[GoogleId]
+      ,[NomeCompleto]
+      ,[Usuario]
+      ,[Senha]
+      ,[Email]
+      ,[DataCriacao]
+      ,[DataDeletado]
+      ,[Tipo]
+      ,[Genero]
+      ,[SteamID]
+      ,[SteamUsername]
+      ,[SteamAvatar]
+      ,[SteamProfileUrl]
+      ,SenhaTemporaria
+FROM dbo.Usuarios WITH(NOLOCK)
+WHERE DataDeletado IS NULL
+AND SteamID = @steamid
+";
+
+                var obj = new
+                {
+                    steamid = steamId
                 };
                 return await _dapper.QueryFirstOrDefaultAsync<UsuarioModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
             }

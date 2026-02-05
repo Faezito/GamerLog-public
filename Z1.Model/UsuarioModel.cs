@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Z1.Model.Lang;
+using Z1.Model.APIs;
 
 namespace Z1.Model
 {
-    public class UsuarioModel
+    public class UsuarioModel : Player
     {
         public int? ID { get; set; }
 

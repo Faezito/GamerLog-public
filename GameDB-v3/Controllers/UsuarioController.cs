@@ -7,6 +7,7 @@ using GenerativeAI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
+using System.Web;
 using Z1.Model;
 using Z2.Services;
 using Z2.Services.Externo;
@@ -22,14 +23,22 @@ namespace GameDB_v3.Controllers
         private readonly LoginUsuario _login;
         private readonly IJogoServicos _jogos;
         private readonly ISteamServicos _steam;
+        private readonly IAPIsServicos _api;
 
-        public UsuarioController(IUsuarioServicos seUsuario, IEmailServicos emailServicos, Sessao sessao, LoginUsuario login, ISteamServicos steam)
+        public UsuarioController(IUsuarioServicos seUsuario,
+            IEmailServicos emailServicos,
+            Sessao sessao,
+            LoginUsuario login,
+            ISteamServicos steam,
+            IAPIsServicos api)
         {
             _seUsuario = seUsuario;
             _emailServicos = emailServicos;
             _sessao = sessao;
             _login = login;
             _steam = steam;
+            _api = api;
+
         }
 
         [Autorizacoes]
@@ -49,7 +58,7 @@ namespace GameDB_v3.Controllers
         [HttpGet]
         [Autorizacoes]
         [ValidateHttpRefererAttributes]
-        public async Task<IActionResult> Edicao(bool? senhaTemporaria)
+        public async Task<IActionResult> Edicao()
         {
             try
             {
@@ -68,8 +77,6 @@ namespace GameDB_v3.Controllers
                         statusCode: StatusCodes.Status500InternalServerError
                     );
                 }
-                if (senhaTemporaria == true)
-                    model.SenhaTemporaria = senhaTemporaria.Value;
 
                 return View(model);
             }
@@ -91,8 +98,8 @@ namespace GameDB_v3.Controllers
                 if (this.User.GetUserId() != model.ID)
                     return Forbid();
 
-                model.SenhaTemporaria = false;
                 var valido = ManipularModels.ValidarUsuario(model);
+                model.SenhaTemporaria = false;
 
                 if (!valido.valido)
                     return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
@@ -118,11 +125,12 @@ namespace GameDB_v3.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObterPerfilSteam()
+        public async Task<IActionResult> ObterPerfilSteam(string steamId)
         {
-            string steamId = "76561198098162132 ";
             Player player = await _steam.GetPlayerAsync(steamId);
             return View(player);
         }
+
+
     }
 }

@@ -10,7 +10,7 @@ namespace Z2.Services.Externo
     public interface IEmailServicos
     {
         Task EnviarEmailAsync(string destinatario, string assunto, string corpoHtml);
-        Task EnviarSenhaPorEmail(bool cadastro, UsuarioModel model);
+        Task EnviarSenhaPorEmail(bool cadastro, UsuarioModel model, string senhaNova);
     }
 
     public class EmailServicos : IEmailServicos
@@ -70,7 +70,7 @@ namespace Z2.Services.Externo
             }
         }
 
-        public async Task EnviarSenhaPorEmail(bool cadastro, UsuarioModel model)
+        public async Task EnviarSenhaPorEmail(bool cadastro, UsuarioModel model, string senhaNova)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace Z2.Services.Externo
                         letter-spacing:2px;
                         color:#a78bfa;
                     '>
-                        {model.Senha}
+                        {senhaNova}
                     </p>
                 </div>
 
@@ -263,7 +263,7 @@ namespace Z2.Services.Externo
                         letter-spacing:2px;
                         color:#a78bfa;
                     '>
-                        {model.Senha}
+                        {senhaNova}
                     </p>
                 </div>
 
@@ -311,6 +311,7 @@ namespace Z2.Services.Externo
 </html>
 ";
                 }
+
                 await EnviarEmailAsync(destinatario, assunto, corpo);
             }
             catch (Exception ex)

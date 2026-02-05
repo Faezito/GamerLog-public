@@ -1,10 +1,8 @@
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using GameDB_v3.Libraries.Sessao;
-using GenerativeAI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Z1.Model;
@@ -21,12 +19,16 @@ namespace GameDB_v3.Controllers
         private readonly LoginUsuario _login;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Sessao _sessao;
+        private readonly IAPIsServicos _api;
+        private readonly ISteamServicos _steam;
 
         public HomeController(IUsuarioServicos seUsuario,
             LoginUsuario login,
             IHttpContextAccessor httpContextAccessor,
             IEmailServicos emailServicos,
-            Sessao sessao
+            Sessao sessao,
+            IAPIsServicos api,
+            ISteamServicos steam
             )
         {
             _seUsuario = seUsuario;
@@ -34,6 +36,8 @@ namespace GameDB_v3.Controllers
             _httpContextAccessor = httpContextAccessor;
             _emailServicos = emailServicos;
             _sessao = sessao;
+            _api = api;
+            _steam = steam;
         }
 
         // LOGIN
@@ -81,9 +85,7 @@ namespace GameDB_v3.Controllers
                 var principal = new ClaimsPrincipal(identity);
 
                 // Efetuar login via cookie
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal,
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
                     new AuthenticationProperties()
                     {
                         IsPersistent = true,       // manter logado
@@ -91,25 +93,18 @@ namespace GameDB_v3.Controllers
                     }
                 );
 
-                // Salvar dados complementares na sessão
-                _sessao.Cadastrar("NomeUsuario", user.NomeCompleto);
-                _sessao.Cadastrar("ID", user.ID.ToString());
-                _sessao.Cadastrar("Tipo", user.Tipo.ToString());
+                // Salvar dados complementares na sessão (não cadastrar identificação)
+                //_sessao.Cadastrar("SenhaTemporaria", user.SenhaTemporaria.ToString());
 
                 var validarSenha = ManipularModels.ValidarSenha(user.Senha);
 
-                if (!validarSenha.senhaValida)
+                if (user.SenhaTemporaria)
                 {
-                    user.SenhaTemporaria = true;
                     TempData["MSG_A"] = "Sua senha não é segura, recomendamos a troca da mesma imediatamente!";
 
                     if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                     {
-                        return Json(new
-                        {
-                            success = true,
-                            redirectUrl = Url.Action("Edicao", "Usuario", new { id = user.ID, senhaTemporaria = user.SenhaTemporaria })
-                        });
+                        return Json(new { success = true, redirectUrl = Url.Action("Edicao", "Usuario") });
                     }
 
                     return RedirectToAction("Cadastro", "Usuario", new { id = user.ID, senhaTemporaria = user.SenhaTemporaria });
@@ -118,11 +113,7 @@ namespace GameDB_v3.Controllers
                 {
                     if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                     {
-                        return Json(new
-                        {
-                            success = true,
-                            redirectUrl = Url.Action("Index", "Usuario", new { id = user.ID })
-                        });
+                        return Json(new { success = true, redirectUrl = Url.Action("Index", "Usuario", new { id = user.ID }) });
                     }
 
                     return RedirectToAction("Index", "Usuario", new { id = user.ID });
@@ -131,10 +122,7 @@ namespace GameDB_v3.Controllers
             }
             catch (Exception ex)
             {
-                return Problem(
-                    title: "Erro",
-                    detail: ex.Message
-                    );
+                return Problem(title: "Erro", detail: ex.Message);
             }
         }
 
@@ -144,13 +132,6 @@ namespace GameDB_v3.Controllers
             await HttpContext.SignOutAsync();
             _sessao.RemoverTodos();
             return RedirectToAction(nameof(Login));
-        }
-
-
-        [HttpGet]
-        public IActionResult RecuperarSenha()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -165,9 +146,10 @@ namespace GameDB_v3.Controllers
                     return Problem(detail: "Não conseguimos encontrar um usuário para o e-mail informado.", title: "Erro");
                 }
 
-                usuario.Senha = KeyGenerator.GetUniqueKey(6);
+                string senhaNova = KeyGenerator.GetUniqueKey(6);
+                usuario.Senha = senhaNova;
                 await _seUsuario.AtualizarSenha(usuario);
-                await _emailServicos.EnviarSenhaPorEmail(false, usuario);
+                await _emailServicos.EnviarSenhaPorEmail(false, usuario, senhaNova);
 
                 TempData["MSG_S"] = Mensagem.S_EMAILRECUPERACAO;
                 return Json(new
@@ -205,10 +187,11 @@ namespace GameDB_v3.Controllers
                 if (!valido.valido)
                     return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
 
-                model.Senha = KeyGenerator.GetUniqueKey(6);
+                string senhaNova = KeyGenerator.GetUniqueKey(6);
+                model.Senha = senhaNova;
 
                 id = await _seUsuario.Cadastrar(model);
-                await _emailServicos.EnviarSenhaPorEmail(true, model);
+                await _emailServicos.EnviarSenhaPorEmail(true, model, senhaNova);
                 TempData["MSG_S"] = "Cadastrado com sucesso! Confira sua caixa de e-mail para prosseguir. (Confira sua caixa de spam e lixeira caso o e-mail não apareça.)";
 
                 return Json(new

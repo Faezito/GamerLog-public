@@ -1,5 +1,6 @@
 ﻿using GameDB_v3.Libraries.Login;
 using GenerativeAI;
+using GenerativeAI.Types;
 using Microsoft.AspNetCore.Mvc;
 using Z1.Model;
 using Z2.Services;
@@ -125,9 +126,11 @@ namespace KitchenApp.Controllers
             try
             {
                 UsuarioModel usuario = await _seUsuario.Obter(id, null, null);
-                usuario.Senha = KeyGenerator.GetUniqueKey(6);
+                string senhaNova = KeyGenerator.GetUniqueKey(6);
+                usuario.Senha = senhaNova;
+
                 await _seUsuario.AtualizarSenha(usuario);
-                await _emailServicos.EnviarSenhaPorEmail(false, usuario);
+                await _emailServicos.EnviarSenhaPorEmail(false, usuario, senhaNova);
 
                 return RedirectToAction(nameof(Index));
             }

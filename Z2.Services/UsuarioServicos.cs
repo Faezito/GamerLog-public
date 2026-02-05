@@ -3,6 +3,7 @@ using Org.BouncyCastle.Crypto;
 using System.Web.Mvc;
 using Z1.Model;
 using Z3.DataAccess;
+using Z4.Lib;
 
 namespace Z2.Services
 {
@@ -12,6 +13,7 @@ namespace Z2.Services
         Task<int?> Cadastrar(UsuarioModel model);
         Task Deletar(UsuarioModel model);
         Task<UsuarioModel> Obter(int? id, string? GoogleId, string? email);
+        Task<UsuarioModel> ObterPorSteam(string? steamId);
         Task<UsuarioModel> Login(string? GoogleId, string? usuario, string Senha);
         Task AtualizarSenha(UsuarioModel model);
     }
@@ -27,6 +29,7 @@ namespace Z2.Services
 
         public async Task AtualizarSenha(UsuarioModel model)
         {
+            model.Senha = PasswordHasher.Hash(model.Senha);
             await _daUsuario.AtualizarSenha(model);
         }
 
@@ -39,6 +42,8 @@ namespace Z2.Services
             }
 
             model.DataCriacao = DateTime.Now;
+            if(model.GoogleId == null && !string.IsNullOrWhiteSpace(model.Senha))
+                model.Senha = PasswordHasher.Hash(model.Senha);
 
             return await _daUsuario.Adicionar(model);
         }
@@ -60,10 +65,9 @@ namespace Z2.Services
 
             if (user != null)
             {
-                if (user.Senha == Senha)
-                {
+                bool valido = PasswordHasher.Autenticar(Senha, user.Senha);
+                if (valido)
                     return user;
-                }
             }
             return null;
         }
@@ -72,6 +76,11 @@ namespace Z2.Services
         {
             var lst = await _daUsuario.Listar(id, null, GoogleId, null, email);
             return lst.SingleOrDefault();
+        }
+
+        public async Task<UsuarioModel> ObterPorSteam(string? steamId)
+        {
+            return await _daUsuario.ObterPorSteam(steamId);
         }
     }
 }

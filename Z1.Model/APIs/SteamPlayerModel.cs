@@ -12,5 +12,7 @@ public class Player
 {
     public string steamid { get; set; }
     public string personaname { get; set; }
-    public string avatarfull { get; set; }
+    public string avatarmedium { get; set; }
+    public string profileurl { get; set; }
+    public string realname { get; set; }
 }
