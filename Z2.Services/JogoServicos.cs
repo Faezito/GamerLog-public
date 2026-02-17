@@ -46,7 +46,7 @@ namespace Z2.Services
 
             try
             {
-                rawgJogo = await _rawg.ObterJogoPorID(id);
+                rawgJogo = await _rawg.ObterJogoPorID(id);  // obtém o jogo na API
             }
             catch (Exception ex)
             {

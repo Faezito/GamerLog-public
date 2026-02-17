@@ -34,9 +34,9 @@ namespace GameDB_v3.Controllers
             try
             {
                 var usuario = this.User.ObterUsuario();
-                var jogo = await _jogos.Obter(id);
+                var jogo = await _jogos.Obter(id);  // busca o jogo no banco de dados
 
-                if (jogo == null)
+                if (jogo == null)   // se não existir, insere no banco, com dados vindos da API
                 {
                     int jogoID = await _jogos.Inserir(id, jogo);
                     jogo = await _jogos.Obter(jogoID);
