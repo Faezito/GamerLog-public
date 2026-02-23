@@ -20,6 +20,7 @@ namespace Z3.DataAccess
         Task Deletar(UsuarioModel model);
         Task<UsuarioModel> Obter(int? id, string? GoogleId, string? usuario);
         Task<UsuarioModel> ObterPorSteam(string? steamId);
+        Task<int?> AdicionarSteam(UsuarioModel model);
     }
 
     public class UsuarioDataAccess : IUsuarioDataAccess
@@ -105,10 +106,6 @@ Senha = COALESCE(@Senha, Senha),
 Tipo = COALESCE(@Tipo, Tipo),
 NomeCompleto = COALESCE(@NomeCompleto, NomeCompleto),
 GoogleId = COALESCE(@GoogleId, GoogleId),
-SteamID = COALESCE(@steamid, SteamID),
-SteamAvatar = COALESCE(@avatarmedium, SteamAvatar),
-SteamUsername = COALESCE(@personaname, SteamUsername),
-SteamProfileUrl = COALESCE(@profileurl, SteamProfileUrl),
 SenhaTemporaria = COALESCE(@SenhaTemporaria, SenhaTemporaria),
 Genero = COALESCE(@Genero, Genero)
 WHERE ID = @id
@@ -160,28 +157,29 @@ WHERE ID = @Id
             try
             {
                 string sql = @"
-SELECT [ID]
-      ,[GoogleId]
-      ,[NomeCompleto]
-      ,[Usuario]
-      ,[Senha]
-      ,[Email]
-      ,[DataCriacao]
-      ,[DataDeletado]
-      ,[Tipo]
-      ,[Genero]
-      ,[SteamID]
-      ,[SteamUsername]
-      ,[SteamAvatar]
-      ,[SteamProfileUrl]
-      ,SenhaTemporaria
-FROM dbo.Usuarios WITH(NOLOCK)
-WHERE DataDeletado IS NULL
-AND (@id IS NULL OR ID = @id)
-AND (@GoogleId IS NULL OR GoogleId = @GoogleId)
-AND (@nome IS NULL OR NomeCompleto LIKE CONCAT(@nome, '%'))
-AND (@usuario IS NULL OR Usuario LIKE CONCAT(@usuario, '%'))
-AND (@email IS NULL OR Email LIKE CONCAT(@email, '%'))
+SELECT U.[ID]
+      ,U.[GoogleId]
+      ,U.[NomeCompleto]
+      ,U.[Usuario]
+      ,U.[Senha]
+      ,U.[Email]
+      ,U.[DataCriacao]
+      ,U.[DataDeletado]
+      ,U.[Tipo]
+      ,U.[Genero]
+      ,U.[SenhaTemporaria]
+      ,S.[steamid]
+      ,S.[personaname]
+      ,S.[avatarmedium]
+      ,S.[profileurl]
+FROM dbo.Usuarios U WITH(NOLOCK)
+LEFT JOIN [steam].[UsuariosSteam] S ON S.UsuarioID = U.ID
+WHERE U.DataDeletado IS NULL
+AND (@id IS NULL OR U.ID = @id)
+AND (@GoogleId IS NULL OR U.GoogleId = @GoogleId)
+AND (@nome IS NULL OR U.NomeCompleto LIKE CONCAT(@nome, '%'))
+AND (@usuario IS NULL OR U.Usuario LIKE CONCAT(@usuario, '%'))
+AND (@email IS NULL OR U.Email LIKE CONCAT(@email, '%'))
 ";
 
                 var obj = new
@@ -230,27 +228,28 @@ WHERE ID = @id
             try
             {
                 string sql = @"
-SELECT [ID]
-      ,[GoogleId]
-      ,[NomeCompleto]
-      ,[Usuario]
-      ,[Senha]
-      ,[Email]
-      ,[DataCriacao]
-      ,[DataDeletado]
-      ,[Tipo]
-      ,[Genero]
-      ,[SteamID]
-      ,[SteamUsername]
-      ,[SteamAvatar]
-      ,[SteamProfileUrl]
-      ,SenhaTemporaria
-FROM dbo.Usuarios WITH(NOLOCK)
-WHERE DataDeletado IS NULL
-AND (@id IS NULL OR ID = @id)
-AND (@GoogleId IS NULL OR GoogleId = @GoogleId)
-AND ((Usuario = @usuario)
-OR (Email = @usuario))
+SELECT U.[ID]
+      ,U.[GoogleId]
+      ,U.[NomeCompleto]
+      ,U.[Usuario]
+      ,U.[Senha]
+      ,U.[Email]
+      ,U.[DataCriacao]
+      ,U.[DataDeletado]
+      ,U.[Tipo]
+      ,U.[Genero]
+      ,U.[SenhaTemporaria]
+      ,S.[steamid]
+      ,S.[personaname]
+      ,S.[avatarmedium]
+      ,S.[profileurl]
+FROM dbo.Usuarios U WITH(NOLOCK)
+LEFT JOIN [steam].[UsuariosSteam] S ON S.UsuarioID = U.ID
+WHERE U.DataDeletado IS NULL
+AND (@id IS NULL OR U.ID = @id)
+AND (@GoogleId IS NULL OR U.GoogleId = @GoogleId)
+AND ((U.Usuario = @usuario)
+OR (U.Email = @usuario))
 ";
 
                 var obj = new
@@ -272,24 +271,24 @@ OR (Email = @usuario))
             try
             {
                 string sql = @"
-SELECT [ID]
-      ,[GoogleId]
-      ,[NomeCompleto]
-      ,[Usuario]
-      ,[Senha]
-      ,[Email]
-      ,[DataCriacao]
-      ,[DataDeletado]
-      ,[Tipo]
-      ,[Genero]
-      ,[SteamID]
-      ,[SteamUsername]
-      ,[SteamAvatar]
-      ,[SteamProfileUrl]
-      ,SenhaTemporaria
-FROM dbo.Usuarios WITH(NOLOCK)
-WHERE DataDeletado IS NULL
-AND SteamID = @steamid
+SELECT U.[ID]
+      ,U.[GoogleId]
+      ,U.[NomeCompleto]
+      ,U.[Usuario]
+      ,U.[Senha]
+      ,U.[Email]
+      ,U.[DataCriacao]
+      ,U.[DataDeletado]
+      ,U.[Tipo]
+      ,U.[Genero]
+      ,U.[SenhaTemporaria]
+      ,S.[steamid]
+      ,S.[personaname]
+      ,S.[avatarmedium]
+      ,S.[profileurl]
+FROM [db36109].[dbo].[Usuarios] U
+LEFT JOIN [steam].[UsuariosSteam] S ON S.UsuarioID = U.ID
+WHERE S.steamid = @steamid
 ";
 
                 var obj = new
@@ -301,6 +300,47 @@ AND SteamID = @steamid
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<int?> AdicionarSteam(UsuarioModel model)
+        {
+            try
+            {
+                string sql = @"
+INSERT INTO [steam].[UsuariosSteam] (
+UsuarioID
+,steamid
+,personaname
+,avatarmedium
+,profileurl
+)
+OUTPUT INSERTED.UsuarioID
+VALUES (
+@ID,
+@steamid,
+@personaname, 
+@avatarmedium,
+@profileurl
+)
+";
+                return await _dapper.ExecuteAsync(sql: sql, commandType: System.Data.CommandType.Text, param: model);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627)
+                {
+                    if (ex.Message.Contains("UK_steamid"))
+                    {
+                        throw new Exception("Esta conta já está vinculada.");
+                    }
+                    throw new Exception("Dados duplicados encontrados no cadastro.");
+                }
+                throw;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Ocorreu um erro inesperado ao salvar os dados."); 
             }
         }
     }

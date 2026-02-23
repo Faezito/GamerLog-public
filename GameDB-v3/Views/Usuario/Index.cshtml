@@ -5,10 +5,21 @@
 }
 
 <div class="row">
-    <div class="col-12 col-sm-4">
-        <h4 class="fw-bold text-center text-sm-start">Olá, @Model.Usuario!</h4>
+    <div class="col-12 col-sm-4 d-flex gap-2">
+        @if (!string.IsNullOrWhiteSpace(Model.avatarmedium))
+        {
+            <img src="@Model.avatarmedium" class="rounded-5" />
+            <div class="ps-4 col-12">
+                <h4 class="fw-bold text-center text-sm-start mt-auto w-100">@Model.Usuario</h4>
+                <h6 class="fw-bold text-center text-sm-start mt-auto w-100">@Model.personaname</h6>
+            </div>
+        }
+        else
+        {
+            <h4 class="fw-bold text-center text-sm-start mt-auto w-100">@Model.Usuario</h4>
+        }
     </div>
-    <div class="col-12 col-sm-8 text-end">
+    <div class="col-12 col-sm-8 text-end mt-auto">
         <form class="" id="pesquisar">
             <div class="row justify-content-end g-2">
                 <div class="col-7 col-sm-4">

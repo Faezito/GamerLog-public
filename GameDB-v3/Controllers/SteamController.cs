@@ -152,14 +152,14 @@ namespace GameDB_v3.Controllers
             usuario.avatarmedium = player.avatarmedium;
 
             // TODO: Adicionar e-mail de confirmação de cadastro para o usuário
-            int? novoid = await _seUsuario.Cadastrar(usuario);
+            int? novoid = await _seUsuario.AdicionarSteam(usuario);
             usuario = await _seUsuario.Obter(novoid, null, null); // TODO: VERIFICAR SE PODE SER REMOVIDO
 
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.ID.ToString()));
             identity.AddClaim(new Claim(ClaimTypes.Email, usuario.Email));
             identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NomeCompleto));
             identity.AddClaim(new Claim(ClaimTypes.Role, usuario.Tipo));
-            identity.AddClaim(new Claim("SteamID", usuario.steamid));
+            identity.AddClaim(new Claim("steamid", usuario.steamid));
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,

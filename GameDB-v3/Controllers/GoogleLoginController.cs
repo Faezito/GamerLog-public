@@ -70,7 +70,8 @@ namespace GameDB_v3.Controllers
                     Email = email,
                     Tipo = "C", // padrão
                     GoogleId = id,
-                    Senha = KeyGenerator.GetUniqueKey(10)
+                    Senha = KeyGenerator.GetUniqueKey(10),
+                    SenhaTemporaria = false
                 };
 
                 // TODO: Adicionar e-mail de confirmação de cadastro para o usuário
@@ -142,6 +143,7 @@ namespace GameDB_v3.Controllers
 
             // Atualiza no banco
             usuario.GoogleId = googleId;
+            usuario.SenhaTemporaria = false;
             await _seUsuario.Cadastrar(usuario);
 
             // Recria o cookie interno com claims completas

@@ -1,7 +1,4 @@
-﻿using GenerativeAI;
-using Org.BouncyCastle.Crypto;
-using System.Web.Mvc;
-using Z1.Model;
+﻿using Z1.Model;
 using Z3.DataAccess;
 using Z4.Lib;
 
@@ -16,6 +13,7 @@ namespace Z2.Services
         Task<UsuarioModel> ObterPorSteam(string? steamId);
         Task<UsuarioModel> Login(string? GoogleId, string? usuario, string Senha);
         Task AtualizarSenha(UsuarioModel model);
+        Task<int?> AdicionarSteam(UsuarioModel model);
     }
 
     public class UsuarioServicos : IUsuarioServicos
@@ -25,6 +23,11 @@ namespace Z2.Services
         public UsuarioServicos(IUsuarioDataAccess daUsuario)
         {
             _daUsuario = daUsuario;
+        }
+
+        public async Task<int?> AdicionarSteam(UsuarioModel model)
+        {
+            return await _daUsuario.AdicionarSteam(model);
         }
 
         public async Task AtualizarSenha(UsuarioModel model)

@@ -3,7 +3,7 @@
 
 <div class="row mb-2">
     <h2 class="text-uppercase">
-        Cadastre-se
+        Editar Perfil
     </h2>
 </div>
 
@@ -98,6 +98,16 @@
         </button>
     </form>
 }
+@if (Model.steamid == null)
+{
+    <form method="get" asp-action="VincularSteam" asp-controller="Steam">
+        <input type="hidden" name="usuarioId" value="@Model.ID" />
+        <button asp-action="VincularSteam" asp-controller="Steam" class="text-light fs-1 btn text-dark bg-light rounded-5 w-auto">
+            <i class="fa-brands fa-steam"></i>
+        </button>
+    </form>
+}
+
 
 
 @section Scripts {
