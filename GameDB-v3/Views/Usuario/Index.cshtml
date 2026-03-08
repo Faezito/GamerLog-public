@@ -22,7 +22,13 @@
     <div class="col-12 col-sm-8 text-end mt-auto">
         <form class="" id="pesquisar">
             <div class="row justify-content-end g-2">
-                <div class="col-7 col-sm-4">
+                <div class="col-4 col-sm-2">
+                    <select name="ano" id="ano" class="form-select form-select-sm">
+                        <option selected>ANO</option>
+                        @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
+                    </select>
+                </div>
+                <div class="col-5 col-sm-4">
                     <input type="text" id="titulo" name="titulo" class="form-control-sm w-100" placeholder="Pesquisar jogo" />
                 </div>
                 <div class="col-5 col-sm-3 col-lg-2">
@@ -37,9 +43,7 @@
 
 @await Component.InvokeAsync("ResumoJogador")
 
-<hr class="my-3" />
-
-<div id="tabela-jogos" class="row gap-5 justify-content-center">
+<div id="tabela-jogos" class="row gap-4 mb-5 justify-content-center">
 </div>
 
 <div id="loading" style="display:none; text-align:center; padding:20px;">
@@ -108,6 +112,11 @@
 @section Scripts {
     <script>
         $('#pesquisar').on('submit', function (e) {
+            e.preventDefault()
+            carregarTabela();
+        });
+
+        $('#ano').on('change', function (e) {
             e.preventDefault()
             carregarTabela();
         });

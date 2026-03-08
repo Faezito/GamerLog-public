@@ -91,12 +91,7 @@ namespace GameDB_v3.Controllers
                         registro.UltimaSessao = registro.DataInput;
                         break;
                 }
-
                 registro.UltimaSessao = registro.UltimaSessao ?? registro.DataInput;
-                //var ret = ManipularModels.ValidarRegistro(registro);
-
-                //if (ret.valido == false)
-                //    return Problem(title: "Erro", detail: ret.mensagem);
 
                 await _registro.Inserir(registro);
 

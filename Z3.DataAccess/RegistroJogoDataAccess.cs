@@ -202,17 +202,13 @@ SELECT TOP 10 R.[ID]
                 string sql = @"
 WITH CTE_BASE AS (
 SELECT DISTINCT
---COALESCE(
---      LEFT([DataZerado], 4)
---      ,LEFT([DataPlatinado], 4)
---      ,LEFT([UltimaSessao], 4)
---      )
-    LEFT([UltimaSessao], 4)AS ANO
+    LEFT([UltimaSessao], 4) AS ANO
   FROM [db36109].[dbo].[RegistrosJogos] WITH(NOLOCK)
   WHERE UsuarioID = @usuarioId
 )
-SELECT * FROM CTE_BASE WITH(NOLOCK)
+SELECT ANO FROM CTE_BASE WITH(NOLOCK)
 WHERE ANO IS NOT NULL
+ORDER BY ANO DESC
 
 ";
                 var obj = new
