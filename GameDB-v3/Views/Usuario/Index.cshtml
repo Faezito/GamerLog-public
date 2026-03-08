@@ -41,9 +41,11 @@
     </div>
 </div>
 
-@await Component.InvokeAsync("ResumoJogador")
+<div class="mb-5">
+    @await Component.InvokeAsync("ResumoJogador")
+</div>
 
-<div id="tabela-jogos" class="row gap-4 mb-5 justify-content-center">
+<div id="tabela-jogos" class="row mb-5 justify-content-center">
 </div>
 
 <div id="loading" style="display:none; text-align:center; padding:20px;">
