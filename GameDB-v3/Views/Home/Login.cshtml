@@ -1,238 +1,456 @@
 ﻿@model UsuarioModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "GamerLog — Organizando sua jogatina";
+    Layout = "_Layout";
 }
-<style>
-    .form-floating > .form-control:focus ~ label::after,
-    .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
-    .form-floating > .form-control-plaintext ~ label::after,
-    .form-floating > .form-select ~ label::after {
-        background-color: transparent !important;
-        color: black;
-    }
 
-    .google-material {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px;
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 25px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 500;
-        transition: 0.2s;
-        width: fit-content;
-    }
 
-        .google-material img {
-            width: 24px;
-            height: 24px;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
 
-        .google-material:hover {
-            background: #f5f5f5;
-        }
-</style>
 
-<div class="row d-flex justify-content-center">
-    <div class="mx-auto mx-sm-1 col-12 col-sm-8 col-md-6 col-lg-4 py-5">
-        <div class="">
-            <div class="card-body px-3 py-4 bg-dark rounded-3 shadow-lg">
-                <div class="">
-                    <h2 class="display-4 mb-3 text-light text-center">GamerLog</h2>
-                    <h5 class="text-center mb-3">Organizando sua jogatina!</h5>
+<!-- ── Fundo com grid ── -->
+<div class="bg-grid"></div>
 
-                    <form class="form" method="post" id="form-login">
-                        @if (ViewData["MSG_E"] != null)
-                        {
-                            <span class="alert alert-danger fw-bold m-0">
-                                @ViewData["MSG_E"]
-                            </span>
-                        }
-                        <div class="form-floating mb-3">
-                            <input id="Login" name="Login" type="text" class="form-control" placeholder=" " required />
-                            <label class="text-dark" for="Login">Usuario ou E-mail</label>
-                        </div>
+<!-- ── Cantos HUD ── -->
+<div class="hud-corner hud-tl"></div>
+<div class="hud-corner hud-tr"></div>
+<div class="hud-corner hud-bl"></div>
+<div class="hud-corner hud-br"></div>
 
-                        <div class="form-floating mb-3">
-                            <input id="Senha" name="Senha" type="password" class="form-control" placeholder=" " required />
-                            <label class="text-dark" for="Senha">Senha</label>
-                        </div>
+<!-- ── Achievement Toast ── -->
+<div class="achievement-toast" id="achToast">
+    <div class="ach-shine"></div>
+    <div class="ach-icon">🏆</div>
+    <div class="ach-text">
+        <div class="ach-label">Achievement Unlocked</div>
+        <div class="ach-name">Primeiro Log</div>
+        <div class="ach-desc">Registre sua primeira jogatina</div>
+    </div>
+</div>
 
-                        <div class="text-center w-100 mb-3">
-                            <button type="submit" class="btn btn-primary w-100 py-3" id="btnLogin">
-                                <span id="texto-login">
-                                    ACESSAR
-                                </span>
-                                <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
-                            </button>
-                            <div class="row py-2">
-                                <div class="col-6 fs-7 text-start">
-                                    <a class="link-light" asp-action="Cadastro" asp-controller="Home">Cadastre-se</a>
-                                </div>
-                                <div class="col-6 fs-7 text-end">
-                                    <a class="link-light" href="#" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">Esqueci minha senha</a>
-                                </div>
-                            </div>
+<!-- ════════════════════════════════════════
+     NAV
+════════════════════════════════════════ -->
+<nav>
+    <a class="nav-logo" href="#">
+        <span class="logo-bracket">[</span>GamerLog<span class="logo-bracket">]</span>
+    </a>
+    <div class="nav-right">
+        <a href="#features" class="nav-link">Funções</a>
+        <a href="#achievements" class="nav-link">Conquistas</a>
+        <a href="https://portfolio2025-vm6w.onrender.com/" target="_blank" class="nav-link">Dev</a>
+        <button class="btn-hud" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            <span>» Entrar</span>
+        </button>
+    </div>
+</nav>
 
-                        </div>
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero-orb"></div>
 
-                        <div class="row justify-content-center mb-3">
-                            <div class="col-5">
-                                <hr />
-                            </div>
-                            <div class="col-2 text-center fs-8 mt-1">
-                                OU
-                            </div>
-                            <div class="col-5">
-                                <hr />
-                            </div>
-                        </div>
+    <!-- Grade synthwave -->
+    <div class="hero-horizon">
+        <svg class="horizon-grid" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 300">
+            <line x1="0" y1="300" x2="1200" y2="300" />
+            <line x1="100" y1="240" x2="1100" y2="240" />
+            <line x1="220" y1="190" x2="980" y2="190" />
+            <line x1="320" y1="150" x2="880" y2="150" />
+            <line x1="400" y1="118" x2="800" y2="118" />
+            <line x1="460" y1="93" x2="740" y2="93" />
+            <line x1="510" y1="73" x2="690" y2="73" />
+            <line x1="600" y1="0" x2="0" y2="300" />
+            <line x1="600" y1="0" x2="1200" y2="300" />
+            <line x1="600" y1="60" x2="0" y2="300" />
+            <line x1="600" y1="60" x2="1200" y2="300" />
+            <line x1="600" y1="100" x2="0" y2="300" />
+            <line x1="600" y1="100" x2="1200" y2="300" />
+            <line x1="600" y1="130" x2="0" y2="300" />
+            <line x1="600" y1="130" x2="1200" y2="300" />
+            <line x1="600" y1="155" x2="0" y2="300" />
+            <line x1="600" y1="155" x2="1200" y2="300" />
+            <line x1="600" y1="175" x2="0" y2="300" />
+            <line x1="600" y1="175" x2="1200" y2="300" />
+            <line x1="600" y1="192" x2="0" y2="300" />
+            <line x1="600" y1="192" x2="1200" y2="300" />
+            <line x1="600" y1="208" x2="0" y2="300" />
+            <line x1="600" y1="208" x2="1200" y2="300" />
+        </svg>
+    </div>
 
-                        <div class="row justify-content-center mb-3 d-flex gap-3">
-                            <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="text-dark bg-light rounded-5 fs-1 w-auto">
-                                <i class="fa-brands fa-google"></i>
-                                @* <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> *@
-                            </a>
-                            <a asp-action="LoginSteam" asp-controller="Steam" class="text-light fs-1 text-dark bg-light rounded-5 w-auto">
-                                <i class="fa-brands fa-steam"></i>
-                            </a>
-                        </div>
+    <div class="hud-status">
+        <span class="dot"></span>
+        <span>SISTEMA ONLINE</span>
+        <span class="sep">|</span>
+        <span>v1.04</span>
+        <span class="sep">|</span>
+        <span>GRATUITO</span>
+    </div>
 
-                    </form>
+    <h1 class="hero-title" data-text="GamerLog">
+        <span class="t1">GAMER</span>
+        <span class="t2">LOG</span>
+    </h1>
+
+    <p class="hero-tagline">// <span class="accent">Organizando</span> sua jogatina</p>
+
+    <p class="hero-sub">
+        Registre cada partida, acompanhe seu backlog, avalie seus jogos e
+        visualize estatísticas da sua jornada como gamer.
+    </p>
+
+    <div class="xp-bar-wrap">
+        <div class="xp-label">
+            <span>XP ACUMULADO</span>
+            <span id="xpCount">0 / 1000 XP</span>
+        </div>
+        <div class="xp-track">
+            <div class="xp-fill" id="xpFill"></div>
+        </div>
+    </div>
+
+    <div class="hero-ctas">
+        <button class="btn-primary-hud" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            Iniciar Jornada
+        </button>
+        <a href="#features" class="btn-outline-hud">Ver Funções ↓</a>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     STATS HUD
+════════════════════════════════════════ -->
+<div class="stats-hud">
+    <div class="stat-hud">
+        <span class="stat-num-hud">100%</span>
+        <span class="stat-lbl-hud">Gratuito</span>
+    </div>
+    <div class="stat-hud">
+        <span class="stat-num-hud">4</span>
+        <span class="stat-lbl-hud">Módulos</span>
+    </div>
+    <div class="stat-hud">
+        <span class="stat-num-hud">∞</span>
+        <span class="stat-lbl-hud">Jogos</span>
+    </div>
+    <div class="stat-hud">
+        <span class="stat-num-hud">v1.04</span>
+        <span class="stat-lbl-hud">Build</span>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FEATURES
+════════════════════════════════════════ -->
+<section class="gl-section reveal" id="features">
+    <div class="section-eyebrow">MÓDULOS DO SISTEMA</div>
+    <h2 class="section-title">Tudo que você precisa para <em>dominar</em> seu backlog</h2>
+
+    <div class="features-grid">
+
+        <div class="feat-card">
+            <div class="feat-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                </svg>
+            </div>
+            <div class="feat-body">
+                <div class="feat-num">MOD_01</div>
+                <div class="feat-title">Registro de Partidas</div>
+                <p class="feat-desc">Documente cada sessão com data, duração, plataforma e notas. Seu histórico completo, sempre acessível.</p>
+            </div>
+        </div>
+
+        <div class="feat-card">
+            <div class="feat-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                </svg>
+            </div>
+            <div class="feat-body">
+                <div class="feat-num">MOD_02</div>
+                <div class="feat-title">Backlog & Wishlist</div>
+                <p class="feat-desc">Organize sua fila de jogos por status — jogando, zerado, pausado, na wishlist. Nunca perca o fio da meada.</p>
+            </div>
+        </div>
+
+        <div class="feat-card">
+            <div class="feat-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                </svg>
+            </div>
+            <div class="feat-body">
+                <div class="feat-num">MOD_03</div>
+                <div class="feat-title">Avaliações & Reviews</div>
+                <p class="feat-desc">Dê sua nota, escreva um mini-review pessoal. Suas impressões registradas para sempre, sem depender de plataformas externas.</p>
+            </div>
+        </div>
+
+        <div class="feat-card">
+            <div class="feat-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                </svg>
+            </div>
+            <div class="feat-body">
+                <div class="feat-num">MOD_04</div>
+                <div class="feat-title">Stats & Analytics</div>
+                <p class="feat-desc">Horas por jogo, gêneros favoritos, ritmo de jogatina, ranking pessoal. Visualize sua evolução como gamer.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SHOWCASE
+════════════════════════════════════════ -->
+<section class="showcase reveal">
+
+    <!-- Mockup HUD -->
+    <div class="hud-mockup">
+        <div class="hud-topbar">
+            <span class="hud-topbar-title">▸ BIBLIOTECA // ATIVA</span>
+            <span class="hud-topbar-date" id="hudDate">--/--/----</span>
+        </div>
+
+        <div class="game-row active">
+            <div class="game-thumb">🎮</div>
+            <div class="game-info">
+                <div class="game-name">Elden Ring</div>
+                <div class="game-meta">
+                    <span class="game-status status-playing">Jogando</span>
+                    <span class="game-platform">PC</span>
                 </div>
             </div>
+            <div class="game-hours">142h <small>↑ hoje</small></div>
+        </div>
+
+        <div class="game-row">
+            <div class="game-thumb">⚔️</div>
+            <div class="game-info">
+                <div class="game-name">Hollow Knight</div>
+                <div class="game-meta">
+                    <span class="game-status status-done">Zerado</span>
+                    <span class="game-platform">PC</span>
+                </div>
+            </div>
+            <div class="game-hours">68h <small>★ 9/10</small></div>
+        </div>
+
+        <div class="game-row">
+            <div class="game-thumb">🌆</div>
+            <div class="game-info">
+                <div class="game-name">Cyberpunk 2077</div>
+                <div class="game-meta">
+                    <span class="game-status status-paused">Pausado</span>
+                    <span class="game-platform">PS5</span>
+                </div>
+            </div>
+            <div class="game-hours">94h <small>★ 8/10</small></div>
+        </div>
+
+        <div class="game-row">
+            <div class="game-thumb">🔥</div>
+            <div class="game-info">
+                <div class="game-name">Hades II</div>
+                <div class="game-meta">
+                    <span class="game-status status-wish">Wishlist</span>
+                    <span class="game-platform">PC</span>
+                </div>
+            </div>
+            <div class="game-hours">— <small>na fila</small></div>
+        </div>
+
+        <div class="mini-chart">
+            <div class="mini-chart-label">Horas / últimos 7 dias</div>
+            <div class="mini-bars">
+                <div class="mini-bar"></div>
+                <div class="mini-bar"></div>
+                <div class="mini-bar"></div>
+                <div class="mini-bar"></div>
+                <div class="mini-bar"></div>
+                <div class="mini-bar"></div>
+                <div class="mini-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Texto -->
+    <div class="showcase-text">
+        <div class="section-eyebrow">SEU PERFIL</div>
+        <h2 class="section-title">Sua biblioteca. <em>Seu histórico.</em></h2>
+        <p>
+            Tenha uma visão completa de tudo que você jogou, está jogando e quer jogar.
+            Com status, plataforma, horas e avaliações num painel limpo e rápido.
+        </p>
+        <ul class="feat-bullets">
+            <li>Status: Jogando / Zerado / Pausado / Wishlist</li>
+            <li>Registro de horas por sessão</li>
+            <li>Notas e avaliações pessoais</li>
+            <li>Filtros por plataforma e gênero</li>
+            <li>Timeline da sua jogatina</li>
+        </ul>
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════
+     ACHIEVEMENTS
+════════════════════════════════════════ -->
+<section class="ach-section reveal" id="achievements">
+    <div class="section-eyebrow">CONQUISTAS</div>
+    <h2 class="section-title">Desbloqueie <em>achievements</em> na sua jornada</h2>
+
+    <div class="ach-grid">
+        <div class="ach-card">
+            <span class="ach-rarity rarity-cyan">COMUM</span>
+            <div class="ach-card-icon">📋</div>
+            <div class="ach-card-name">Primeiro Log</div>
+            <div class="ach-card-desc">Registre sua primeira sessão de jogo</div>
+        </div>
+        <div class="ach-card">
+            <span class="ach-rarity rarity-gold">RARO</span>
+            <div class="ach-card-icon">⚔️</div>
+            <div class="ach-card-name">Caçador de Platinas</div>
+            <div class="ach-card-desc">Zerou 10 jogos na sua biblioteca</div>
+        </div>
+        <div class="ach-card">
+            <span class="ach-rarity rarity-purple">ÉPICO</span>
+            <div class="ach-card-icon">🕐</div>
+            <div class="ach-card-name">Mil Horas</div>
+            <div class="ach-card-desc">Acumule 1000h registradas no total</div>
+        </div>
+        <div class="ach-card locked">
+            <span class="ach-rarity rarity-gold">LENDÁRIO</span>
+            <div class="ach-card-icon">🔒</div>
+            <div class="ach-card-name">???</div>
+            <div class="ach-card-desc">Continue jogando para descobrir</div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     CTA
+════════════════════════════════════════ -->
+<section class="cta-wrap reveal">
+    <div class="pixel-bg">
+        <canvas id="pixelCanvas"></canvas>
+    </div>
+    <div class="cta-inner">
+        <h2>Pronto para<br><em>iniciar sua jornada?</em></h2>
+        <p class="cta-sub">// GRATUITO · SEM ANÚNCIOS · FEITO POR GAMER PARA GAMER</p>
+        <button class="btn-primary-hud" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            » Criar Conta Grátis
+        </button>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="gl-footer">
+    <span class="footer-copy">© GamerLog 2025 (v1.04) · Todos os direitos reservados</span>
+    <div class="footer-right">
+        <a href="https://portfolio2025-vm6w.onrender.com/" target="_blank">dev: faé</a>
+        <a href="https://gamerlog.runasp.net" target="_blank">gamerlog.runasp.net</a>
+    </div>
+</footer>
+
+<!-- ════════════════════════════════════════
+     MODAL LOGIN (Bootstrap)
+════════════════════════════════════════ -->
+<div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content gl-modal-content">
+
+            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
+
+            <div class="modal-logo">
+                <span class="bracket">[</span>GamerLog<span class="bracket">]</span>
+            </div>
+            <p class="modal-sub">// Organizando sua jogatina</p>
+
+            @if (ViewData["MSG_E"] != null)
+            {
+                <div class="alert alert-danger fw-bold mb-3">@ViewData["MSG_E"]</div>
+            }
+
+            <form id="form-login" method="post">
+                <div class="field-group">
+                    <label class="field-label" for="Login">Usuário ou E-mail</label>
+                    <input id="Login" name="Login" type="text" class="field-input" placeholder="seu_usuario" required />
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="Senha">Senha</label>
+                    <input id="Senha" name="Senha" type="password" class="field-input" placeholder="••••••••" required />
+                </div>
+
+                <div class="modal-links">
+                    <a asp-action="Cadastro" asp-controller="Home">Cadastre-se</a>
+                    <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">
+                        Esqueci minha senha
+                    </a>
+                </div>
+
+                <button type="submit" class="btn-modal-submit" id="btnLogin">
+                    <span id="texto-login">» ACESSAR</span>
+                    <span id="loading-login" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
+            </form>
+
+            <div class="modal-divider"><span>OU</span></div>
+
+            <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="btn-google-hud">
+                <i class="fa-brands fa-google"></i>
+                Entrar com Google
+            </a>
+
+            <a asp-action="LoginSteam" asp-controller="Steam" class="btn-steam-hud mt-2">
+                <i class="fa-brands fa-steam"></i>
+                Entrar com Steam
+            </a>
+
         </div>
     </div>
 </div>
 
-<!-- Modal RECUPERAR SENHA -->
-<div class="modal fade" id="modalRecuperarSenha" tabindex="-1" aria-labelledby="modalRecuperarSenha" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-secondary fs-5">RECUPERAR SENHA</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <form class="w-auto mx-auto" id="form-recuperar">
-                        <div class="text-center">
-                            <div class="input-group mb-2">
-                                <label for="email" class="input-group-text">Email</label>
-                                <input type="text" class="form-control" name="email" />
-                                <span asp-validation-for="Email"></span>
-                                <button type="button" id="recuperar-senha" class="btn btn-primary">
-                                    <span id="texto-salvar">
-                                        Enviar código
-                                    </span>
-                                    <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+<!-- ════════════════════════════════════════
+     MODAL RECUPERAR SENHA (Bootstrap)
+════════════════════════════════════════ -->
+<div class="modal fade" id="modalRecuperarSenha" tabindex="-1" aria-labelledby="modalRecuperarSenhaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content gl-modal-content">
+
+            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
+
+            <div class="modal-logo" style="font-size: 1.1rem;">RECUPERAR SENHA</div>
+            <p class="modal-sub">// Informe seu e-mail para receber o código</p>
+
+            <form id="form-recuperar">
+                <div class="field-group">
+                    <label class="field-label" for="email">E-mail</label>
+                    <input type="email" class="field-input" name="email" id="email"
+                           placeholder="seu@email.com" required />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
-            </div>
+
+                <button type="button" id="recuperar-senha" class="btn-modal-submit mt-2">
+                    <span id="texto-salvar">Enviar código</span>
+                    <span id="loading-recuperar" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
+            </form>
+
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script>
-        $("#form-login").on('submit', function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: '/Home/Login',
-                type: 'POST',
-                data: $('#form-login').serialize(),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                beforeSend: function () {
-                    $('#btnLogin').prop('disabled', true);
-                },
-                complete: function () {
-                    $('#btnLogin').prop('disabled', false);
-                },
-                success: function (response) {
-                    if (response.success) {
-                        window.location.href = response.redirectUrl;
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: response.title ?? 'Erro',
-                            text: response.detail
-                        });
-                    }
-                },
-                error: function (xhr) {
-                    let json = xhr.responseJSON;
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: json?.title ?? 'Erro',
-                        text: json?.detail ?? 'Ocorreu um erro inesperado.'
-                    });
-                }
-            });
-        });
-
-            //todo: testar
-            $(document).on('click','#recuperar-senha', function(e){
-            e.preventDefault();
-
-            const form = $(this).closest("form");
-
-            Swal.fire({
-                title: "Realmente deseja resetar sua senha? Esta ação é irreversível.",
-                showDenyButton: true,
-                denyButtonText: "Não",
-                confirmButtonText: "Sim",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/Home/RecuperarSenha',
-                        type: 'POST',
-                        data: $('#form-recuperar').serialize(),
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        beforeSend: function () {
-                            $("#loading").show();
-                            $("#texto-salvar").hide();
-                            $('#btnSalvar').prop('disabled', true);
-                        },
-                        complete: function () {
-                            $("#loading").hide();
-                            $("#texto-salvar").show();
-                            $('#btnSalvar').prop('disabled', false);
-                        }
-                    })
-                    .done(function (response) {
-                        if (response.success) {
-                            window.location.href = response.redirectUrl;
-                        }
-                    })
-                    .fail(function (xhr) {
-                        if (xhr.responseJSON) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: xhr.responseJSON.title ?? 'Erro',
-                                html: xhr.responseJSON.detail
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erro',
-                                text: 'Erro inesperado ao processar a requisição.'
-                            });
-                        }
-                    });
-            }
-        })
-        })
-    </script>
+    <script src="~/js/landing.js" asp-append-version="true"></script>
 }
