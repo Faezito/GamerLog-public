@@ -11,8 +11,8 @@
 
         @foreach (int? mes in meses)
         {
-            <h4 class="text-uppercase mb-0 mt-2 text-center">@mes?.ObterMesCompleto()</h4>
-            <hr />
+            <h4 class="text-uppercase mb-0 mt-2 text-center gl-shimmer">@mes?.ObterMesCompleto()</h4>
+            <hr class="gl-divider-glow" />
             foreach (var game in Model.Where(x => x.UltimaSessao?.Month == mes))
             {
                 <div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
