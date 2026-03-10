@@ -13,8 +13,9 @@
         {
             <h4 class="text-uppercase mb-0 mt-2 text-center gl-shimmer">@mes?.ObterMesCompleto()</h4>
             <hr class="gl-divider-glow" />
-            foreach (var game in Model.Where(x => x.UltimaSessao?.Month == mes))
-            {
+            <div class="game-card-grid justify-content-center">
+                @foreach (var game in Model.Where(x => x.UltimaSessao?.Month == mes))
+                {
                 @await Component.InvokeAsync("CardJogo", game);
 
 
@@ -58,7 +59,8 @@
                 </div> *@
 
 
-            }
+                }
+            </div>
         }
     </div>
 }

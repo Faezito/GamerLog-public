@@ -13,7 +13,67 @@
 
     var tempoDisplay = (Model.TempoJogadoTotal ?? 0).ToString("N1") + " h";
 }
-<div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
+
+<div class="game-card">
+    <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@Model.ID" class="game-card__link">
+        <div class="game-card__cover">
+            <img src="@Model.CaminhoImagem" class="game-card__img">
+            <div class="game-card__title-wrap">
+                <h3 class="game-card__title">@Model.Titulo</h3>
+            </div>
+        </div>
+
+        <div class="game-card__info">
+            <div class="game-card__platform">
+                <i class="game-card__platform-icon"></i>
+                <span class="game-card__platform-label">Plataforma:</span>
+                <span class="game-card__platform-value">@Model.Plataforma</span>
+            </div>
+            <hr class="game-card__divider">
+            <div class="game-card__stats">
+                <div class="game-card__stat">
+                    <div class="game-card__stat-header">
+                        <i class="game-card__stat-icon"></i>
+                        <span class="game-card__stat-label">Tempo</span>
+                    </div>
+                    <span class="game-card__stat-value">@tempoDisplay</span>
+                </div>
+                <div class="game-card__stats-divider">
+                </div> <div class="game-card__stat">
+                    <div class="game-card__stat-header">
+                        <i class="game-card__stat-icon game-card__stat-icon--warning"></i>
+                        <span class="game-card__stat-label">Status</span>
+                    </div>
+                    <span class="game-card__status game-card__status--playing">@Model.StatusTexto</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+
+
+@* <div class="row mb-4 justify-content-center">
+    <div class="col-6 border-end border-secondary text-center">
+        <span class="d-flex align-items-center mb-1 justify-content-center">
+            <i class="bi bi-clock-history me-2 text-info"></i>
+            <span class="small text-secondary text-uppercase fw-semibold fs-9">Tempo</span>
+        </span>
+        <span class="h5 fw-bold mb-0">@tempoDisplay</span>
+    </div>
+
+    <div class="col-6 text-center ps-3">
+        <span class="d-flex align-items-center justify-content-center mb-1">
+            <i class="bi bi-check-circle me-2 text-@Model.StatusCor"></i>
+            <span class="small text-secondary text-uppercase fw-semibold fs-9">Status</span>
+        </span>
+        <span class="badge rounded-pill bg-@Model.StatusCor-soft text-@Model.StatusCor border border-@Model.StatusCor">@Model.StatusTexto</span>
+    </div>
+</div> *@
+@* </div>
+</a>
+</div> *@
+@* 
+<div class="game-card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
     <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@Model.ID" class="link-light card-game-link">
         <div class="position-relative">
             <img src="@Model.CaminhoImagem" class="card-img-top" style="height: 200px; object-fit: cover;">
@@ -50,4 +110,4 @@
             </div>
         </div>
     </a>
-</div>
+</div> *@
