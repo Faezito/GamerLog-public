@@ -4,24 +4,18 @@
 }
 
 <div class="row mb-3">
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-md-4">
         <h4 class="fw-bold text-center text-sm-start">JOGOS</h4>
     </div>
-    <form class="col" id="pesquisar">
-        <div class="row justify-content-end g-2">
-            <div class="col-12 col-sm-4">
-                <input type="text" id="titulo" name="titulo" class="gl-input w-100" placeholder="Pesquisar jogo" />
-            </div>
-            <div class="col-6 col-sm-auto">
-                <button type="submit" class="btn-gl-primary btn-sm w-100" id="pesquisar-jogos">
-                    <i class="fa-solid fa-magnifying-glass"></i>&nbsp;
-                    Pesquisar</button>
-            </div>
-            <div class="col-6 col-sm-auto">
-                <a asp-action="Index" asp-controller="Usuario" class="btn-gl-secondary btn-sm w-100">
-                    <i class="fa-solid fa-reply"></i>&nbsp;
-                    Voltar</a>
-            </div>
+    <form class="col-12 col-md-8" id="pesquisar">
+        <div class="d-flex gap-1">
+            <input type="text" id="titulo" name="titulo" class="gl-input w-auto" placeholder="Pesquisar jogo" />
+            <button type="submit" class="btn-gl-primary" id="pesquisar-jogos w-100">
+                Pesquisar
+            </button>
+            <a asp-action="Index" asp-controller="Usuario" class="btn-gl-secondary w-auto">
+                Voltar
+            </a>
         </div>
     </form>
 </div>

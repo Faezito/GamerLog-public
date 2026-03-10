@@ -5,40 +5,34 @@
 }
 
 <div class="row">
-    <div class="col-12 col-sm-4 d-flex gap-2">
+    <div class="col-12 col-sm-4 d-flex gap-2 mb-3 mb-md-0">
         @if (!string.IsNullOrWhiteSpace(Model.avatarmedium))
         {
-            <img src="@Model.avatarmedium" class="rounded-5" />
-            <div class="ps-4 col-12">
-                <h4 class="fw-bold text-center text-sm-start mt-auto w-100">@Model.Usuario</h4>
-                <h6 class="fw-bold text-center text-sm-start mt-auto w-100">@Model.personaname</h6>
+            <div class="ps-4 col-auto">
+                <img src="@Model.avatarmedium" class="rounded-5" />
+            </div>
+            <div class="ps-2 col-8 justify-content-start">
+                <h4 class="fw-bold text-start mt-auto">@Model.Usuario</h4>
+                <h6 class="fw-bold text-start mt-auto">@Model.personaname</h6>
             </div>
         }
         else
         {
-            <h4 class="fw-bold text-center text-sm-start mt-auto w-100">@Model.Usuario</h4>
+            <h4 class="fw-bold text-start mt-auto">@Model.Usuario</h4>
         }
     </div>
-    <div class="col-12 col-sm-8 text-end mt-auto">
-        <form class="" id="pesquisar">
-            <div class="row justify-content-end g-2">
-                <div class="col-4 col-sm-2">
-                    <select name="ano" id="ano" class="gl-input gl-select text-secondary">
-                        <option selected>ANO</option>
-                        @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
-                    </select>
-                </div>
-                <div class="col-5 col-sm-4">
-                    <input type="text" id="titulo" name="titulo" class="gl-input w-100" placeholder="Pesquisar jogo" />
-                </div>
-                <div class="col-5 col-sm-3 col-lg-2">
-                    <a role="button" class="btn-gl-primary w-100" asp-action="Index" asp-controller="Rawg">
-                        NOVO
-                    </a>
-                </div>
-            </div>
-        </form>
-    </div>
+    <form class="col-12 col-md-8" id="pesquisar">
+        <div class="d-flex gap-1">
+            <select name="ano" id="ano" class="gl-input gl-select text-secondary w-25">
+                <option selected>ANO</option>
+                @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
+            </select>
+            <input type="text" id="titulo" name="titulo" class="gl-input w-50" placeholder="Pesquisar jogo" />
+            <a role="button" class="btn-gl-primary w-25" asp-action="Index" asp-controller="Rawg">
+                NOVO
+            </a>
+        </div>
+    </form>
 </div>
 
 <div class="mb-5">
