@@ -1,10 +1,11 @@
 ﻿@model List<RawgGameDto>
 
-<hr />
-
-@foreach (var game in Model)
-{
-    <div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
+<hr class="gl-divider-glow" />
+<div class="game-card-grid justify-content-center">
+    @foreach (var game in Model)
+    {
+        @await Component.InvokeAsync("CardRawg", game)
+        @* <div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
         <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@game.Id" class="link-light card-game-link">
             <div class="position-relative">
                 <img src="@game.Background_Image" class="card-img-top" style="height: 200px; object-fit: cover;">
@@ -35,8 +36,9 @@
                 </div>
             </div>
         </a>
-    </div>
+    </div> *@
 
-}
+    }
+</div>
 
 

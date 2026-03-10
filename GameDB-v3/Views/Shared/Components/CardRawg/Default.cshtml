@@ -15,19 +15,22 @@
             <div class="game-card__stats">
                 <div class="game-card__stat">
                     <div class="game-card__stat-header">
-                        <i class="game-card__stat-icon"></i>
                         <span class="game-card__stat-label">Metacritic</span>
                     </div>
                     <span class="d-flex align-items-center justify-content-center mb-1">
                         <i class="bi bi-check-circle me-2 text-@Model.MetacriticCor"></i>
-                        <span class="small text-secondary text-uppercase fw-semibold fs-9">Metacritic</span>
+                        <span class="small text-secondary text-uppercase fw-semibold fs-9 text-@Model.MetacriticCor">@Model.Metacritic</span>
                     </span>
                 </div>
                 <div class="game-card__stats-divider">
                 </div>
                 <div class="game-card__stat">
-                    <span class="game-card__stat-label">Lançamento:</span>
-                    <span class="">@(Model.Released == null ? " " : Model.Released?.ToString("dd 'de' MMM 'de' yyyy"))</span>
+                    <div class="game-card__stat-header">
+                        <span class="game-card__stat-label">Lançamento</span>
+                    </div>
+                    <span class="d-flex align-items-center justify-content-center mb-1">
+                        <span class="small text-secondary text-uppercase fw-semibold fs-9">@(Model.Released == null ? " " : Model.Released?.ToString("dd/MM/yyyy"))</span>
+                    </span>
                 </div>
             </div>
         </div>

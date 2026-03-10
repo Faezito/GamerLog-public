@@ -16,10 +16,10 @@
             <div class="game-card-grid justify-content-center">
                 @foreach (var game in Model.Where(x => x.UltimaSessao?.Month == mes))
                 {
-                @await Component.InvokeAsync("CardJogo", game);
+                    @await Component.InvokeAsync("CardJogo", game)
 
 
-                @* <div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
+                    @* <div class="card bg-dark text-white border-0 p-0 shadow-lg" style="width: 18rem; border-radius: 20px; overflow: hidden;">
                     <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@game.ID" class="link-light card-game-link">
                         <div class="position-relative">
                             <img src="@game.CaminhoImagem" class="card-img-top" style="height: 200px; object-fit: cover;">
