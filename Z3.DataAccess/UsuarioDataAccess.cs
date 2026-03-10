@@ -212,6 +212,7 @@ WHERE ID = @id
                 var obj = new
                 {
                     Senha = model.Senha,
+                    SenhaTemporaria = model.SenhaTemporaria,
                     id = model.ID
                 };
 

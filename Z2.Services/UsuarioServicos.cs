@@ -33,6 +33,7 @@ namespace Z2.Services
         public async Task AtualizarSenha(UsuarioModel model)
         {
             model.Senha = PasswordHasher.Hash(model.Senha);
+            model.SenhaTemporaria = false; // TODO: Método para validar formato de senha
             await _daUsuario.AtualizarSenha(model);
         }
 

@@ -1352,3 +1352,338 @@ a {
     .gl-hud-status { gap: .75rem; padding: .4rem .8rem; font-size: .6rem; }
     .hud-corner { width: 40px; height: 40px; }
 }
+
+
+
+/* ═══════════════════════════════════════════════════════════════
+   GAMERLOG — game-card.css
+   Arquivo: wwwroot/css/game-card.css
+   Dependência: gamerlog.css
+═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────
+   CARD CONTAINER
+───────────────────────────────────────── */
+.game-card {
+    position: relative;
+    width: 200px;
+    background: var(--gl-card);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, .06);
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    flex-shrink: 0;
+}
+
+    .game-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(6, 182, 212, .35);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, .5), 0 0 20px rgba(6, 182, 212, .12);
+    }
+
+    /* Linha superior cyan — toque GamerLog */
+    .game-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--gl-blue), var(--gl-cyan));
+        border-radius: 16px 16px 0 0;
+        z-index: 5;
+        opacity: .7;
+        transition: opacity .25s;
+    }
+
+    .game-card:hover::before {
+        opacity: 1;
+    }
+
+/* ─────────────────────────────────────────
+   LINK WRAPPER
+───────────────────────────────────────── */
+.game-card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+    .game-card__link:hover,
+    .game-card__link:focus {
+        color: inherit;
+        text-decoration: none;
+        outline: none;
+    }
+
+/* ─────────────────────────────────────────
+   CAPA
+───────────────────────────────────────── */
+.game-card__cover {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.game-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .35s ease, filter .25s ease;
+}
+
+.game-card:hover .game-card__img {
+    transform: scale(1.04);
+    filter: brightness(1.05);
+}
+
+/* Fallback sem imagem */
+.game-card__cover-fallback {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--gl-navy-2), var(--gl-navy-3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+/* Gradiente overlay inferior da capa */
+.game-card__cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65%;
+    background: linear-gradient( to top, rgba(10, 20, 34, .95) 0%, rgba(10, 20, 34, .6) 45%, transparent 100% );
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Título sobre a capa */
+.game-card__title-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 .85rem .75rem;
+    z-index: 3;
+}
+
+.game-card__title {
+    font-family: var(--gl-font-display);
+    font-weight: 700;
+    font-size: .68rem;
+    line-height: 1.35;
+    letter-spacing: .04em;
+    color: var(--gl-white);
+    text-transform: uppercase;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, .9);
+    margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   INFORMAÇÕES
+───────────────────────────────────────── */
+.game-card__info {
+    padding: .75rem .85rem .8rem;
+}
+
+/* ── Plataforma ── */
+.game-card__platform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    margin-bottom: .65rem;
+}
+
+.game-card__platform-icon {
+    font-size: .75rem;
+    color: var(--gl-muted);
+    flex-shrink: 0;
+}
+
+.game-card__platform-label {
+    font-family: var(--gl-font-body);
+    font-size: .72rem;
+    font-weight: 400;
+    color: var(--gl-muted-2);
+    letter-spacing: .02em;
+}
+
+.game-card__platform-value {
+    font-family: var(--gl-font-body);
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--gl-white);
+    letter-spacing: .02em;
+}
+
+/* Divisor */
+.game-card__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, .07);
+    border: none;
+    margin: 0 0 .65rem;
+    opacity: 1;
+}
+
+/* ── Stats (TEMPO | STATUS) ── */
+.game-card__stats {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.game-card__stat {
+    text-align: center;
+}
+
+.game-card__stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    margin-bottom: .3rem;
+}
+
+.game-card__stat-icon {
+    font-size: .65rem;
+    color: var(--gl-muted-2);
+}
+
+.game-card__stat-icon--warning {
+    color: var(--gl-yellow);
+}
+
+.game-card__stat-icon--success {
+    color: var(--gl-green);
+}
+
+.game-card__stat-icon--info {
+    color: var(--gl-cyan);
+}
+
+.game-card__stat-icon--purple {
+    color: var(--gl-magenta);
+}
+
+.game-card__stat-icon--danger {
+    color: var(--gl-red);
+}
+
+.game-card__stat-label {
+    font-family: var(--gl-font-body);
+    font-size: .65rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--gl-muted-2);
+}
+
+.game-card__stat-value {
+    font-family: var(--gl-font-body);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--gl-white);
+    display: block;
+    line-height: 1;
+}
+
+/* Divisor vertical */
+.game-card__stats-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(255, 255, 255, .1);
+    align-self: center;
+    flex-shrink: 0;
+    margin: 0 .25rem;
+}
+
+/* ─────────────────────────────────────────
+   BADGE DE STATUS
+   Pill — fiel ao original
+───────────────────────────────────────── */
+.game-card__status {
+    display: inline-block;
+    font-family: var(--gl-font-body);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding: .2rem .65rem;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    transition: box-shadow .25s;
+    line-height: 1.4;
+}
+
+.game-card__status--playing {
+    color: var(--gl-yellow);
+    border-color: var(--gl-yellow);
+    background: rgba(251, 191, 36, .08);
+}
+
+.game-card__status--done {
+    color: var(--gl-cyan);
+    border-color: var(--gl-cyan);
+    background: rgba(6, 182, 212, .08);
+}
+
+.game-card__status--paused {
+    color: var(--gl-yellow);
+    border-color: var(--gl-yellow);
+    background: rgba(251, 191, 36, .08);
+}
+
+.game-card__status--wishlist {
+    color: var(--gl-magenta);
+    border-color: var(--gl-magenta);
+    background: rgba(232, 121, 249, .08);
+}
+
+.game-card__status--dropped {
+    color: var(--gl-red);
+    border-color: var(--gl-red);
+    background: rgba(248, 113, 113, .08);
+}
+
+.game-card:hover .game-card__status--playing {
+    box-shadow: 0 0 8px rgba(251, 191, 36, .25);
+}
+
+.game-card:hover .game-card__status--done {
+    box-shadow: 0 0 8px rgba(6, 182, 212, .25);
+}
+
+.game-card:hover .game-card__status--paused {
+    box-shadow: 0 0 8px rgba(251, 191, 36, .25);
+}
+
+.game-card:hover .game-card__status--wishlist {
+    box-shadow: 0 0 8px rgba(232, 121, 249, .25);
+}
+
+.game-card:hover .game-card__status--dropped {
+    box-shadow: 0 0 8px rgba(248, 113, 113, .25);
+}
+
+/* ─────────────────────────────────────────
+   GRID DE CARDS
+───────────────────────────────────────── */
+.game-card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVO
+───────────────────────────────────────── */
+@media (max-width: 575.98px) {
+    .game-card {
+        width: 160px;
+    }
+}

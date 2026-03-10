@@ -6,25 +6,25 @@
 }
 else
 {
-    <table class="table table-bordered">
+    <table class="gl-table">
         <thead>
             <tr>
-                <td class="text-light text-center fs-bold fs-7">Data</td>
-                <td class="text-light text-center fs-bold fs-7">Status</td>
-                <td class="text-light text-center fs-bold fs-7">Plataforma</td>
-                <td class="text-light text-center fs-bold fs-7">Avaliação</td>
-                <td class="text-light text-center fs-bold fs-7">Observação</td>
-                <td class="text-light text-center fs-bold fs-7"></td>
+                <td class="text-center">Data</td>
+                <td class="text-center">Status</td>
+                <td class="text-center">Plataforma</td>
+                <td class="text-center">Avaliação</td>
+                <td class="text-center">Observação</td>
+                <td class="text-center">#</td>
             </tr>
         </thead>
         <tbody class="">
             @foreach (var game in Model)
             {
                 <tr class="">
-                    <td class="text-light text-center">@game.UltimaSessao?.ToString("dd/MM/yyyy")</td>
-                    <td class="text-light text-center">@game.StatusTexto</td>
-                    <td class="text-light">@game.Plataforma</td>
-                    <td class="text-light d-flex justify-content-center">
+                    <td class="text-center">@game.UltimaSessao?.ToString("dd/MM/yyyy")</td>
+                    <td class="text-center">@game.StatusTexto</td>
+                    <td class="text-center">@game.Plataforma</td>
+                    <td class="text-center">
                         <div class="rating"
                              data-nota="@game.Nota"
                              data-bs-toggle="popover"
@@ -33,13 +33,15 @@ else
                              data-readonly="true">
                         </div>
                     </td>
-                    <td class="text-light">@game.Obs</td>
-                    <td class="text-light px-0 text-end">
-                        <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
-                            <button type="submit" class="btn btn-danger btn-sm deletar" id="Deletar">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </form>
+                    <td class="">@game.Obs</td>
+                    <td class="text-center">
+                        <div class="d-flex gap-1 justify-content-center">
+                            <form method="post" asp-action="Deletar" asp-controller="RegistroJogo" asp-route-id="@game.ID" asp-route-JogoID="@game.JogoID">
+                                <button type="submit" class="btn btn-danger btn-sm deletar" id="Deletar">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+                        </div>
 
                     </td>
                 </tr>
