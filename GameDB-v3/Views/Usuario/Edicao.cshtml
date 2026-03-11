@@ -13,29 +13,22 @@
     <input type="hidden" asp-for="ID" />
     <input type="hidden" asp-for="GoogleId" />
 
-    <div class="row mb-3">
+    <div class="row d-flex gap-1 mb-3">
         <div class="col">
-            <div class="form-floating">
-                <input type="email" class="form-control" id="floatingEmail" asp-for="Email" placeholder=" ">
-                <label for="floatingEmail">Email</label>
-            </div>
+            <label asp-for="Email" class="gl-label">Email</label>
+            <input type="email" class="gl-input" asp-for="Email">
         </div>
         <div class="col">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="floatingUsuario" asp-for="Usuario" placeholder=" ">
-                <label for="floatingUsuario">Usuario</label>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="floatingNome" asp-for="NomeCompleto" placeholder=" ">
-                <label for="floatingNome">Nome Completo</label>
-            </div>
+            <label asp-for="Usuario" class="gl-label">Usuario</label>
+            <input type="text" class="gl-input" asp-for="Usuario">
         </div>
         <div class="col">
-            <select asp-for="Genero" class="form-select py-3">
+            <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
+            <input type="text" class="gl-input" asp-for="NomeCompleto">
+        </div>
+        <div class="col">
+            <label asp-for="Genero" class="gl-label">Gênero</label>
+            <select asp-for="Genero" class="gl-input gl-select text-secondary">
                 <option disabled selected>GENERO</option>
                 <option value="M">Masculino</option>
                 <option value="F">Feminino</option>
@@ -52,36 +45,27 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col">
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingSenha" asp-for="Senha" placeholder=" ">
-                    <label for="floatingSenha">Senha</label>
-                </div>
+        <div class="row d-flex gap-2 mb-3">
+            <div class="">
+                <label asp-for="Senha" class="gl-label">Senha</label>
+                <input type="password" class="gl-input" asp-for="Senha">
             </div>
-            <div class="col">
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingSenha" asp-for="ConfirmacaoSenha" placeholder=" ">
-                    <label for="floatingSenha">Confirmação de senha</label>
-                </div>
+            <div class="">
+                <label asp-for="ConfirmacaoSenha" class="gl-label">Confirmação de senha</label>
+                <input type="password" class="gl-input" asp-for="ConfirmacaoSenha">
             </div>
         </div>
     }
 
 
-    <div class="row mb-3">
-        <div class="col-auto">
-            <button type="button" id="btnSalvar" class="btn btn-success btn-sm">
-                <span id="texto-salvar">
-                    <i class="fa-regular fa-floppy-disk"></i>&nbsp;
-                    Salvar
-                </span>
-                <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
+    <div class="row d-flex gap-1 justify-content-end mb-3">
+        <div class="col">
+            <button type="button" id="btnSalvar" class="btn-gl-success">
+                Salvar
             </button>
         </div>
-        <div class="col-auto">
-            <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary btn-sm">
-                <i class="fa-solid fa-reply"></i>&nbsp;
+        <div class="col">
+            <a asp-controller="Usuario" asp-action="Index" class="btn-gl-secondary">
                 Voltar
             </a>
         </div>
@@ -112,44 +96,46 @@
 
 @section Scripts {
     <script>
-        //TODO: adicionar loading
-
-        $('#btnSalvar').on('click', function () {
-            $.ajax({
-                url: '/Usuario/Edicao',
-                type: 'POST',
-                data: $('#form-cadastro').serialize(),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                beforeSend: function () {
-                    $('#btnSalvar').prop('disabled', true);
-                },
-                complete: function () {
-                    $('#btnSalvar').prop('disabled', false);
-                }
-            })
-            .done(function (response) {
-                if (response.success) {
-                    window.location.href = response.redirectUrl;
-                }
-            })
-            .fail(function (xhr) {
-                if (xhr.responseJSON) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: xhr.responseJSON.title ?? 'Erro',
-                        html: xhr.responseJSON.detail
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro',
-                        text: 'Erro inesperado ao processar a requisição.'
-                    });
-                }
-            });
+        $('#btnSalvar').on('click', function (evt) {
+            fn_salvar(evt, '@Url.Action("Edicao", "Usuario")', '#form-cadastro', '#btnSalvar')
         });
+
+        // $('#btnSalvar').on('click', function () {
+        //     $.ajax({
+        //         url: '/Usuario/Edicao',
+        //         type: 'POST',
+        //         data: $('#form-cadastro').serialize(),
+        //         headers: {
+        //             'X-Requested-With': 'XMLHttpRequest'
+        //         },
+        //         beforeSend: function () {
+        //             $('#btnSalvar').prop('disabled', true);
+        //         },
+        //         complete: function () {
+        //             $('#btnSalvar').prop('disabled', false);
+        //         }
+        //     })
+        //     .done(function (response) {
+        //         if (response.success) {
+        //             window.location.href = response.redirectUrl;
+        //         }
+        //     })
+        //     .fail(function (xhr) {
+        //         if (xhr.responseJSON) {
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: xhr.responseJSON.title ?? 'Erro',
+        //                 html: xhr.responseJSON.detail
+        //             });
+        //         } else {
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Erro',
+        //                 text: 'Erro inesperado ao processar a requisição.'
+        //             });
+        //         }
+        //     });
+        // });
 
 
     </script>

@@ -114,8 +114,6 @@ $(function () {
 });
 
 
-
-
 $(document).ready(function () {
     $('.date').mask('00/00/0000');
     $('.time').mask('00:00:00');
@@ -151,3 +149,48 @@ $(document).ready(function () {
     });
     $('.selectonfocus').mask("00/00/0000", { selectOnFocus: true });
 });
+
+
+/* WRAPPERS */
+
+fn_salvar(evt, Url, JQ_formID, JQ_btnID)
+{
+    evt.preventDefault();
+    const form = $(JQ_formID);
+
+    $.ajax({
+        url: Url,
+        type: 'POST',
+        data: form.serialize(),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        beforeSend: function () {
+            $(JQ_btnID).prop('disabled', true);
+        },
+        complete: function () {
+            $(JQ_btnID).prop('disabled', false);
+        }
+    })
+        .done(function (response) {
+            if (response.success) {
+                window.location.href = response.redirectUrl;
+            }
+        })
+        .fail(function (xhr) {
+            if (xhr.responseJSON) {
+                Swal.fire({
+                    icon: 'error',
+                    title: xhr.responseJSON.title ?? 'Erro',
+                    html: xhr.responseJSON.detail
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Erro inesperado ao processar a requisição.'
+                });
+            }
+        });
+
+}

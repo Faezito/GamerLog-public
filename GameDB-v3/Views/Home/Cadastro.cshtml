@@ -1,39 +1,5 @@
 ﻿@model UsuarioModel;
 
-<style>
-    .form-floating > .form-control:focus ~ label::after,
-    .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
-    .form-floating > .form-control-plaintext ~ label::after,
-    .form-floating > .form-select ~ label::after {
-        background-color: transparent !important;
-        color: black;
-    }
-
-    .google-material {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px;
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 25px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 500;
-        transition: 0.2s;
-        width: fit-content;
-    }
-
-        .google-material img {
-            width: 24px;
-            height: 24px;
-        }
-
-        .google-material:hover {
-            background: #f5f5f5;
-        }
-</style>
-
 <div class="row mb-2">
     <h2 class="text-uppercase">
         Cadastre-se
@@ -48,27 +14,20 @@
 
     <div class="row mb-3">
         <div class="col">
-            <div class="form-floating">
-                <input type="email" class="form-control" id="floatingEmail" asp-for="Email" placeholder=" ">
-                <label for="floatingEmail">Email</label>
-            </div>
+            <label asp-for="Email" class="gl-label">Email</label>
+            <input type="email" class="gl-input" asp-for="Email">
         </div>
         <div class="col">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="floatingUsuario" asp-for="Usuario" placeholder=" ">
-                <label for="floatingUsuario">Usuario</label>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="floatingNome" asp-for="NomeCompleto" placeholder=" ">
-                <label for="floatingNome">Nome Completo</label>
-            </div>
+            <label asp-for="Usuario" class="gl-label">Usuario</label>
+            <input type="text" class="gl-input" asp-for="Usuario">
         </div>
         <div class="col">
-            <select asp-for="Genero" class="form-select py-3">
+            <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
+            <input type="text" class="gl-input" asp-for="NomeCompleto">
+        </div>
+        <div class="col">
+            <label asp-for="Genero" class="gl-label">Gênero</label>
+            <select asp-for="Genero" class="gl-input gl-select">
                 <option disabled selected>GENERO</option>
                 <option value="M">Masculino</option>
                 <option value="F">Feminino</option>

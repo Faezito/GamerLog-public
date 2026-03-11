@@ -72,11 +72,12 @@
 </div>
 
 @* MODAL CADASTRO *@
-<div class="modal fade text-black" id="Modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
+<div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+        <div class="modal-content bg-gl-navy">
             <div class="modal-header text-center">
                 <h3>Como está sendo sua jogatina?</h3>
+                <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
             </div>
             <div class="modal-body">
                 <form method="post" id="form-cadastro">
@@ -85,15 +86,15 @@
 
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="PlataformaID" class="form-label">Plataforma</label>
-                            <select class="form-control" name="PlataformaID" required>
+                            <label for="PlataformaID" class="gl-label">Plataforma</label>
+                            <select class="gl-input" name="PlataformaID" required>
                                 <option disabled selected>PLATAFORMA</option>
                                 @await Component.InvokeAsync("DropPlataformas")
                             </select>
                         </div>
                         <div class="col">
                             <input type="hidden" name="Nota" id="Nota" required />
-                            <label class="form-label">Avaliação:</label>
+                            <label class="gl-label">Avaliação:</label>
                             <div id="rating-edit"
                                  class="mx-auto"
                                  data-bs-toggle="popover"
@@ -104,21 +105,18 @@
                         </div>
 
                         <div class="col">
-                            <label for="tempoJogado" class="form-label">Tempo Jogado</label>
-                            <div class="input-group mb-3">
+                            <label for="tempoJogado" class="gl-label">Tempo Jogado (em horas)</label>
                                 <input type="text"
-                                       class="form-control"
+                                       class="gl-input"
                                        id="tempoJogado"
                                        name="TempoJogadoString"
                                        required>
-                                <span class="input-group-text">horas</span>
-                            </div>
                         </div>
 
 
                         <div class="col">
-                            <label for="Status" class="form-label">Situação</label>
-                            <select name="Status" id="Status" class="form-select" required>
+                            <label for="Status" class="gl-label">Situação</label>
+                            <select name="Status" id="Status" class="gl-input gl-select text-secondary" required>
                                 <option selected disabled>SITUAÇÃO</option>
                                 <option value="1">Jogando</option>
                                 <option value="2">História Principal concluída</option>
@@ -129,9 +127,9 @@
                         </div>
 
                         <div class="col" id="DataInput">
-                            <label for="DataInput" class="form-label">Data</label>
+                            <label for="DataInput" class="gl-label">Data</label>
                             <input type="date"
-                                   class="form-control"
+                                   class="gl-input"
                                    id="DataInput"
                                    name="DataInput" required>
                         </div>
@@ -139,16 +137,14 @@
 
                     <div class="row mb-3">
                         <div class="col">
-                            <div class="form-floating">
-                                <textarea class="form-control" name="Obs" placeholder=" " id="floatingTextarea"></textarea>
-                                <label for="floatingTextarea" class="">Observações</label>
-                            </div>
+                                <label for="Obs" class="gl-label">Observações</label>
+                                <textarea class="gl-input" name="Obs"></textarea>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-auto">
-                            <button type="button" id="btnSalvar" class="btn btn-success btn-sm">
+                            <button type="button" id="btnSalvar" class="btn-gl-success">
                                 <span id="texto-salvar">
                                     Salvar
                                 </span>
@@ -157,7 +153,7 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" data-bs-dismiss="modal"
-                                    class="btn btn-secondary btn-sm">
+                                    class="btn-gl-danger">
                                 Cancelar
                             </button>
                         </div>
