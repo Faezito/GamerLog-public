@@ -29,7 +29,9 @@ namespace GameDB_v3.Controllers
             _login = login;
             _registro = registro;
         }
-        public async Task<IActionResult> Index(int id)
+
+        [HttpGet("{slug}")]
+        public async Task<IActionResult> Index(int id, string? slug)
         {
             try
             {

@@ -1,7 +1,12 @@
-﻿@model RawgGameDto
+﻿@using Z4.Bibliotecas
+@model RawgGameDto
+
+@{
+    string slug = ManipularModels.GerarSlug(Model.Name);
+}
 
 <div class="game-card">
-    <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@Model.Id" class="game-card__link">
+    <a asp-controller="RegistroJogo" asp-action="Index" asp-route-id="@Model.Id" asp-route-slug="@slug" class="game-card__link">
         <div class="game-card__cover">
             <img src="@Model.Background_Image" class="game-card__img">
             <div class="game-card__title-wrap">

@@ -1,24 +1,35 @@
 ﻿using GameDB_v3.Libraries.Login;
 using Microsoft.AspNetCore.Mvc;
+using Z1.Model.APIs;
+using Z2.Services;
 using Z2.Services.Externo;
 
 namespace GameDB_v3.Controllers
 {
     [Autorizacoes]
-    [Route("jogos")]
+    [Route("AdicionarJogo")]
     public class RawgController : Controller
     {
         private readonly RawgService _rawg;
+        private readonly IJogoServicos _jogos;
 
-        public RawgController(RawgService rawg)
+        public RawgController(RawgService rawg, IJogoServicos jogos)
         {
             _rawg = rawg;
+            _jogos = jogos;
         }
 
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return Problem(title: "Erro ao listar jogos", detail: ex.Message);
+            }
         }
 
         [HttpPost("Pesquisar")]
@@ -38,6 +49,21 @@ namespace GameDB_v3.Controllers
             }
         }
 
+
+        [HttpPost("ListaInicial")]
+        public async Task<IActionResult> ListaInicial(string? titulo)
+        {
+            try
+            {
+                var lst = await _jogos.ListarInicial();
+
+                return PartialView("_Tabela", lst);
+            }
+            catch (Exception ex)
+            {
+                return Problem(title: "Erro ao listar jogos", detail: ex.Message);
+            }
+        }
     }
 
 }

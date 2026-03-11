@@ -18,6 +18,7 @@ namespace Z2.Services
     public interface IJogoServicos
     {
         Task<List<JogoModel>> Listar(int? id, string? titulo);
+        Task<List<RawgGameDto>> ListarInicial();
         Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano = null, int? mes = null);
         Task<int> Cadastro(int id, JogoModel jogo);
         Task<JogoModel> Obter(int id);
@@ -163,7 +164,6 @@ namespace Z2.Services
             return await _daJogo.Obter(id);
         }
 
-
         private async Task<string> ObterGeneroEPublisher(string titulo)
         {
             string res = string.Empty;
@@ -194,6 +194,11 @@ Qual é o gênero e publisher do jogo {titulo}?";
 
             res = res.Replace("(", "").Replace(")", "");
             return res;
+        }
+
+        public Task<List<RawgGameDto>> ListarInicial()
+        {
+            return _daJogo.ListarInicial();
         }
     }
 }

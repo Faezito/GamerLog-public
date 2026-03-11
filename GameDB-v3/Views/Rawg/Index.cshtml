@@ -35,7 +35,7 @@
         });
 
         $(document).ready(function(){
-            carregarTabela();
+            carregarJogos();
         })
 
         function carregarTabela() {
@@ -43,7 +43,7 @@
             const page = $('#page').val();
 
             $.ajax({
-                url: '/jogos/Pesquisar',
+                url: '/AdicionarJogo/Pesquisar',
                 type: 'POST',
                 dataType: 'html',
                 data: { titulo: titulo, page: page },
@@ -67,6 +67,42 @@
                     });
                 }
             });
+        }
+
+        function carregarJogos(){
+            try{
+
+            const titulo = '';
+
+            $.ajax({
+                url: '/AdicionarJogo/ListaInicial',
+                type: 'POST',
+                dataType: 'html',
+                data: { titulo: titulo },
+
+                beforeSend: function () {
+                },
+
+                success: function (resultado) {
+                    $("#tabela-jogos").html(resultado);
+                    initRatings("#tabela-jogos");
+                },
+
+                complete: function () {
+                },
+
+                error: function () {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "Erro ao carregar jogos, tente novamente."
+                    });
+                }
+            });
+            }catch(ex){
+                console.log(ex)
+            }
+
         }
     </script>
 

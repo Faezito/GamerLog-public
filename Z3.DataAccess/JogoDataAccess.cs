@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Z1.Model;
+using Z1.Model.APIs;
 using Z3.DataAccess.Database;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -12,6 +13,7 @@ namespace Z3.DataAccess
     public interface IJogoDataAccess
     {
         Task<List<JogoModel>> Listar(int? id, string? titulo);
+        Task<List<RawgGameDto>> ListarInicial();
         Task<List<RegistroJogoModel>> ListarJogosDoUsuario(int? id, string? titulo, int? status, int usuarioID, int? ano, int? mes);
         Task<int> Adicionar(JogoModel model);
         Task<int> Atualizar(JogoModel model);
@@ -122,7 +124,7 @@ J.ID
 FROM [dbo].[Jogos] J WITH(NOLOCK)
 INNER JOIN [dbo].Generos G ON J.GeneroID = G.ID
 INNER JOIN [dbo].Publishers P ON J.PublisherID = P.ID
-WHERE (@id IS NULL OR ID = @id)
+WHERE (@id IS NULL OR J.ID = @id)
 AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
 ";
 
@@ -132,6 +134,28 @@ AND (@titulo IS NULL OR titulo LIKE CONCAT(@titulo, '%'))
                     titulo = titulo
                 };
                 return await _dapper.QueryAsync<JogoModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<RawgGameDto>> ListarInicial()
+        {
+            try
+            {
+                string sql = @"
+SELECT TOP 15
+ID AS Id
+,[Titulo] AS Name
+,[DataLancamento] AS Released
+,Metacritic AS Metacritic
+,CaminhoImagem AS 'Background_Image'
+FROM [dbo].[Jogos] J WITH(NOLOCK)
+";
+
+                return await _dapper.QueryAsync<RawgGameDto>(sql: sql, commandType: System.Data.CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -183,7 +207,7 @@ LEFT JOIN [dbo].Publishers P ON J.PublisherID = P.ID
 WHERE J.ID = @id
 ";
 
-            var obj = new
+                var obj = new
                 {
                     id = id
                 };
@@ -194,7 +218,7 @@ WHERE J.ID = @id
                 throw new Exception(ex.Message);
             }
         }
-        
+
         public async Task<JogoModel> Obter(int id, int usuarioID)
         {
             try
