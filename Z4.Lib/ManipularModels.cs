@@ -136,5 +136,21 @@ namespace Z4.Bibliotecas
             string usuario = usermail + '.' + id;
             return usuario;
         }
+
+        public static string GerarSlug(string Titulo)
+        {
+            if (!string.IsNullOrWhiteSpace(Titulo))
+            {
+                return Titulo
+                     .ToLower()
+                     .Replace(" ", "-")
+                     .Normalize(System.Text.NormalizationForm.FormD)
+                     .Where(c => System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.NonSpacingMark)
+                     .Aggregate("", (acc, c) => acc + c)
+                     .Replace(".", "")
+                     .Replace(":", "");
+            }
+            return Titulo;
+        }
     }
 }
