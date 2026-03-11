@@ -46,65 +46,6 @@
     <span class="spinner-border" role="status"></span>
 </div>
 
-
-
-
-<!-- MODAL PESQUISA -->
-@* <div class="modal fade" id="modal-pesquisar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-pesquisar" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                    PESQUISAR JOGO
-                </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="" id="filtrar">
-                    <div class="row justify-content-end g-2">
-                        <div class="col-4">
-                            <select name="ano" id="ano" class="form-select">
-                                <option selected>ANO</option>
-                                @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
-                            </select>
-                        </div>
-
-                        <div class="col-6">
-                            <select name="Status" id="Status" class="form-select">
-                                <option selected>SITUAÇÃO</option>
-                                <option value="1">Jogando</option>
-                                <option value="2">História Principal concluída</option>
-                                <option value="3">História Principal + secundárias concluídas</option>
-                                <option value="9">Todas as Conquistas</option>
-                                <option value="0">Abandonado</option>
-                            </select>
-                        </div>
-
-                        <div class="col-6">
-                            <select name="Ordem" id="Ordem" class="form-select">
-                                <option selected>Ordem</option>
-                                <option value="0">Ultima Sessao</option>
-                                <option value="4">Titulo</option>
-                                <option value="1">Situação</option>
-                                <option value="2">Data Zerado</option>
-                                <option value="3">Todas as Conquistas</option>
-                            </select>
-                        </div>
-
-                        <div class="col-auto">
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-secondary" form="pesquisar" id="pesquisar-jogos" data-bs-dismiss="modal">Pesquisar</button>
-                <button type="button" class="btn btn-secondary" id="limpar-pesquisa">Limpar</button>
-            </div>
-        </div>
-    </div>
-</div>
- *@
 @section Scripts {
     <script>
         $('#pesquisar').on('submit', function (e) {
