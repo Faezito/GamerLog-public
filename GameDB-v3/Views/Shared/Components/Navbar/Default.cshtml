@@ -1,6 +1,65 @@
 ﻿@model UsuarioModel;
 
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm shadow-lg bg-dark box-shadow mb-3">
+<nav class="navbar navbar-expand-lg gl-nav">
+    <div class="container-fluid">
+        <a class="navbar-brand gl-nav-logo" asp-controller="Usuario" asp-action="Index">
+            <span class="logo-bracket">[</span>GamerLog<span class="logo-bracket">]</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navMain" aria-controls="navMain"
+                aria-expanded="false" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+                <li>
+                    <a asp-controller="Usuario" asp-action="Index" class="nav-link">HOME</a>
+                </li>
+                <li>
+                    <a asp-controller="Tierlist" asp-action="Index" class="nav-link">TIER LIST</a>
+                </li>
+
+                <li>
+                    <a href="#features" class="nav-link">Funções</a>
+                </li>
+                <li>
+                    <a href="#achievements" class="nav-link">Conquistas</a>
+                </li>
+
+
+
+                @if (Model != null)
+                {
+                    <li class="nav-item dropdown gl-dropdown">
+                        <button class="btn dropdown-toggle nav-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @Model.NomeCompleto.Split(" ")[0]
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end gl-dropdown-menu">
+                            <li>
+                                <a class="dropdown-item"
+                                   role="button"
+                                   asp-area=""
+                                   asp-controller="Usuario"
+                                   asp-action="Edicao">
+                                    Perfil
+                                </a>
+                            </li>
+
+                            @if (Model.Tipo == "A")
+                            {
+                                <li><a class="dropdown-item" role="" asp-controller="Admin" asp-action="Index">Painel Administrativo</a></li>
+                            }
+                            <li><a class="dropdown-item" role="button" asp-area="" asp-controller="Home" asp-action="Logout">Sair</a></li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@* <nav class="navbar navbar-expand-sm navbar-toggleable-sm shadow-lg bg-dark box-shadow mb-3">
     <div class="container-fluid">
         <a class="navbar-brand text-light" asp-area="" asp-controller="Usuario" asp-action="Index">GamerLog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -53,4 +112,4 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> *@

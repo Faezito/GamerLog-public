@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> 
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="bg-mainblue text-light">
+<body class="bg-mainblue">
     <header>
         @if (controller != "Home")
         {
@@ -42,9 +42,12 @@
         </main>
     </div>
 
-    <footer class="footer text-muted border-top border-dark position-absolute bottom-0 w-100 mb-3">
-        <div class="container d-flex gap-5 text-light mt-3">
-            <span>&copy; GamerLog 2025 (v1.04). Todos os direitos reservados. - Desenvolvido por Faé</span> <a class="link-light" href="https://portfolio2025-vm6w.onrender.com/" target="_blank">Sobre</a>
+    <!-- FOOTER -->
+    <footer class="gl-footer">
+        <span class="footer-copy">© GamerLog 2025 (v2.0) · Todos os direitos reservados</span>
+        <div class="footer-right">
+            <a href="https://portfolio2025-vm6w.onrender.com/" target="_blank">Desenvolvido por: Faé</a>
+            <a href="https://gamerlog.runasp.net" target="_blank">gamerlog.runasp.net</a>
         </div>
     </footer>
 

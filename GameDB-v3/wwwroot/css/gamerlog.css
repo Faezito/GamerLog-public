@@ -757,64 +757,159 @@ a {
 /* ─────────────────────────────────────────────────────────────────
    11. NAVEGAÇÃO
 ───────────────────────────────────────────────────────────────── */
+/* ── Container da navbar ── */
 .gl-nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 200;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.1rem 2.5rem;
-    background: linear-gradient(to bottom, rgba(8,15,28,.98) 0%, rgba(8,15,28,0) 100%);
-    backdrop-filter: blur(2px);
+    padding: .9rem 2rem;
+    background: rgba(8, 15, 28, .97) !important;
+    border-bottom: 1px solid var(--gl-border-subtle);
+    backdrop-filter: blur(8px);
+    z-index: 1030;
+    -webkit-backdrop-filter: blur(8px);
 }
 
+/* Variante gradiente (landing / hero) */
+.gl-nav-gradient {
+    background: linear-gradient(to bottom, rgba(8,15,28,.98) 0%, rgba(8,15,28,0) 100%) !important;
+    border-bottom: none;
+}
+
+/* ── Logo / Brand ── */
+.gl-nav .navbar-brand,
 .gl-nav-logo {
     font-family: var(--gl-font-display);
     font-weight: 900;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     letter-spacing: .12em;
+    color: var(--gl-white) !important;
     text-decoration: none;
-    color: var(--gl-white);
     display: flex;
     align-items: center;
     gap: .5rem;
 }
 
-.gl-nav-logo .logo-bracket { color: var(--gl-cyan); font-size: 1.3rem; line-height: 1; }
+    .gl-nav .navbar-brand:hover,
+    .gl-nav-logo:hover {
+        color: var(--gl-white) !important;
+    }
 
-.gl-nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+    .gl-nav-logo .logo-bracket {
+        color: var(--gl-cyan);
+        font-size: 1.25rem;
+        line-height: 1;
+    }
 
+/* ── Links de navegação ── */
+.gl-nav .nav-link,
 .gl-nav-link {
-    color: var(--gl-muted-2);
-    text-decoration: none;
-    font-size: .78rem;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    font-weight: 600;
     font-family: var(--gl-font-mono);
-    transition: color .2s;
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gl-muted-2) !important;
+    text-decoration: none;
+    padding: .35rem .1rem !important;
+    margin: 0 .75rem;
     position: relative;
+    transition: color .2s;
 }
 
-.gl-nav-link:hover { color: var(--gl-cyan); }
+    .gl-nav .nav-link:hover,
+    .gl-nav .nav-link:focus,
+    .gl-nav-link:hover {
+        color: var(--gl-cyan) !important;
+    }
 
-.gl-nav-link.active { color: var(--gl-cyan); }
+    /* Sublinhado ativo */
+    .gl-nav .nav-link.active,
+    .gl-nav-link.active {
+        color: var(--gl-cyan) !important;
+    }
 
-.gl-nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -.25rem; left: 0; right: 0;
-    height: 1px;
-    background: var(--gl-cyan);
-    box-shadow: 0 0 6px var(--gl-glow-cyan);
+        .gl-nav .nav-link.active::after,
+        .gl-nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gl-cyan);
+            box-shadow: 0 0 6px var(--gl-glow-cyan);
+        }
+
+/* ── Toggler (hambúrguer) ── */
+.gl-nav .navbar-toggler {
+    border: 1px solid rgba(6, 182, 212, .25);
+    padding: .35rem .55rem;
+    border-radius: 0;
+    transition: border-color .2s, background .2s;
 }
 
-/* Navbar sólida (para páginas internas) */
-.gl-nav-solid {
-    background: rgba(8,15,28,.97);
-    border-bottom: 1px solid var(--gl-border-subtle);
-    backdrop-filter: blur(8px);
+    .gl-nav .navbar-toggler:hover,
+    .gl-nav .navbar-toggler:focus {
+        border-color: var(--gl-cyan);
+        background: rgba(6, 182, 212, .06);
+        box-shadow: none;
+    }
+
+/* Ícone do toggler recolorido */
+.gl-nav .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(6,182,212,0.85)' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* ── Collapse (menu expandido em mobile) ── */
+.gl-nav .navbar-collapse {
+    /* sem estilo extra em desktop — Bootstrap cuida do flex */
+}
+
+/* Em mobile (quando colapsa), o menu vira uma lista vertical */
+@media (max-width: 991.98px) {
+    .gl-nav {
+        padding: .75rem 1.25rem;
+        z-index: 1030;
+    }
+
+        .gl-nav .navbar-collapse {
+            background: var(--gl-card);
+            border: 1px solid rgba(6, 182, 212, .15);
+            border-top: 2px solid var(--gl-cyan);
+            margin-top: .6rem;
+            padding: .5rem 0;
+            animation: glDropdownIn .2s ease both;
+        }
+
+        .gl-nav .nav-link,
+        .gl-nav-link {
+            display: block;
+            margin: 0;
+            padding: .55rem 1.25rem !important;
+            border-left: 2px solid transparent;
+            transition: color .15s, background .15s, border-color .15s;
+        }
+
+            .gl-nav .nav-link:hover,
+            .gl-nav-link:hover {
+                background: rgba(6, 182, 212, .06);
+                border-left-color: var(--gl-cyan);
+                padding-left: 1.5rem !important;
+            }
+
+            /* Remove sublinhado ativo em mobile, usa borda esquerda */
+            .gl-nav .nav-link.active::after,
+            .gl-nav-link.active::after {
+                display: none;
+            }
+
+            .gl-nav .nav-link.active,
+            .gl-nav-link.active {
+                border-left-color: var(--gl-cyan);
+                background: rgba(6, 182, 212, .06);
+            }
+
+        /* Separador entre nav-items no collapse */
+        .gl-nav .navbar-nav .nav-item + .nav-item {
+            border-top: 1px solid rgba(255, 255, 255, .04);
+        }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -1693,3 +1788,280 @@ a {
         width: 160px;
     }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   11b. DROPDOWN
+   Uso: adicione .gl-dropdown no <div class="dropdown">
+        e .gl-dropdown-menu no <ul class="dropdown-menu ...">
+   O Bootstrap 5 continua controlando abertura/fechamento via JS.
+───────────────────────────────────────────────────────────────── */
+
+/* ── Botão trigger ── */
+.gl-dropdown .btn.dropdown-toggle {
+    font-family: var(--gl-font-mono);
+    font-size: .75rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gl-muted-2);
+    background: transparent;
+    border: 1px solid transparent;
+    padding: .4rem .85rem;
+    transition: color .2s, border-color .2s, background .2s;
+    position: relative;
+}
+
+    .gl-dropdown .btn.dropdown-toggle:hover,
+    .gl-dropdown .btn.dropdown-toggle:focus,
+    .gl-dropdown.show .btn.dropdown-toggle {
+        color: var(--gl-cyan);
+        border-color: rgba(6, 182, 212, .25);
+        background: rgba(6, 182, 212, .06);
+        box-shadow: none;
+        outline: none;
+    }
+
+    /* Seta do Bootstrap recolorida */
+    .gl-dropdown .btn.dropdown-toggle::after {
+        border-top-color: currentColor;
+        opacity: .7;
+        transition: opacity .2s, transform .2s;
+    }
+
+.gl-dropdown.show .btn.dropdown-toggle::after {
+    opacity: 1;
+    transform: rotate(180deg);
+}
+
+/* ── Menu ── */
+.gl-dropdown-menu {
+    background: var(--gl-card) !important;
+    border: 1px solid rgba(6, 182, 212, .2) !important;
+    border-radius: 0 !important;
+    padding: .35rem 0 !important;
+    min-width: 160px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .5), 0 0 20px rgba(6, 182, 212, .06) !important;
+    /* Animação de entrada */
+    animation: glDropdownIn .15s ease both;
+}
+
+@keyframes glDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Linha superior gradiente */
+.gl-dropdown-menu::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gl-blue), var(--gl-cyan));
+    margin-bottom: .35rem;
+}
+
+/* ── Itens ── */
+.gl-dropdown-menu .dropdown-item {
+    font-family: var(--gl-font-mono);
+    font-size: .72rem;
+    letter-spacing: .08em;
+    color: var(--gl-muted-2) !important;
+    padding: .5rem 1rem;
+    background: transparent !important;
+    border: none;
+    transition: color .15s, background .15s, padding-left .15s;
+    position: relative;
+}
+
+    .gl-dropdown-menu .dropdown-item:hover,
+    .gl-dropdown-menu .dropdown-item:focus {
+        color: var(--gl-cyan) !important;
+        background: rgba(6, 182, 212, .06) !important;
+        padding-left: 1.3rem;
+    }
+
+    /* Barra de acento à esquerda no hover */
+    .gl-dropdown-menu .dropdown-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 20%;
+        bottom: 20%;
+        width: 2px;
+        background: var(--gl-cyan);
+        opacity: 0;
+        transition: opacity .15s;
+    }
+
+    .gl-dropdown-menu .dropdown-item:hover::before,
+    .gl-dropdown-menu .dropdown-item:focus::before {
+        opacity: 1;
+    }
+
+/* ── Divider interno (opcional: <li><hr class="dropdown-divider gl-dropdown-divider"></li>) ── */
+.gl-dropdown-menu .gl-dropdown-divider {
+    border-color: rgba(255, 255, 255, .06) !important;
+    margin: .3rem 0;
+    opacity: 1;
+}
+
+/* ── Item destrutivo — adicione .gl-dropdown-item-danger ao <a> ── */
+.gl-dropdown-menu .gl-dropdown-item-danger {
+    color: var(--gl-red) !important;
+}
+
+    .gl-dropdown-menu .gl-dropdown-item-danger:hover,
+    .gl-dropdown-menu .gl-dropdown-item-danger:focus {
+        color: var(--gl-red) !important;
+        background: rgba(248, 113, 113, .08) !important;
+    }
+
+    .gl-dropdown-menu .gl-dropdown-item-danger::before {
+        background: var(--gl-red);
+    }
+
+
+
+
+/* ─────────────────────────────────────────────────────────────────
+   11b. DROPDOWN
+   Uso: adicione .gl-dropdown no <div class="dropdown">
+        e .gl-dropdown-menu no <ul class="dropdown-menu ...">
+   O Bootstrap 5 continua controlando abertura/fechamento via JS.
+───────────────────────────────────────────────────────────────── */
+
+/* ── Botão trigger ── */
+.gl-dropdown .btn.dropdown-toggle {
+    font-family: var(--gl-font-mono);
+    font-size: .75rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gl-muted-2);
+    background: transparent;
+    border: 1px solid transparent;
+    padding: .4rem .85rem;
+    transition: color .2s, border-color .2s, background .2s;
+    position: relative;
+}
+
+    .gl-dropdown .btn.dropdown-toggle:hover,
+    .gl-dropdown .btn.dropdown-toggle:focus,
+    .gl-dropdown.show .btn.dropdown-toggle {
+        color: var(--gl-cyan);
+        border-color: rgba(6, 182, 212, .25);
+        background: rgba(6, 182, 212, .06);
+        box-shadow: none;
+        outline: none;
+    }
+
+    /* Seta do Bootstrap recolorida */
+    .gl-dropdown .btn.dropdown-toggle::after {
+        border-top-color: currentColor;
+        opacity: .7;
+        transition: opacity .2s, transform .2s;
+    }
+
+.gl-dropdown.show .btn.dropdown-toggle::after {
+    opacity: 1;
+    transform: rotate(180deg);
+}
+
+/* ── Menu ── */
+.gl-dropdown-menu {
+    background: var(--gl-card) !important;
+    border: 1px solid rgba(6, 182, 212, .2) !important;
+    border-radius: 0 !important;
+    padding: .35rem 0 !important;
+    min-width: 160px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .5), 0 0 20px rgba(6, 182, 212, .06) !important;
+    z-index: 1031 !important; /* acima do .gl-nav */
+    /* Animação de entrada */
+    animation: glDropdownIn .15s ease both;
+}
+
+@keyframes glDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Linha superior gradiente */
+.gl-dropdown-menu::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gl-blue), var(--gl-cyan));
+    margin-bottom: .35rem;
+}
+
+/* ── Itens ── */
+.gl-dropdown-menu .dropdown-item {
+    font-family: var(--gl-font-mono);
+    font-size: .72rem;
+    letter-spacing: .08em;
+    color: var(--gl-muted-2) !important;
+    padding: .5rem 1rem;
+    background: transparent !important;
+    border: none;
+    transition: color .15s, background .15s, padding-left .15s;
+    position: relative;
+}
+
+    .gl-dropdown-menu .dropdown-item:hover,
+    .gl-dropdown-menu .dropdown-item:focus {
+        color: var(--gl-cyan) !important;
+        background: rgba(6, 182, 212, .06) !important;
+        padding-left: 1.3rem;
+    }
+
+    /* Barra de acento à esquerda no hover */
+    .gl-dropdown-menu .dropdown-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 20%;
+        bottom: 20%;
+        width: 2px;
+        background: var(--gl-cyan);
+        opacity: 0;
+        transition: opacity .15s;
+    }
+
+    .gl-dropdown-menu .dropdown-item:hover::before,
+    .gl-dropdown-menu .dropdown-item:focus::before {
+        opacity: 1;
+    }
+
+/* ── Divider interno (opcional: <li><hr class="dropdown-divider gl-dropdown-divider"></li>) ── */
+.gl-dropdown-menu .gl-dropdown-divider {
+    border-color: rgba(255, 255, 255, .06) !important;
+    margin: .3rem 0;
+    opacity: 1;
+}
+
+/* ── Item destrutivo — adicione .gl-dropdown-item-danger ao <a> ── */
+.gl-dropdown-menu .gl-dropdown-item-danger {
+    color: var(--gl-red) !important;
+}
+
+    .gl-dropdown-menu .gl-dropdown-item-danger:hover,
+    .gl-dropdown-menu .gl-dropdown-item-danger:focus {
+        color: var(--gl-red) !important;
+        background: rgba(248, 113, 113, .08) !important;
+    }
+
+    .gl-dropdown-menu .gl-dropdown-item-danger::before {
+        background: var(--gl-red);
+    }
+ 
