@@ -14,16 +14,13 @@
             <input asp-for="UsuarioID" value="@usuario.ID" type="hidden" />
             <div class="row justify-content-end g-2">
                 <div class="col-auto">
-                    <select name="Ano" id="Ano" class="form-select">
+                    <select name="Ano" id="Ano" class="gl-input gl-select">
                         <option selected>TODOS</option>
                         @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
                     </select>
                 </div>
-@*                 <div class="col-auto">
-                    @await Component.InvokeAsync("DropMeses")
-                </div> *@
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-secondary" form="pesquisar" id="pesquisar-jogos" data-bs-dismiss="modal">Pesquisar</button>
+                    <button type="submit" class="btn-gl-primary" form="pesquisar" id="pesquisar-jogos" data-bs-dismiss="modal">Pesquisar</button>
                 </div>
             </div>
         </form>
