@@ -12,20 +12,20 @@
     <input type="hidden" asp-for="ID" />
     <input type="hidden" asp-for="GoogleId" />
 
-    <div class="row mb-3">
-        <div class="col">
+    <div class="row d-flex gy-3 mb-3">
+        <div class="col-12 col-sm-6 col-md-auto">
             <label asp-for="Email" class="gl-label">Email</label>
             <input type="email" class="gl-input" asp-for="Email">
         </div>
-        <div class="col">
+        <div class="col-12 col-sm-6 col-md-auto">
             <label asp-for="Usuario" class="gl-label">Usuario</label>
             <input type="text" class="gl-input" asp-for="Usuario">
         </div>
-        <div class="col">
+        <div class="col-12 col-sm-6 col-md-auto">
             <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
             <input type="text" class="gl-input" asp-for="NomeCompleto">
         </div>
-        <div class="col">
+        <div class="col-12 col-sm-6 col-md-auto">
             <label asp-for="Genero" class="gl-label">Gênero</label>
             <select asp-for="Genero" class="gl-input gl-select">
                 <option disabled selected>GENERO</option>
@@ -42,20 +42,8 @@
         </h6>
     </div>
 
-    <div class="row mb-3 justify-content-end">
-        <div class="col-auto">
-            <button type="button" id="btnSalvar" class="btn btn-success btn-sm">
-                <span id="texto-salvar">
-                    <i class="fa-regular fa-floppy-disk"></i>&nbsp;
-                    Salvar
-                </span>
-                <span id="loading" style="display:none; text-align:center;" class="spinner-border spinner-border-sm" role="status"></span>
-            </button>
-        </div>
-        <div class="col-auto">
-            <a asp-controller="Home" asp-action="Login" class="btn btn-secondary btn-sm">Voltar</a>
-        </div>
-    </div>
+    @Html.Partial("Components/_FormFooter")
+
 </form>
 
 

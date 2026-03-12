@@ -13,20 +13,20 @@
     <input type="hidden" asp-for="ID" />
     <input type="hidden" asp-for="GoogleId" />
 
-    <div class="row d-flex gap-1 mb-3">
-        <div class="col">
+    <div class="row d-flex gy-3 mb-3">
+        <div class="col-12 col-sm-6 col-lg-3">
             <label asp-for="Email" class="gl-label">Email</label>
             <input type="email" class="gl-input" asp-for="Email">
         </div>
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-3">
             <label asp-for="Usuario" class="gl-label">Usuario</label>
             <input type="text" class="gl-input" asp-for="Usuario">
         </div>
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-3">
             <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
             <input type="text" class="gl-input" asp-for="NomeCompleto">
         </div>
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-3">
             <label asp-for="Genero" class="gl-label">Gênero</label>
             <select asp-for="Genero" class="gl-input gl-select text-secondary">
                 <option disabled selected>GENERO</option>
@@ -57,19 +57,8 @@
         </div>
     }
 
+    @Html.Partial("Components/_FormFooter")
 
-    <div class="row d-flex gap-1 justify-content-end mb-3">
-        <div class="col">
-            <button type="button" id="btnSalvar" class="btn-gl-success">
-                Salvar
-            </button>
-        </div>
-        <div class="col">
-            <a asp-controller="Usuario" asp-action="Index" class="btn-gl-secondary">
-                Voltar
-            </a>
-        </div>
-    </div>
 </form>
 
 @if (Model.GoogleId == null)
@@ -99,44 +88,5 @@
         $('#btnSalvar').on('click', function (evt) {
             fn_salvar(evt, '@Url.Action("Edicao", "Usuario")', '#form-cadastro', '#btnSalvar')
         });
-
-        // $('#btnSalvar').on('click', function () {
-        //     $.ajax({
-        //         url: '/Usuario/Edicao',
-        //         type: 'POST',
-        //         data: $('#form-cadastro').serialize(),
-        //         headers: {
-        //             'X-Requested-With': 'XMLHttpRequest'
-        //         },
-        //         beforeSend: function () {
-        //             $('#btnSalvar').prop('disabled', true);
-        //         },
-        //         complete: function () {
-        //             $('#btnSalvar').prop('disabled', false);
-        //         }
-        //     })
-        //     .done(function (response) {
-        //         if (response.success) {
-        //             window.location.href = response.redirectUrl;
-        //         }
-        //     })
-        //     .fail(function (xhr) {
-        //         if (xhr.responseJSON) {
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: xhr.responseJSON.title ?? 'Erro',
-        //                 html: xhr.responseJSON.detail
-        //             });
-        //         } else {
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'Erro',
-        //                 text: 'Erro inesperado ao processar a requisição.'
-        //             });
-        //         }
-        //     });
-        // });
-
-
     </script>
 }

@@ -2,5 +2,12 @@
 
 @foreach (var item in Model)
 {
-    <option value="@item">@item</option>
+    if (item == DateTime.Now.Year)
+    {
+        <option value="@item" selected>@item</option>
+    }
+    else
+    {
+        <option value="@item">@item</option>
+    }
 }
