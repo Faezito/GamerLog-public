@@ -30,7 +30,7 @@ namespace GameDB_v3.Controllers
             _registro = registro;
         }
 
-        [HttpGet("{slug}")]
+        //[HttpGet("{slug}")]
         public async Task<IActionResult> Index(int id, string? slug)
         {
             try
