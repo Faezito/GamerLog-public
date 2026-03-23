@@ -95,39 +95,13 @@ VALUES (
         {
             try
             {
-                string sql = @"
-SELECT 
-R.[ID]
-,[UsuarioID]
-,[JogoID]
-,[PlataformaID]
-,Plataforma
-,[TempoJogado]
-,[DataAdicionado]
-,[Nota]
-,Status
-,CASE 
-	WHEN Status = 0 THEN 'Abandonado'
-	WHEN Status = 1 THEN 'Jogando'
-	WHEN Status = 2 THEN 'História principal concluída'
-	WHEN Status = 3 THEN 'História principal e Missões secundárias concluídas'
-	WHEN Status = 9 THEN 'Todas as conquistas obtidas (Platinado)'
- END AS StatusTexto
-,[Obs]
-,UltimaSessao
-,DataZerado
-,DataPlatinado
-FROM [dbo].[RegistrosJogos] R  WITH(NOLOCK)
-INNER JOIN Plataformas P ON P.ID = R.PlataformaID
-WHERE UsuarioID = @usuarioId
-AND JogoID = @jogoId
-";
+                string sql = @"usp_listar_registros";
                 var obj = new
                 {
                     jogoId = jogoId,
                     usuarioId = usuarioId
                 };
-                return await _dapper.QueryAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.Text, param: obj);
+                return await _dapper.QueryAsync<RegistroJogoModel>(sql: sql, commandType: System.Data.CommandType.StoredProcedure, param: obj);
             }
             catch (Exception ex)
             {

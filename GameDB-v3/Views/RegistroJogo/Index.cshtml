@@ -12,62 +12,72 @@
             <div class="row justify-content-center mb-3 rounded-3 shadow-lg" style="background-image: url('@Model.CaminhoImagem'); background-size: cover; background-position: center; height: 200px; height: 200px;">
             </div>
 
-            @if (tempoJogado == null)
-            {
-                <span class="fs-5 w-auto my-auto">Nenhuma jogatina registrada.</span>
-            }
-            else
-            {
-                <span class="fs-5 w-auto my-auto">@tempoJogado horas registradas</span> <br />
-                <span class="fs-5 w-auto my-auto">Última sessão: @ultimaSessao</span> <br />
-                <span class="rating text-center"
-                      data-nota="@mediaAvaliacoes"
-                      data-readonly="true">
-                </span>
-            }
+            <table class="gl-table">
+                <tr>
+                    <td class="text-light">Genero:</td>
+                    <td class="text-light">@Model.Genero</td>
+                </tr>
+                <tr>
+                    <td class="text-light">Metacritic Score:</td>
+                    <td><span class="@Model.MetacriticCor">@Model.Metacritic</span></td>
+                </tr>
+
+
+                @if (tempoJogado == null)
+                {
+                    <tr class="fs-5 w-auto my-auto">Nenhuma jogatina registrada.</tr>
+                }
+                else
+                {
+                    <tr class="text-light">
+                        <td>
+                            Tempo de Jogo:
+                        </td>
+                        <td>
+                            @tempoJogado horas registradas
+                        </td>
+                    </tr>
+                    <tr class="text-light">
+                        <td>
+                            Última sessão:
+                        </td>
+                        <td>
+                            @ultimaSessao
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rating text-center"
+                            data-nota="@mediaAvaliacoes"
+                            data-readonly="true">
+                        </td>
+                    </tr>
+                }
+            </table>
         </div>
     </div>
 
-    <div class="col-12 col-lg-9">
+    <div class="col-12 col-lg-9 ps-5 mt-5 mt-md-0">
         <div class="row mb-2">
-            <div class="col-10">
+            <div class="col-8">
                 <h2 class="text-uppercase w-auto">
                     @Model.Titulo
                 </h2>
                 <span class="fs-8">Lançado em @Model.DataLancamento?.ToString("dd 'de' MMM 'de' yyyy", new CultureInfo("pt-BR")) por @Model.Publisher</span>
             </div>
-            <div class="col-2 text-end">
-                <a class="btn-gl-secondary" asp-action="Index" asp-controller="Usuario">
-                    <i class="fa-solid fa-reply"></i>&nbsp;
-                        Voltar
+            <div class="col-4 d-flex gap-1 mt-auto justify-content-end">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#Modal" class="btn-gl-success btn-gl-sm">
+                    <i class="fa-solid fa-plus"></i> ADICIONAR
                 </a>
-            </div>
-        </div>
-
-        <hr />
-        <div class="row">
-            <div class="col-10">
-                <table class="gl-table">
-                    <tr>
-                        <td class="text-light">Genero:</td>
-                        <td class="text-light">@Model.Genero</td>
-                    </tr>
-                    <tr>
-                        <td class="text-light">Metacritic Score:</td>
-                        <td><span class="@Model.MetacriticCor">@Model.Metacritic</span></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-2 align-bottom text-end">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#Modal" class="btn-gl-success mt-5">
-                    <i class="fa-solid fa-plus"></i>&nbsp; ADICIONAR
+                <a class="btn-gl-secondary btn-gl-sm" asp-action="Index" asp-controller="Usuario">
+                    <i class="fa-solid fa-reply"></i>
+                    Voltar
                 </a>
             </div>
         </div>
 
         <hr />
 
-        <div id="lista-registros"></div>
+        <div id="lista-registros" class="mt-md-5"></div>
     </div>
 </div>
 
@@ -87,7 +97,7 @@
                     <div class="row mb-3">
                         <div class="col">
                             <label for="PlataformaID" class="gl-label">Plataforma</label>
-                            <select class="gl-input" name="PlataformaID" required>
+                            <select class="gl-input text-secondary" name="PlataformaID" required>
                                 <option disabled selected>PLATAFORMA</option>
                                 @await Component.InvokeAsync("DropPlataformas")
                             </select>
@@ -100,17 +110,16 @@
                                  data-bs-toggle="popover"
                                  data-bs-trigger="hover focus"
                                  data-bs-placement="top"
-                                 data-bs-content="Nota: 0"
-                            ></div>
+                                 data-bs-content="Nota: 0"></div>
                         </div>
 
                         <div class="col">
                             <label for="tempoJogado" class="gl-label">Tempo Jogado (em horas)</label>
-                                <input type="text"
-                                       class="gl-input"
-                                       id="tempoJogado"
-                                       name="TempoJogadoString"
-                                       required>
+                            <input type="text"
+                                   class="gl-input"
+                                   id="tempoJogado"
+                                   name="TempoJogadoString"
+                                   required>
                         </div>
 
 
@@ -137,8 +146,8 @@
 
                     <div class="row mb-3">
                         <div class="col">
-                                <label for="Obs" class="gl-label">Observações</label>
-                                <textarea class="gl-input" name="Obs"></textarea>
+                            <label for="Obs" class="gl-label">Observações</label>
+                            <textarea class="gl-input" name="Obs"></textarea>
                         </div>
                     </div>
 
@@ -167,165 +176,165 @@
 
 @section Scripts {
     <script>
-        $(function () {
-            $.get('/RegistroJogo/ListarRegistros', { id: @Model.ID })
-                .done(function (html) {
-                    $('#lista-registros').html(html);
-                    initRatings("#lista-registros");
+                $(function () {
+                    $.get('/RegistroJogo/ListarRegistros', { id: @Model.ID })
+                        .done(function (html) {
+                            $('#lista-registros').html(html);
+                            initRatings("#lista-registros");
 
-                })
-                .fail(function (err) {
-                    Swal.fire('Erro', 'Erro ao carregar registros', 'error');
+                        })
+                        .fail(function (err) {
+                            Swal.fire('Erro', 'Erro ao carregar registros', 'error');
+                        });
+                        $('#inputZerado').hide()
+                        $('#inputPlatinado').hide()
+                        $('.date').mask('00/00/0000');
                 });
-                $('#inputZerado').hide()
-                $('#inputPlatinado').hide()
-                $('.date').mask('00/00/0000');
-        });
 
-        $("#rating-edit").rateYo({
-            rating: 0,
-            starWidth: "32px",
-            ratedFill: "#ffc107",
-            precision: 1,
-            onSet: function (rating) {
-                $("#Nota").val(Math.round(rating * 20));
-            }
-        });
+                $("#rating-edit").rateYo({
+                    rating: 0,
+                    starWidth: "32px",
+                    ratedFill: "#ffc107",
+                    precision: 1,
+                    onSet: function (rating) {
+                        $("#Nota").val(Math.round(rating * 20));
+                    }
+                });
 
-        // DELETAR
+                // DELETAR
 
-        $(document).on('click','.deletar', function(e){
-            e.preventDefault();
+                $(document).on('click','.deletar', function(e){
+                    e.preventDefault();
 
-            const form = $(this).closest("form");
+                    const form = $(this).closest("form");
 
-            Swal.fire({
-                title: "Realmente deseja deletar este registro?",
-                showDenyButton: true,
-                denyButtonText: "Não",
-                confirmButtonText: "Sim",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                form.trigger("submit");
-            }
-        })
-        })
-
-        // SALVAR
-
-        $('#btnSalvar').on('click', function () {
-            $.ajax({
-                url: '/Jogo/Registro',
-                type: 'POST',
-                data: $('#form-cadastro').serialize(),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                beforeSend: function () {
-                    $('#btnSalvar').prop('disabled', true);
-                },
-                complete: function () {
-                    $('#btnSalvar').prop('disabled', false);
-                }
-            })
-            .done(function (response) {
-                if (response.success) {
-                    window.location.href = response.redirectUrl;
-                }
-            })
-            .fail(function (xhr) {
-                if (xhr.responseJSON) {
                     Swal.fire({
-                        icon: 'error',
-                        title: xhr.responseJSON.title ?? 'Erro',
-                        html: xhr.responseJSON.detail
+                        title: "Realmente deseja deletar este registro?",
+                        showDenyButton: true,
+                        denyButtonText: "Não",
+                        confirmButtonText: "Sim",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                        form.trigger("submit");
+                    }
+                })
+                })
+
+                // SALVAR
+
+                $('#btnSalvar').on('click', function () {
+                    $.ajax({
+                        url: '/Jogo/Registro',
+                        type: 'POST',
+                        data: $('#form-cadastro').serialize(),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        beforeSend: function () {
+                            $('#btnSalvar').prop('disabled', true);
+                        },
+                        complete: function () {
+                            $('#btnSalvar').prop('disabled', false);
+                        }
+                    })
+                    .done(function (response) {
+                        if (response.success) {
+                            window.location.href = response.redirectUrl;
+                        }
+                    })
+                    .fail(function (xhr) {
+                        if (xhr.responseJSON) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: xhr.responseJSON.title ?? 'Erro',
+                                html: xhr.responseJSON.detail
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro',
+                                text: 'Erro inesperado ao processar a requisição.'
+                            });
+                        }
                     });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro',
-                        text: 'Erro inesperado ao processar a requisição.'
-                    });
-                }
-            });
+                });
+
+                $(document).ready(function () {
+
+                let notaInicial = $("#Nota").val() || 0;
+
+                $("#rating-edit").rateYo({
+                    rating: notaInicial,
+                    fullStar: true,
+                    starWidth: "25px"
+                }).on("rateyo.change", function (e, data) {
+
+                    let nota5 = data.rating;      // 0 a 5
+                    let nota100 = nota5 * 20;      // 0 a 100
+
+                    $("#Nota").val(nota100);
+
+                    let texto = `Nota: ${nota100.toFixed(0)}/100`;
+                    $(this).attr("data-bs-content", texto);
+
+                    let popover = bootstrap.Popover.getInstance(this);
+                    if (popover) {
+                        popover.setContent({ '.popover-body': texto });
+                    }
         });
 
-        $(document).ready(function () {
+            // Inicializa o popover
+            let popover = new bootstrap.Popover(document.getElementById("rating-edit"));
+        });
 
-        let notaInicial = $("#Nota").val() || 0;
+                // ALTERNAR DATAS
 
-        $("#rating-edit").rateYo({
-            rating: notaInicial,
-            fullStar: true,
-            starWidth: "25px"
-        }).on("rateyo.change", function (e, data) {
+                // $('#Status').on('change', function(evt){
+                //     const status = Number($(this).val());
+                //     if (status == 2)
+                //     {
+                //         $('#inputZerado').show()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', false);
 
-            let nota5 = data.rating;      // 0 a 5
-            let nota100 = nota5 * 20;      // 0 a 100
+                //         $('#inputPlatinado').hide()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', true);
 
-            $("#Nota").val(nota100);
+                //         $('#inputJogado').hide()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', true);
+                //     }
+                //     else if (status == 9)
+                //     {
+                //         $('#inputZerado').hide()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', true);
 
-            let texto = `Nota: ${nota100.toFixed(0)}/100`;
-            $(this).attr("data-bs-content", texto);
+                //         $('#inputPlatinado').show()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', false);
 
-            let popover = bootstrap.Popover.getInstance(this);
-            if (popover) {
-                popover.setContent({ '.popover-body': texto });
-            }
-});
+                //         $('#inputJogado').hide()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', true);
+                //     }
+                //     else
+                //     {
+                //         $('#inputZerado').hide()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', true);
 
-    // Inicializa o popover
-    let popover = new bootstrap.Popover(document.getElementById("rating-edit"));
-});
+                //         $('#inputPlatinado').hide()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', true);
 
-        // ALTERNAR DATAS
+                //         $('#inputJogado').show()
+                //             .find('input, select, textarea')
+                //             .prop('disabled', false);
+                //     }
 
-        // $('#Status').on('change', function(evt){
-        //     const status = Number($(this).val());
-        //     if (status == 2)
-        //     {
-        //         $('#inputZerado').show()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', false);
-
-        //         $('#inputPlatinado').hide()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', true);
-
-        //         $('#inputJogado').hide()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', true);
-        //     }
-        //     else if (status == 9)
-        //     {
-        //         $('#inputZerado').hide()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', true);
-
-        //         $('#inputPlatinado').show()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', false);
-
-        //         $('#inputJogado').hide()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', true);
-        //     }
-        //     else
-        //     {
-        //         $('#inputZerado').hide()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', true);
-
-        //         $('#inputPlatinado').hide()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', true);
-
-        //         $('#inputJogado').show()
-        //             .find('input, select, textarea')
-        //             .prop('disabled', false);
-        //     }
-
-        // })
+                // })
 
     </script>
 }

@@ -36,20 +36,14 @@
             @await Component.InvokeAsync("Navbar")
         }
     </header>
-    <div class="container">
-        <main role="main" class="py-3">
+    <div class="container mt-4 mb-5 pb-5 text-light">
+        <main role="main" class="py-3 pb-5">
             @RenderBody()
         </main>
     </div>
 
     <!-- FOOTER -->
-    <footer class="gl-footer">
-        <span class="footer-copy">© GamerLog 2025 (v2.0) · Todos os direitos reservados</span>
-        <div class="footer-right">
-            <a href="https://portfolio2025-vm6w.onrender.com/" target="_blank">Desenvolvido por: Faé</a>
-            <a href="https://gamerlog.runasp.net" target="_blank">gamerlog.runasp.net</a>
-        </div>
-    </footer>
+    <partial name="_Footer" />
 
     <script asp-append-version="true" src="~/lib/summernote/summernote-bs5.min.js"></script>
     <script asp-append-version="true" src="~/lib/summernote/summernote-pt-BR.min.js"></script>

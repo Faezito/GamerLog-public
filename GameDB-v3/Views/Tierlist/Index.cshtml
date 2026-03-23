@@ -7,14 +7,14 @@
 
 <div class="row">
     <div class="col-12 col-sm-4">
-        <h4 class="fw-bold">GERADOR DE TIER LIST</h4>
+        <h4 class="fw-bold text-light">GERADOR DE TIER LIST</h4>
     </div>
     <div class="col text-end">
         <form class="" id="pesquisar">
             <input asp-for="UsuarioID" value="@usuario.ID" type="hidden" />
             <div class="row justify-content-end g-2">
                 <div class="col-auto">
-                    <select name="Ano" id="Ano" class="gl-input gl-select">
+                    <select name="Ano" id="Ano" class="gl-input gl-select text-secondary">
                         <option selected>TODOS</option>
                         @await Component.InvokeAsync("DropAnos", new { usuarioId = this.User.GetUserId() })
                     </select>
