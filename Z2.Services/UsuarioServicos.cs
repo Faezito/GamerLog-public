@@ -39,6 +39,9 @@ namespace Z2.Services
 
         public async Task<int?> Cadastrar(UsuarioModel model)
         {
+            if (!string.IsNullOrWhiteSpace(model.Senha))
+                model.Senha = PasswordHasher.Hash(model.Senha);
+
             if (model.ID.HasValue)
             {
                 await _daUsuario.Atualizar(model);
@@ -46,8 +49,6 @@ namespace Z2.Services
             }
 
             model.DataCriacao = DateTime.Now;
-            if(model.GoogleId == null && !string.IsNullOrWhiteSpace(model.Senha))
-                model.Senha = PasswordHasher.Hash(model.Senha);
 
             return await _daUsuario.Adicionar(model);
         }
