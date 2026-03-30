@@ -1,12 +1,8 @@
 ﻿using GameDB_v3.Extensions;
-using GameDB_v3.Libraries.Filtros;
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
 using Z1.Model;
-using Z1.Model.APIs;
 using Z2.Services;
 using Z2.Services.Externo;
 
