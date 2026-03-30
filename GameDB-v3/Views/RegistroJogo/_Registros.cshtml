@@ -20,8 +20,17 @@ else
         <tbody class="">
             @foreach (var game in Model)
             {
+                var data = game.Status switch
+                {
+                    2 => game.DataZerado,
+                    9 => game.DataPlatinado,
+                    _ => game.UltimaSessao
+                };
+
                 <tr class="">
-                    <td class="text-center">@game.UltimaSessao?.ToString("dd/MM/yyyy")</td>
+                    <td class="text-center">
+                        @data?.ToString("dd/MM/yyyy")
+                    </td>
                     <td class="text-center">@game.StatusTexto</td>
                     <td class="text-center">@game.Plataforma</td>
                     <td class="text-center">
