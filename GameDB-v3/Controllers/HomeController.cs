@@ -1,3 +1,4 @@
+using GameDB_v3.Extensions;
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
 using GameDB_v3.Libraries.Sessao;
@@ -44,6 +45,11 @@ namespace GameDB_v3.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (this.User.GetUserId() > 0)
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+
             if (HttpContext.Items.ContainsKey("MSG_E"))
             {
                 TempData["MSG_E"] = HttpContext.Items["MSG_E"];
@@ -85,7 +91,9 @@ namespace GameDB_v3.Controllers
                 var principal = new ClaimsPrincipal(identity);
 
                 // Efetuar login via cookie
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
                     new AuthenticationProperties()
                     {
                         IsPersistent = true,       // manter logado
