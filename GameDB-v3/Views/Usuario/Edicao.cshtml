@@ -14,19 +14,19 @@
     <input type="hidden" asp-for="GoogleId" />
 
     <div class="row d-flex gy-3 mb-3">
-        <div class="col-12 col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-4">
             <label asp-for="Email" class="gl-label">Email</label>
             <input type="email" class="gl-input" asp-for="Email">
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-4">
             <label asp-for="Usuario" class="gl-label">Usuario</label>
             <input type="text" class="gl-input" asp-for="Usuario">
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-4">
             <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
             <input type="text" class="gl-input" asp-for="NomeCompleto">
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-4">
             <label asp-for="Genero" class="gl-label">Gênero</label>
             <select asp-for="Genero" class="gl-input gl-select text-secondary">
                 <option disabled selected>GENERO</option>
@@ -35,27 +35,25 @@
                 <option value="O">Outro</option>
             </select>
         </div>
+        @if (Model.SenhaTemporaria == true)
+        {
+            <div class="row mb-3">
+                <div class="row mx-auto">
+                    <span class="alert alert-warning"> Por motivos de segurança, recomendamos que você troque sua senha agora. </span>
+                </div>
+            </div>
+        }
+
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="Senha" class="gl-label">Senha</label>
+            <input type="password" class="gl-input" asp-for="Senha">
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="ConfirmacaoSenha" class="gl-label">Confirmação de senha</label>
+            <input type="password" class="gl-input" asp-for="ConfirmacaoSenha">
+        </div>
     </div>
 
-    @if (Model.SenhaTemporaria == true)
-    {
-        <div class="row mb-3">
-            <div class="row mx-auto">
-                <span class="alert alert-warning"> Por motivos de segurança, recomendamos que você troque sua senha agora. </span>
-            </div>
-        </div>
-
-        <div class="row d-flex gap-2 mb-3">
-            <div class="">
-                <label asp-for="Senha" class="gl-label">Senha</label>
-                <input type="password" class="gl-input" asp-for="Senha">
-            </div>
-            <div class="">
-                <label asp-for="ConfirmacaoSenha" class="gl-label">Confirmação de senha</label>
-                <input type="password" class="gl-input" asp-for="ConfirmacaoSenha">
-            </div>
-        </div>
-    }
 
     <partial name="_FormFooter"></partial>
 
