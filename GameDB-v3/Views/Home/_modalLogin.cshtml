@@ -1,0 +1,60 @@
+﻿<!-- MODAL LOGIN  -->
+<div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content gl-modal-content">
+
+            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
+
+            <div class="modal-logo">
+                <span class="bracket">[</span>GamerLog<span class="bracket">]</span>
+            </div>
+            <p class="modal-sub">// Organizando sua jogatina</p>
+
+            @if (ViewData["MSG_E"] != null)
+            {
+                <div class="alert alert-danger fw-bold mb-3">@ViewData["MSG_E"]</div>
+            }
+
+            <form id="form-login" method="post">
+                <div class="field-group">
+                    <label class="field-label" for="Login">Usuário ou E-mail</label>
+                    <input id="Login" name="Login" type="text" class="field-input" placeholder="seu_usuario" required />
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="Senha">Senha</label>
+                    <input id="Senha" name="Senha" type="password" class="field-input" placeholder="••••••••" required />
+                </div>
+
+                <div class="modal-links">
+                    <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalCadastro">Cadastre-se</a>
+                    <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">
+                        Esqueci minha senha
+                    </a>
+                </div>
+
+                <button type="submit" class="btn-modal-submit" id="btnLogin">
+                    <span id="texto-login">» ACESSAR</span>
+                    <span id="loading-login" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
+            </form>
+
+            <p class="fs-7 text-center text-warning">
+                Na versão 2.0, foi realizamos um grande upgrade na segurança do sistema junto ao login com a Steam. Por isso, pode ser necessário resetar sua senha através do "Esqueci minha senha."
+            </p>
+
+            <div class="modal-divider"><span>OU</span></div>
+
+            <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="btn-google-hud">
+                <i class="fa-brands fa-google"></i>
+                Entrar com Google
+            </a>
+
+            <a asp-action="LoginSteam" asp-controller="Steam" class="btn-steam-hud mt-2">
+                <i class="fa-brands fa-steam"></i>
+                Entrar com Steam
+            </a>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@model UsuarioModel
+
+<!-- MODAL LOGIN  -->
+<div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content gl-modal-content">
+
+            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
+
+            <div class="modal-logo">
+                <span class="bracket">[</span>Cadastre-se<span class="bracket">]</span>
+            </div>
+
+            <form method="post" id="form-cadastro">
+                <input type="hidden" asp-for="ID" />
+                <input type="hidden" asp-for="GoogleId" />
+
+                <div class="row d-flex gy-3 mb-3">
+                    <div class="col-12 col-sm-6">
+                        <label asp-for="Email" class="gl-label">Email</label>
+                        <input type="email" class="gl-input" asp-for="Email">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label asp-for="Usuario" class="gl-label">Usuario</label>
+                        <input type="text" class="gl-input" asp-for="Usuario">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
+                        <input type="text" class="gl-input" asp-for="NomeCompleto">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label asp-for="Genero" class="gl-label">Gênero</label>
+                        <select asp-for="Genero" class="gl-input gl-select text-secondary">
+                            <option disabled selected>GENERO</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                            <option value="O">Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3 justify-content-center px-3">
+                    <h6 class="alert alert-primary">
+                        Enviaremos um e-mail com uma senha provisória para validar o e-mail inserido e concluir o cadastro.
+                    </h6>
+                </div>
+
+                <div class="row d-flex gy-3 justify-content-end mb-3 mt-3">
+                    <div class="col-6">
+                        <button type="button" id="btnSalvar" class="btn-gl-success w-100">
+                            Salvar
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Usuario" asp-action="Index" class="btn-gl-secondary w-100">
+                            Voltar
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="modal-divider"><span>OU</span></div>
+
+            <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="btn-google-hud">
+                <i class="fa-brands fa-google"></i>
+                Entrar com Google
+            </a>
+
+            <a asp-action="LoginSteam" asp-controller="Steam" class="btn-steam-hud mt-2">
+                <i class="fa-brands fa-steam"></i>
+                Entrar com Steam
+            </a>
+
+        </div>
+    </div>
+</div>
+
+

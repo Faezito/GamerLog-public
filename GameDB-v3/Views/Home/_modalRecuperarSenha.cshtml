@@ -1,0 +1,28 @@
+﻿@model UsuarioModel
+
+<div class="modal fade" id="modalRecuperarSenha" tabindex="-1" aria-labelledby="modalRecuperarSenhaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content gl-modal-content">
+
+            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
+
+            <div class="modal-logo" style="font-size: 1.1rem;">RECUPERAR SENHA</div>
+            <p class="modal-sub">// Informe seu e-mail para receber o código</p>
+
+            <form id="form-recuperar">
+                <div class="field-group">
+                    <label class="field-label" for="email">E-mail</label>
+                    <input type="email" class="field-input" name="email" id="email"
+                           placeholder="seu@email.com" required />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <button type="button" id="recuperar-senha" class="btn-modal-submit mt-2">
+                    <span id="texto-salvar">Enviar código</span>
+                    <span id="loading-recuperar" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>

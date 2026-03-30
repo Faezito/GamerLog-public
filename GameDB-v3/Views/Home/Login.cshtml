@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "GamerLog — Organizando sua jogatina";
     Layout = "_Layout";
+    var versao = "v2.00";
 }
 
 
@@ -27,6 +28,9 @@
     <div class="nav-right">
         <a href="#features" class="nav-link">Funções</a>
         @* <a href="#achievements" class="nav-link">Conquistas</a> *@
+        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalAtualizacao">
+            <span>Novidades</span>
+        </a>
         <button class="btn-hud" data-bs-toggle="modal" data-bs-target="#modalLogin">
             <span>» Entrar</span>
         </button>
@@ -70,7 +74,7 @@
         <span class="dot"></span>
         <span>SISTEMA ONLINE</span>
         <span class="sep">|</span>
-        <span>v1.04</span>
+        <span>@versao</span>
         <span class="sep">|</span>
         <span>GRATUITO</span>
     </div>
@@ -120,7 +124,7 @@
         <span class="stat-lbl-hud">Jogos</span>
     </div>
     <div class="stat-hud">
-        <span class="stat-num-hud">v1.04</span>
+        <span class="stat-num-hud">@versao</span>
         <span class="stat-lbl-hud">Build</span>
     </div>
 </div>
@@ -214,7 +218,8 @@
 
 </section>
 
-@* <!-- ACHIEVEMENTS -->
+@* 
+    <!-- ACHIEVEMENTS -->
 <section class="ach-section reveal" id="achievements">
     <div class="section-eyebrow">CONQUISTAS</div>
     <h2 class="section-title">Desbloqueie <em>achievements</em> na sua jornada</h2>
@@ -245,7 +250,8 @@
             <div class="ach-card-desc">Continue jogando para descobrir</div>
         </div>
     </div>
-</section> *@
+</section> 
+*@
 
 <!-- CTA -->
 <section class="cta-wrap reveal">
@@ -261,95 +267,56 @@
     </div>
 </section>
 
-<!-- MODAL LOGIN  -->
-<div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content gl-modal-content">
-
-            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
-
-            <div class="modal-logo">
-                <span class="bracket">[</span>GamerLog<span class="bracket">]</span>
-            </div>
-            <p class="modal-sub">// Organizando sua jogatina</p>
-
-            @if (ViewData["MSG_E"] != null)
-            {
-                <div class="alert alert-danger fw-bold mb-3">@ViewData["MSG_E"]</div>
-            }
-
-            <form id="form-login" method="post">
-                <div class="field-group">
-                    <label class="field-label" for="Login">Usuário ou E-mail</label>
-                    <input id="Login" name="Login" type="text" class="field-input" placeholder="seu_usuario" required />
-                </div>
-
-                <div class="field-group">
-                    <label class="field-label" for="Senha">Senha</label>
-                    <input id="Senha" name="Senha" type="password" class="field-input" placeholder="••••••••" required />
-                </div>
-
-                <div class="modal-links">
-                    <a asp-action="Cadastro" asp-controller="Home">Cadastre-se</a>
-                    <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">
-                        Esqueci minha senha
-                    </a>
-                </div>
-
-                <button type="submit" class="btn-modal-submit" id="btnLogin">
-                    <span id="texto-login">» ACESSAR</span>
-                    <span id="loading-login" class="spinner-border spinner-border-sm d-none" role="status"></span>
-                </button>
-            </form>
-
-            <p class="fs-7 text-center text-warning">
-                Na versão 2.0, foi realizamos um grande upgrade na segurança do sistema junto ao login com a Steam. Por isso, pode ser necessário resetar sua senha através do "Esqueci minha senha."
-            </p>
-
-            <div class="modal-divider"><span>OU</span></div>
-
-            <a asp-action="LoginGoogle" asp-controller="GoogleLogin" class="btn-google-hud">
-                <i class="fa-brands fa-google"></i>
-                Entrar com Google
-            </a>
-
-            <a asp-action="LoginSteam" asp-controller="Steam" class="btn-steam-hud mt-2">
-                <i class="fa-brands fa-steam"></i>
-                Entrar com Steam
-            </a>
-
-        </div>
-    </div>
-</div>
-
+<partial name="_modalLogin" />
 <!-- MODAL RECUPERAR SENHA -->
-<div class="modal fade" id="modalRecuperarSenha" tabindex="-1" aria-labelledby="modalRecuperarSenhaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content gl-modal-content">
+<partial name="_modalRecuperarSenha" />
 
-            <button type="button" class="gl-modal-close" data-bs-dismiss="modal" aria-label="Fechar">[ ESC ]</button>
+<!-- MODAL CADASTRO -->
+<partial name="_modalCadastro" />
 
-            <div class="modal-logo" style="font-size: 1.1rem;">RECUPERAR SENHA</div>
-            <p class="modal-sub">// Informe seu e-mail para receber o código</p>
-
-            <form id="form-recuperar">
-                <div class="field-group">
-                    <label class="field-label" for="email">E-mail</label>
-                    <input type="email" class="field-input" name="email" id="email"
-                           placeholder="seu@email.com" required />
-                    <span asp-validation-for="Email" class="text-danger small"></span>
-                </div>
-
-                <button type="button" id="recuperar-senha" class="btn-modal-submit mt-2">
-                    <span id="texto-salvar">Enviar código</span>
-                    <span id="loading-recuperar" class="spinner-border spinner-border-sm d-none" role="status"></span>
-                </button>
-            </form>
-
-        </div>
-    </div>
-</div>
+<!-- MODAL CADASTRO -->
+<partial name="_modalAtualizacao" />
 
 @section Scripts {
     <script src="~/js/landing.js" asp-append-version="true"></script>
+
+    <script>
+        $('#btnSalvar').on('click', function () {
+            $.ajax({
+                url: '/Home/Cadastro',
+                type: 'POST',
+                data: $('#form-cadastro').serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function () {
+                    $('#btnSalvar').prop('disabled', true);
+                },
+                complete: function () {
+                    $('#btnSalvar').prop('disabled', false);
+                }
+            })
+            .done(function (response) {
+                if (response.success) {
+                    window.location.href = response.redirectUrl;
+                }
+            })
+            .fail(function (xhr) {
+                if (xhr.responseJSON) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: xhr.responseJSON.title ?? 'Erro',
+                        html: xhr.responseJSON.detail
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Erro inesperado ao processar a requisição.'
+                    });
+                }
+            });
+        });
+    </script>
+
 }
