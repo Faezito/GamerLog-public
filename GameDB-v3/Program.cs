@@ -2,20 +2,13 @@ using GameDB_v3.Libraries.Login;
 using GameDB_v3.Libraries.Sessao;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Options;
-using NETCore.MailKit.Core;
 using System.Data.Common;
-using Z1.Model.Email;
 using Z2.Services;
 using Z2.Services.Externo;
 using Z3.DataAccess;
 using Z3.DataAccess.Database;
 using Z3.DataAccess.Externo;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.DataProtection;
 using System.Security.Claims;
 using Z4.Bibliotecas;
 
@@ -53,7 +46,7 @@ builder.Services.AddAuthentication(options =>
 // Data Protection persistente
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(@"C:\keys")) // LOCAL NO SERVIDOR
-    .SetApplicationName("LOGIN");  //MUDAR DE ACORDO COM O NOME DO APP
+    .SetApplicationName("GamerLog");  //MUDAR DE ACORDO COM O NOME DO APP
 
 // Sessão
 builder.Services.AddSession(options =>
