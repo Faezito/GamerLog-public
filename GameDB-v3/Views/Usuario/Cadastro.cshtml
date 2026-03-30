@@ -1,0 +1,65 @@
+﻿@model UsuarioModel;
+
+
+<div class="row mb-2">
+    <h2 class="text-uppercase text-light">
+        Concluir Cadastro
+    </h2>
+</div>
+
+<hr />
+
+<form method="post" id="form-cadastro">
+    <input type="hidden" asp-for="ID" />
+    <input type="hidden" asp-for="steamid" />
+    <input type="hidden" asp-for="avatarmedium" />
+    <input type="hidden" asp-for="profileurl" />
+    <input type="hidden" asp-for="realname" />
+    <input type="hidden" asp-for="personaname" />
+
+    <div class="row d-flex gy-3 mb-3">
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="Email" class="gl-label">Email</label>
+            <input type="email" class="gl-input" asp-for="Email" required>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="Usuario" class="gl-label">Usuario</label>
+            <input type="text" class="gl-input" asp-for="Usuario" readonly>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="NomeCompleto" class="gl-label">Nome Completo</label>
+            <input type="text" class="gl-input" asp-for="NomeCompleto" required>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="Genero" class="gl-label">Gênero</label>
+            <select asp-for="Genero" class="gl-input gl-select text-secondary">
+                <option disabled selected>GENERO</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+                <option value="O">Outro</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="Senha" class="gl-label">Senha</label>
+            <input type="password" class="gl-input" asp-for="Senha" required>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label asp-for="ConfirmacaoSenha" class="gl-label">Confirmação de senha</label>
+            <input type="password" class="gl-input" asp-for="ConfirmacaoSenha" required>
+        </div>
+    </div>
+
+
+    <partial name="_FormFooter"></partial>
+
+</form>
+
+
+@section Scripts {
+    <script>
+        $('#btnSalvar').on('click', function (evt) {
+            fn_salvar(evt, '@Url.Action("CadastroSteam", "Usuario")', '#form-cadastro', '#btnSalvar')
+        });
+    </script>
+}

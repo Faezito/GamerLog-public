@@ -127,6 +127,43 @@ namespace GameDB_v3.Controllers
             return View(player);
         }
 
+        [HttpGet]
+        public IActionResult Cadastro(UsuarioModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CadastroSteam(UsuarioModel model)
+        {
+            try
+            {
+                model.Tipo = "C";
+                var valido = ManipularModels.ValidarUsuario(model);
+
+                if (!valido.valido)
+                    return Problem(detail: valido.mensagem, title: "Erro", statusCode: StatusCodes.Status400BadRequest);
+
+                 
+                model.ID = await _seUsuario.Cadastrar(model);
+
+                TempData["MSG_S"] = "Cadastrado com sucesso!";
+
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("Login", "Home")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    title: "Erro",
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
+        }
 
     }
 }

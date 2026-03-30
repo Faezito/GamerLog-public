@@ -5,6 +5,7 @@
         usuario = this.User.ObterUsuario();
     }
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
 }
 
 <!DOCTYPE html>
@@ -31,7 +32,7 @@
 </head>
 <body class="bg-mainblue">
     <header>
-        @if (controller != "Home")
+        @if (controller != "Home" && !(controller == "Usuario" && action == "Cadastro"))
         {
             @await Component.InvokeAsync("Navbar")
         }

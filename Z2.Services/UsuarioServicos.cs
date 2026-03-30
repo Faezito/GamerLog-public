@@ -1,4 +1,5 @@
-﻿using Z1.Model;
+﻿using System.Transactions;
+using Z1.Model;
 using Z3.DataAccess;
 using Z4.Lib;
 
@@ -47,10 +48,28 @@ namespace Z2.Services
                 await _daUsuario.Atualizar(model);
                 return model.ID;
             }
+            else
+            {
+                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    try
+                    {
+                        model.DataCriacao = DateTime.Now;
+                        model.ID = await _daUsuario.Adicionar(model);
 
-            model.DataCriacao = DateTime.Now;
+                        if (!string.IsNullOrWhiteSpace(model.steamid))
+                            await AdicionarSteam(model);
 
-            return await _daUsuario.Adicionar(model);
+                        scope.Complete();
+                        return model.ID;
+                    }
+                    catch (Exception)
+                    {
+                        scope.Dispose();
+                        throw;
+                    }
+                }
+            }
         }
 
         public async Task Deletar(UsuarioModel model)

@@ -46,10 +46,6 @@ NomeCompleto
 ,Genero
 ,DataCriacao
 ,GoogleId
-,SteamID
-,SteamUsername
-,SteamAvatar
-,SteamProfileUrl
 ,SenhaTemporaria
 )
 OUTPUT INSERTED.ID
@@ -62,11 +58,7 @@ VALUES (
 @Genero,
 @DataCriacao,
 @GoogleId,
-@steamid,
-@personaname, 
-@avatarmedium,
-@profileurl,
-SenhaTemporaria
+@SenhaTemporaria
 )
 ";
                 return await _dapper.ExecuteAsync(sql: sql, commandType: System.Data.CommandType.Text, param: model);

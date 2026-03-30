@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
 using System.Web;
+using Z1.Model;
 using Z2.Services;
 using Z2.Services.Externo;
 
@@ -92,7 +93,20 @@ namespace GameDB_v3.Controllers
 
             var usuario = await _seUsuario.ObterPorSteam(steamId);
             if (usuario == null)
-                return Problem(title: "Usuário não encontrado.", detail: "Não encontramos um usuário cadastrado com esta conta, crie uma nova conta e depois vincule sua conta Steam.");
+            {
+                usuario = new UsuarioModel()
+                {
+                    NomeCompleto = player.personaname,
+                    Usuario = player.personaname.Replace(" ", ""),
+                    avatarmedium = player.avatarmedium,
+                    steamid = player.steamid,
+                    personaname = player.personaname,
+                    profileurl = player.profileurl
+                };
+
+                return RedirectToAction("Cadastro","Usuario", usuario);
+            }
+                //return Problem(title: "Usuário não encontrado.", detail: "Não encontramos um usuário cadastrado com esta conta, crie uma nova conta e depois vincule sua conta Steam.");
 
             // Configura claims internas do sistema
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
