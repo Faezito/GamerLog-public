@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Linq;
-using Z1.Model;
 
 namespace GameDB_v3.Libraries.Login
 {
