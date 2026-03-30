@@ -48,6 +48,9 @@
                     <tr>
                         <td class="rating text-center"
                             data-nota="@mediaAvaliacoes"
+                            data-bs-toggle="popover"
+                            data-bs-trigger="hover focus"
+                            data-bs-placement="top"
                             data-readonly="true">
                         </td>
                     </tr>
@@ -98,7 +101,6 @@
                         <div class="col">
                             <label for="PlataformaID" class="gl-label">Plataforma</label>
                             <select class="gl-input text-secondary" name="PlataformaID" required>
-                                <option disabled selected>PLATAFORMA</option>
                                 @await Component.InvokeAsync("DropPlataformas")
                             </select>
                         </div>
@@ -126,7 +128,6 @@
                         <div class="col">
                             <label for="Status" class="gl-label">Situação</label>
                             <select name="Status" id="Status" class="gl-input gl-select text-secondary" required>
-                                <option selected disabled>SITUAÇÃO</option>
                                 <option value="1">Jogando</option>
                                 <option value="2">História Principal concluída</option>
                                 <option value="3">História Principal + secundárias concluídas</option>
