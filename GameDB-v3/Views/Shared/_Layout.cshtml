@@ -27,18 +27,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/gamerlog.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="bg-mainblue">
+<body class="bg-mainblue d-flex flex-column min-vh-100">
     <header>
         @if (controller != "Home" && !(controller == "Usuario" && action == "Cadastro"))
         {
             @await Component.InvokeAsync("Navbar")
         }
     </header>
-    <div class="container mt-4 mb-5 pb-5 text-light">
-        <main role="main" class="py-3 pb-5">
+    <div class="container mt-4 text-light flex-fill d-flex flex-column">
+        <main role="main" class="py-3 flex-fill">
             @RenderBody()
         </main>
     </div>
@@ -54,7 +54,7 @@
     <script asp-append-version="true" src="~/lib/fontawesome/solid.min.js"></script>
     <script asp-append-version="true" src="~/lib/font-awesome/js/brands.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/jquery.rateyo.min.js"></script> 
+    <script src="~/js/jquery.rateyo.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/jquery-mask/jquery.mask.js"></script>

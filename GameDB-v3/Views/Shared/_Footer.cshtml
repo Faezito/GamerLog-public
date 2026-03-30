@@ -1,13 +1,9 @@
-<footer class="gl-footer w-100 bottom-0" style="z-index: 100;">
-
-    <div class="gl-footer-pip gl-footer-pip--tl" aria-hidden="true"></div>
-    <div class="gl-footer-pip gl-footer-pip--tr" aria-hidden="true"></div>
-
-    <div class="gl-footer-body">
+<footer class="gl-footer w-100 mt-auto" style="z-index: 100;">
+    <div class="gl-footer-body col-12 py-0">
         <div class="container-fluid">
             <div class="row g-4">
 
-                <div class="col-12 col-md-4 col-lg-3">
+                <div class="col-12 col-sm-4 col-lg-3">
                     <a asp-controller="Home" asp-action="Index" class="gl-footer-brand">
                         <span class="logo-bracket">[</span>GL<span class="logo-bracket">]</span>
                         GAMERLOG
@@ -23,40 +19,50 @@
                             <span class="gl-footer-meta-label">Build</span>
                             <span class="gl-footer-meta-value">2026.03</span>
                         </div>
+                        <div class="gl-footer-meta-item">
+                            <span class="gl-footer-meta-label">Desenvolvido por</span>
+                            <span class="gl-footer-meta-value">
+                                <a href="https://matheus-fae.onrender.com/" target="_blank" class="nav-link">Faé</a>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-6 col-md-4 col-lg-3">
-                    <p class="gl-footer-heading">Navegação</p>
-                    <ul class="gl-footer-links">
-                        <li>
-                            <a asp-controller="Usuario" asp-action="Index" class="gl-footer-link">
-                                Início
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-controller="Rawg" asp-action="Index" class="gl-footer-link">
-                                Biblioteca
-                            </a>
-                        </li>
-                    </ul>
-                </div>
 
-                <div class="col-6 col-md-4 col-lg-3">
-                    <p class="gl-footer-heading">Conta</p>
-                    <ul class="gl-footer-links">
-                        <li>
-                            <a asp-controller="Usuario" asp-action="Edicao" class="gl-footer-link">
-                                Perfil
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-controller="Home" asp-action="Logout" class="gl-footer-link">
-                                Sair
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                @if (this.User.GetUserId() > 0)
+                {
+                    <div class="col-6 col-sm-4 col-lg-3">
+                        <p class="gl-footer-heading">Navegação</p>
+                        <ul class="gl-footer-links">
+                            <li>
+                                <a asp-controller="Usuario" asp-action="Index" class="gl-footer-link">
+                                    Início
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Rawg" asp-action="Index" class="gl-footer-link">
+                                    Biblioteca
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3">
+                        <p class="gl-footer-heading">Conta</p>
+                        <ul class="gl-footer-links">
+                            <li>
+                                <a asp-controller="Usuario" asp-action="Edicao" class="gl-footer-link">
+                                    Perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Home" asp-action="Logout" class="gl-footer-link">
+                                    Sair
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                }
 
                 @* <div class="col-12 col-lg-3">
                     <p class="gl-footer-heading">Sistema</p>
@@ -78,7 +84,7 @@
 
     <hr class="gl-footer-divider">
 
-    <div class="gl-footer-bottom">
+    <div class="gl-footer-bottom col-12">
         <span class="gl-footer-copyright">
             &copy; <span>@DateTime.Now.Year</span> GamerLog — Todos os direitos reservados
         </span>
