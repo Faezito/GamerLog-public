@@ -153,7 +153,7 @@ $(document).ready(function () {
 
 /* WRAPPERS */
 
-fn_salvar(evt, Url, JQ_formID, JQ_btnID)
+function fn_salvar(evt, Url, JQ_formID, JQ_btnID)
 {
     evt.preventDefault();
     const form = $(JQ_formID);
