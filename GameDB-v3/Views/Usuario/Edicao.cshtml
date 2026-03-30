@@ -37,7 +37,7 @@
         </div>
         @if (Model.SenhaTemporaria == true)
         {
-            <div class="row mb-3">
+            <div class="row my-3">
                 <div class="row mx-auto">
                     <span class="alert alert-warning"> Por motivos de segurança, recomendamos que você troque sua senha agora. </span>
                 </div>
@@ -59,26 +59,28 @@
 
 </form>
 
-@if (Model.GoogleId == null)
-{
-    <form method="get" asp-action="VincularGoogle" asp-controller="GoogleLogin">
-        <input type="hidden" name="usuarioId" value="@Model.ID" />
-        <button type="submit" class="btn btn-light btn-sm google-material border shadow shadow-sm">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 20px;">
-            Vincular conta
-        </button>
-    </form>
-}
-@if (Model.steamid == null)
-{
-    <form method="get" asp-action="VincularSteam" asp-controller="Steam">
-        <input type="hidden" name="usuarioId" value="@Model.ID" />
-        <button asp-action="VincularSteam" asp-controller="Steam" class="text-light fs-1 btn text-dark bg-light rounded-5 w-auto">
-            <i class="fa-brands fa-steam"></i>
-        </button>
-    </form>
-}
-
+<div class="row d-flex gap-2">
+    @if (Model.GoogleId == null)
+    {
+        <form method="get" asp-action="VincularGoogle" asp-controller="GoogleLogin" class="col-auto">
+            <input type="hidden" name="usuarioId" value="@Model.ID" />
+            <button type="submit" class="btn btn-outline-secondary btn-google-hud text-light">
+                <i class="fa-brands fa-google"></i>
+                Vincular Google
+            </button>
+        </form>
+    }
+    @if (Model.steamid == null)
+    {
+        <form method="get" asp-action="VincularSteam" asp-controller="Steam" class="col-auto">
+            <input type="hidden" name="usuarioId" value="@Model.ID" />
+            <button class="btn btn-outline-secondary btn-steam-hud text-light">
+                <i class="fa-brands fa-steam"></i>
+                Vincular Steam
+            </button>
+        </form>
+    }
+</div>
 
 
 @section Scripts {
