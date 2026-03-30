@@ -2,16 +2,11 @@
 using GameDB_v3.Libraries.Filtros;
 using GameDB_v3.Libraries.Lang;
 using GameDB_v3.Libraries.Login;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using System.Globalization;
-using System.Threading.Tasks;
 using Z1.Model;
-using Z1.Model.APIs;
 using Z2.Services;
 using Z2.Services.Externo;
-using Z4.Bibliotecas;
 
 namespace GameDB_v3.Controllers
 {
@@ -71,9 +66,14 @@ namespace GameDB_v3.Controllers
                 if (usuario == null || jogo == null)
                     throw new Exception("Erro ao obter jogo, tente novamente mais tarde.");
 
+                if (!ModelState.IsValid)
+                {
+                    var msgs = string.Join("<br/>", ModelState.Values.SelectMany(e => e.Errors).Select(x => x.ErrorMessage));
+                    throw new Exception(msgs);
+                }
+
                 var tempoStr = string.IsNullOrWhiteSpace(registro.TempoJogadoString) ? "0" : registro.TempoJogadoString;
                 registro.TempoJogado = decimal.Parse(tempoStr, new CultureInfo("pt-BR"));
-
 
                 registro.JogoID = jogo.ID.Value;
                 registro.UsuarioID = usuario.ID.Value;
@@ -91,6 +91,7 @@ namespace GameDB_v3.Controllers
                         registro.UltimaSessao = registro.DataInput;
                         break;
                 }
+
                 registro.UltimaSessao = registro.UltimaSessao ?? registro.DataInput;
 
                 await _registro.Inserir(registro);
